@@ -730,3 +730,12 @@ build time (confirming the build machine's `pacman-key --add`/
 (`pacman-init.service` drop-in) and installed-system
 (`shellprocess-final.conf`) keyring population mechanisms worked as
 designed on both platforms, with no manual intervention needed.
+
+---
+
+**This log covers Phase 1 (base system) and Phase 2 (Calamares
+installer) only, through round 20 (2026-08-12).** It is not maintained
+past this point. Build/boot/install verification for Phase 3/4 (GNOME
+theming, Calamares slideshow/options) is logged inline, with dates,
+directly in `docs/THEMING.md` and `docs/CALAMARES.md` instead — check
+those for anything tested after 2026-08-12.

@@ -126,7 +126,7 @@ no-ops, not worth the cleanup).
 Real OBLinux assets (mark, Slate & Amber palette) are already wired in —
 this wasn't left as generic Calamares placeholder branding.
 
-**Slideshow (2026-08-20, phase 3/4 item 3)**: upgraded from the earlier
+**Slideshow (2026-08-22, phase 3/4 item 3)**: upgraded from the earlier
 single-static-image placeholder to a real multi-slide QML presentation
 (`airootfs/etc/calamares/branding/oblinux/show.qml`, `slideshowAPI: 2`).
 Structure verified verbatim against Calamares' own reference slideshow
