@@ -519,7 +519,7 @@ closest current equivalent for those topics.
 
 ## Maintaining this file
 
-Update `docs/AGENTS.md` when a change materially affects: repository
+Update `AGENTS.md` when a change materially affects: repository
 responsibilities, the high-level architecture, the build workflow,
 important file paths, package-sourcing strategy, GNOME configuration
 strategy, Calamares module sequence/architecture, testing expectations,
