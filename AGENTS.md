@@ -20,9 +20,9 @@ contributor/author (see Development Rules).
 
 ## Repository responsibility
 
-This repository (`oblinux`, cloned locally as `oblinux-gnome`) **is** the
-archiso profile: everything that becomes the live ISO and, by extension
-(via Calamares' `unpackfs`), the installed system. It owns package
+This repository (`oblinux`) **is** the archiso profile: everything that
+becomes the live ISO and, by extension (via Calamares' `unpackfs`), the
+installed system. It owns package
 selection, live-environment configuration, GNOME/GDM defaults, boot
 theming (Plymouth/GRUB/syslinux), and the Calamares installer
 configuration.
