@@ -20,15 +20,95 @@ contributor/author (see Development Rules).
 
 ## Repository responsibility
 
-This repository (`oblinux`) **is** the archiso profile: everything that
-becomes the live ISO and, by extension (via Calamares' `unpackfs`), the
-installed system. It owns package
-selection, live-environment configuration, GNOME/GDM defaults, boot
-theming (Plymouth/GRUB/syslinux), and the Calamares installer
-configuration.
+This repository (`oblinux-arch-iso-dev`) **is** the active Arch OBLinux
+development/staging archiso profile: everything that becomes the live ISO
+and, by extension (via Calamares' `unpackfs`), the installed system. It
+owns package selection, live-environment configuration, GNOME/GDM
+defaults, boot theming (Plymouth/GRUB/syslinux), and the Calamares
+installer configuration — for the development lineage. New features,
+Brand Master integrations, fixes, package updates, and validation
+candidates are built and tested here before an explicit, separate,
+owner-authorized promotion step copies accepted work to stable.
 
-Two sibling repositories, both real and referenced from this one — do not
-invent others:
+### Pipeline role and governance
+
+This repo is one node in a four-repository OBLinux Arch pipeline:
+
+```text
+                 oblinux-brand-master
+                Shared Visual Identity
+                         |
+                         v
+                oblinux-arch-iso-dev   <- this repository
+               Development / Staging
+                         |
+                  test + validate
+                         |
+                  owner approval
+                         |
+                         v
+                  oblinux-arch-iso
+                   Stable / Production
+```
+
+- **`oblinux-brand-master`** owns the shared OBLinux visual identity (R5
+  master logo, wordmark, brand colors, shared icons/wallpapers, GRUB/
+  Plymouth/Calamares branding, common visual standards). Shared branding
+  changes originate there and are consumed here only through
+  released/versioned Brand Master releases — never redesign shared
+  branding in this repo, and never locally fork/copy Brand Master
+  artwork here. Brand Master `main` is not a production/staging
+  dependency unless explicitly instructed for development investigation.
+  A defect that belongs upstream gets identified/documented here and
+  fixed there, then consumed as a new released version — never patched
+  around locally.
+- **`oblinux-arch-iso-dev`** (this repository) is where normal Arch
+  development happens: new features, Brand Master integration, Arch
+  config changes, bug fixes, package updates, GNOME/GRUB/Plymouth/
+  Calamares changes, development ISO builds, and validation candidates.
+  Changes remain here until tested and owner-approved.
+- **`oblinux-arch-iso`** is stable/production — the last accepted OBLinux
+  Arch implementation. It is **protected**: never commit, push, merge,
+  cherry-pick, reset, rebase, or force-push to it, and never change its
+  tags/branches or sync dev into it automatically, from this repository.
+  It may be inspected read-only (e.g. as a non-default remote) to compare
+  behavior or understand the known-good implementation. Promotion from
+  dev to stable is always a separate, explicit, owner-authorized task —
+  a successful development build is not automatic approval, and this
+  repo does not perform promotion on its own initiative.
+- **`oblinux`** (legacy) is read-only historical/reference material, will
+  eventually be retired, and must not be pushed to, modified, rewritten,
+  or developed against. It may be inspected for historical context. This
+  repository (`oblinux-arch-iso-dev`) was populated from legacy `oblinux`
+  at commit `c65f5e2b861f761e8084fe46da065fe2296c695d` — the shared
+  baseline also held by `oblinux-arch-iso` at initialization. From that
+  point forward, `oblinux-arch-iso-dev` may diverge; stable stays
+  unchanged until an owner-approved promotion.
+
+**Origin/remote safety**: `origin` must point only to
+`git@github-oblinux-arch-dev:marcoobaid/oblinux-arch-iso-dev.git`. A
+`legacy` remote pointing at the legacy `oblinux` repo may exist for
+read-only reference but must never be the default push destination, and
+no writable remote may point at `oblinux-arch-iso` (stable). If any
+push-capable remote is found pointing at stable or legacy, stop and
+report it before making changes — do not push there under any
+circumstance. Force-pushing this repository (`oblinux-arch-iso-dev`) is
+prohibited unless explicitly authorized for a specific recovery
+situation; the one historical force-push (replacing a GitHub-generated
+placeholder commit during initial migration) was a one-time exception,
+not a standing practice.
+
+**Fabricated validation is never acceptable.** Always distinguish
+source/static validation (what an agent working from macOS can actually
+check) from a successful `mkarchiso` build, from runtime/VM boot-and-
+install testing, from manual owner validation on real hardware — see ISO
+Build Process and Testing and Validation below. Never claim a build,
+boot, install, or visual check happened unless it actually did.
+
+### Package-source sibling repositories
+
+Two further sibling repositories, both real and referenced from this
+one — do not invent others:
 
 - **[`oblinux_repo`](https://github.com/marcoobaid/oblinux_repo)** — a
   signed pacman repository (hosted on GitHub Pages) for packages this
@@ -40,7 +120,10 @@ invent others:
   separate step this repository cannot trigger.
 - **[`oblinux-icon-theme`](https://github.com/marcoobaid/oblinux-icon-theme)**
   — the amber-recolored Papirus-derivative icon theme, packaged and
-  published through `oblinux_repo` the same way.
+  published through `oblinux_repo` the same way. Whether/how Brand
+  Master's eventual R5 integration affects this theme's ownership is
+  undetermined — treat it as unchanged until a future task addresses it
+  explicitly.
 
 ## Repository map
 
@@ -217,6 +300,22 @@ extension, not third-party. See `docs/THEMING.md` item 5 for the full
 reasoning and the real config search path if this ever needs revisiting.
 
 ## Branding
+
+**Current state**: this is the legacy "Slate & Amber" branding inherited
+from the `oblinux` baseline at initialization — the current dev baseline
+until a future, explicit task integrates the released OBLinux Brand
+Master R5 identity from `oblinux-brand-master` (see Pipeline role and
+governance above). Do not redesign or R5-integrate branding as a side
+effect of unrelated work.
+
+**Legacy identity strings not yet updated**: `profiledef.sh`'s
+`iso_publisher`, `airootfs/etc/os-release`'s `HOME_URL`/`SUPPORT_URL`/
+`BUG_REPORT_URL`, and Calamares `branding.desc`'s `productUrl`/
+`supportUrl`/`knownIssuesUrl`/`releaseNotesUrl` all still point at
+`github.com/marcoobaid/oblinux` (the legacy repo). This is inherited,
+untouched initialization-baseline state, not a bug introduced here —
+leave it as-is until an explicit, owner-authorized task addresses project
+identity/URLs (likely alongside R5 integration).
 
 Palette and full design system: `docs/BRANDING.md`. Core values used
 throughout the codebase (search for these hexes if tracing a color):
@@ -457,6 +556,11 @@ systemd units, or Calamares config in this repo.
   official docs) for anything non-trivial rather than relying on
   general/remembered knowledge. Several real bugs in this project's
   history trace back to an unverified assumption.
+- Never push, commit, merge, cherry-pick, reset, rebase, or force-push
+  to `oblinux-arch-iso` (stable) or legacy `oblinux` from this repo, and
+  never force-push this repo (`oblinux-arch-iso-dev`) itself without
+  explicit authorization for a specific recovery situation. Promotion to
+  stable is always a separate, owner-authorized task.
 - Never commit credentials or secrets. The `oblinux_repo` signing
   private key lives only on the build machine's own GnuPG keyring —
   never in this repo.
@@ -500,22 +604,33 @@ closest current equivalent for those topics.
 ## Agent start-of-task workflow
 
 1. Read this file.
-2. Check `git log`/`git status` for recent, possibly-uncommitted context.
-3. Read the `docs/` file(s) relevant to the requested task (see
+2. Verify repository identity and remote safety: `git status`, `git
+   remote -v`, `git branch --show-current`, `git rev-parse HEAD` —
+   confirm you're in `oblinux-arch-iso-dev`, `origin` points only there,
+   and no writable remote points at `oblinux-arch-iso` (stable) or
+   legacy `oblinux`. Stop and report if it does (see Pipeline role and
+   governance above).
+3. Check `git log`/`git status` for recent, possibly-uncommitted context.
+4. Read the `docs/` file(s) relevant to the requested task (see
    Documentation Map) — don't rely on this file's summaries for
    subsystem detail.
-4. Inspect the actual current implementation (config files, not just
+5. Inspect the actual current implementation (config files, not just
    docs) — docs can lag behind a fast-moving repo like this one.
-5. Determine ownership: does this change belong in this repo, or in
-   `oblinux_repo`/`oblinux-icon-theme`?
-6. Make the smallest complete change; match the existing style/comment
-   density in the file being edited.
-7. State plainly what validation would confirm the change works, and
+6. Determine ownership: does this change belong in this repo, in
+   `oblinux-brand-master` (shared branding — request/consume, don't
+   redesign here), or in `oblinux_repo`/`oblinux-icon-theme` (packages)?
+7. Make the smallest complete change; match the existing style/comment
+   density in the file being edited. Never touch `oblinux-arch-iso`
+   (stable) or legacy `oblinux` from this repo — promotion is a separate
+   owner-authorized task.
+8. State plainly what validation would confirm the change works, and
    whether that validation actually happened (this repo can't
    self-verify builds/boots — say so rather than implying it did).
-8. Update the relevant `docs/` file(s) when the change is
+   Never fabricate a build/boot/install/visual result.
+9. Update the relevant `docs/` file(s) when the change is
    architecturally meaningful (see Maintaining This File for the bar).
-9. Summarize what changed and what still needs verification.
+10. Summarize what changed and what still needs verification, and
+    whether promotion to stable is (not) in scope.
 
 ## Maintaining this file
 
