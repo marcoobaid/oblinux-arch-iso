@@ -11,36 +11,193 @@ OBLinux is an Arch Linux-based Linux distribution: GNOME desktop, Calamares
 graphical installer, built with `archiso`. It ships as a live/install ISO
 with a curated (not minimal, not maximal) default application set, and a
 consistent "Slate & Amber" visual identity applied from GRUB through GDM,
-the desktop, the terminal, and the installer.
+the desktop, the terminal, and the installer. **This repository
+(`oblinux-arch-iso`) is the stable/production implementation** — see
+Repository architecture below for how it relates to the other OBLinux
+repositories.
 
 The project is presented as a public GitHub project, not an individual's
 personal build — project documentation and commit messages must stay
 free of any personal name and must never list an AI tool as a
 contributor/author (see Development Rules).
 
-## Repository responsibility
+## Repository architecture
 
-This repository (`oblinux`) **is** the archiso profile: everything that
-becomes the live ISO and, by extension (via Calamares' `unpackfs`), the
-installed system. It owns package
-selection, live-environment configuration, GNOME/GDM defaults, boot
-theming (Plymouth/GRUB/syslinux), and the Calamares installer
-configuration.
+OBLinux's Arch implementation spans four repositories with a defined
+promotion flow:
 
-Two sibling repositories, both real and referenced from this one — do not
-invent others:
+```
+                 oblinux-brand-master
+                Shared Visual Identity
+                         │
+                         ▼
+                oblinux-arch-iso-dev
+               Development / Staging
+                         │
+                  test + validate
+                         │
+                  owner approval
+                         │
+                         ▼
+                  oblinux-arch-iso
+                   Stable / Production
+```
+
+- **`oblinux-brand-master`** — owns shared OBLinux visual identity: the
+  master logo/wordmark, brand colors, shared icons, shared wallpapers,
+  GRUB branding, Plymouth branding, Calamares branding, and other common
+  visual standards. Shared visual changes originate there and reach this
+  repository only through released/versioned Brand Master output,
+  normally via `oblinux-arch-iso-dev` first (see Brand Master below).
+- **`oblinux-arch-iso-dev`** — the active development/staging repository.
+  New features, integrations (including R5), fixes, experiments, major
+  configuration changes, and ISO-level validation normally happen there
+  first, not here.
+- **`oblinux-arch-iso`** (this repository) — stable/production. Its job
+  is to preserve the last owner-approved, tested, and validated OBLinux
+  Arch implementation. See Stable repository safety below.
+
+The legacy **`oblinux`** repository is separate from this flow: it is
+read-only historical/reference material, populated this repo's and
+`oblinux-arch-iso-dev`'s shared starting point. See Legacy `oblinux`
+repository below.
+
+Two further sibling repositories sit outside this promotion chain and are
+consumed by whichever repo currently needs them (today, that's this repo
+directly; see Package management):
 
 - **[`oblinux_repo`](https://github.com/marcoobaid/oblinux_repo)** — a
-  signed pacman repository (hosted on GitHub Pages) for packages this
-  project needs that aren't in the official Arch repos: `calamares`,
-  `paru`, `ckbcomp`, `oblinux-icon-theme`. Built with `makepkg`, published
-  with that repo's own `x86_64/update_repo.sh`. **Packages must be built
-  and published there before a `mkarchiso` build that references them —
-  `pacstrap` will fail to resolve them otherwise.** This is a genuinely
-  separate step this repository cannot trigger.
+  signed pacman repository (hosted on GitHub Pages) for packages that
+  aren't in the official Arch repos: `calamares`, `paru`, `ckbcomp`,
+  `oblinux-icon-theme`. Built with `makepkg`, published with that repo's
+  own `x86_64/update_repo.sh`. **Packages must be built and published
+  there before a `mkarchiso` build that references them** — `pacstrap`
+  will fail to resolve them otherwise. This is a genuinely separate step
+  no Arch-implementation repo can trigger itself.
 - **[`oblinux-icon-theme`](https://github.com/marcoobaid/oblinux-icon-theme)**
   — the amber-recolored Papirus-derivative icon theme, packaged and
   published through `oblinux_repo` the same way.
+
+Do not invent other repositories beyond the ones named above. As of the
+most recent workspace inspection, `oblinux-brand-master` did not yet
+exist in the local workspace and `oblinux-arch-iso-dev` had not yet
+diverged from this repository's baseline — treat any Brand Master
+consumption or dev-to-stable promotion as forward-looking, not yet
+performed, unless the current `git log`/`git status` shows otherwise.
+
+## This repository's role
+
+`oblinux-arch-iso` **is** the archiso profile: everything that becomes the
+live ISO and, by extension (via Calamares' `unpackfs`), the installed
+system. It owns package selection, live-environment configuration,
+GNOME/GDM defaults, boot theming (Plymouth/GRUB/syslinux), and the
+Calamares installer configuration — for the **stable, owner-approved**
+state of all of these. Day-to-day iteration on any of them belongs in
+`oblinux-arch-iso-dev`, not here.
+
+## Stable repository safety
+
+Default behavior in this repository is: **inspect, understand, validate,
+preserve.** This is not the normal development workspace. Unless the
+owner explicitly instructs otherwise for a specific task, do not:
+
+- integrate experimental changes or independently implement R5 changes
+- consume unreleased Brand Master changes (Brand Master `main`/unreleased
+  commits are not a production dependency — see Brand Master)
+- merge from, cherry-pick from, or otherwise synchronize dev into this
+  repository
+- perform speculative cleanup or unrelated refactoring
+- rewrite published git history
+- create releases or tags
+- promote development changes on the assumption that a successful dev
+  build implies approval (see Promotion policy)
+
+## Promotion policy
+
+Changes reach this repository only by flowing:
+
+```
+oblinux-arch-iso-dev → test/validation → owner approval → oblinux-arch-iso
+```
+
+Promotion into stable is always a separate, explicitly owner-authorized
+task — never assume it because a dev build or dev validation succeeded.
+Before a promotion, the change should normally have:
+
+1. successful static/source validation
+2. a successful ISO build
+3. runtime/VM testing where applicable
+4. manual/visual validation where applicable
+5. explicit owner approval
+
+See Validation integrity for the rules on reporting these truthfully.
+
+## Force-push policy
+
+**Do not force-push `oblinux-arch-iso`** unless the owner explicitly
+authorizes it for a specific, named recovery situation. The force-push
+used during this repository's initial migration from legacy `oblinux` was
+a one-time action to replace a GitHub-generated placeholder commit — it
+is not standing repository policy, and it does not imply force-push is
+routine or acceptable going forward. Published stable history should be
+preserved; do not rewrite it otherwise.
+
+## Validation integrity
+
+Never fabricate build, validation, runtime, VM, or visual test results.
+If a test cannot actually be performed from this environment, say so
+plainly rather than implying it happened. Distinguish clearly between:
+
+- **static/source validation** — config/syntax review, no build performed
+- **a successful ISO build** — `mkarchiso` completed, produced an image
+- **automated VM/runtime validation** — an actual boot/install cycle was
+  run and its result observed (see Testing and validation)
+- **manual owner visual/runtime validation** — the owner personally
+  confirmed a result (screenshot, direct inspection, a real boot)
+
+Do not declare something production-ready, working, or safe to promote
+based solely on configuration files existing in git — that is, at most,
+static/source validation. This repository's own development environment
+(macOS) cannot run `mkarchiso` or boot the result; see ISO build process.
+
+## Legacy `oblinux` repository
+
+`oblinux` is the legacy Arch repository this repository and
+`oblinux-arch-iso-dev` were both populated from (shared baseline commit
+`c65f5e2b861f761e8084fe46da065fe2296c695d` as of this repository's
+initialization). It is now **reference-only**:
+
+- do not push to it
+- do not use it as an active development target
+- do not rewrite it, or change its branches or tags
+- do not treat it as, or promote it to, the new stable repository
+
+It may be inspected when historical implementation context is genuinely
+needed — most of the technical knowledge in this file originated there
+and remains valid for the Arch implementation generally. Its eventual
+retirement or deletion is a separate owner-controlled decision, not
+something to act on unilaterally.
+
+## Brand Master
+
+Shared OBLinux visual identity (the master logo/wordmark, brand colors,
+shared icons, shared wallpapers, and the shared standards behind GRUB,
+Plymouth, and Calamares branding) belongs to `oblinux-brand-master`, not
+to this repository. In this repository:
+
+- do not independently redesign or maintain a competing version of
+  shared OBLinux branding — see Branding for what this repo currently
+  ships, which predates the Brand Master split and should be treated as
+  the thing Brand Master output eventually replaces, not a parallel
+  source of truth
+- treat released/versioned Brand Master output as an immutable
+  dependency once consumed
+- Brand Master's `main` branch (or any unreleased commit) is not a
+  production dependency and should not be pulled into this repository
+  directly
+- new Brand Master releases normally reach this repository only after
+  being integrated and validated in `oblinux-arch-iso-dev` first — never
+  as a direct stable-repo change
 
 ## Repository map
 
@@ -63,7 +220,9 @@ docs/                     All project documentation; see Documentation Map.
 docs/branding/            Design *sources* (SVG wallpapers, the mark,
                           GNOME Shell theme SCSS) — not shipped on the
                           image; compiled/rasterized output lives under
-                          airootfs/.
+                          airootfs/. Pending Brand Master adoption, this
+                          is still this repo's own source of truth for
+                          branding (see Brand Master above).
 scripts/                  Standalone verification scripts
                           (verify-shell-theme.sh) — dev tooling, not part
                           of the built image.
@@ -112,9 +271,9 @@ rather than re-deriving behavior from source alone.
 **Build machine is not this Mac.** Development in this repo happens on
 macOS (file edits, research, syntax validation); the actual `mkarchiso`
 build, boot test, and install test always happen on a separate Linux
-build machine, driven by the user. An agent working here should assume it
-**cannot** run a real build/boot/install cycle itself and must ask for
-that verification rather than claim it.
+build machine, driven by the owner. An agent working here should assume
+it **cannot** run a real build/boot/install cycle itself and must ask for
+that verification rather than claim it (see Validation integrity).
 
 Primary entry point (on the Linux build machine, from the repo root):
 ```bash
@@ -162,6 +321,9 @@ mechanism check (the GNOME Shell theme extension).
 `packages.x86_64` itself is the authoritative source of truth for what's
 installed — read its `## OBLinux:` comment blocks before adding anything;
 almost every addition has a documented rationale and a doc cross-reference.
+In this stable repository, package-list changes normally arrive already
+validated from `oblinux-arch-iso-dev` (see Promotion policy) rather than
+being authored here directly.
 
 ## Filesystem and live environment
 
@@ -222,7 +384,10 @@ Palette and full design system: `docs/BRANDING.md`. Core values used
 throughout the codebase (search for these hexes if tracing a color):
 Ink `#151a22`, Slate `#2c3a4e`, Primary `#3f6690`, Slate Light `#a9b8c8`,
 Amber `#d68a3c` (reserved for actions/alerts, never decorative), Cloud
-`#f2f3f5`.
+`#f2f3f5`. This is this repository's **current, shipped** branding — the
+state Brand Master output is expected to eventually supersede (see Brand
+Master above); until a Brand Master release is actually integrated and
+promoted, this section remains authoritative for what's on the image.
 
 Design sources (SVG, SCSS) live under `docs/branding/`; compiled/shipped
 output lives under `airootfs/`. This split matters: **editing a shipped
@@ -318,8 +483,9 @@ Calamares slideshow work) is logged inline in `docs/THEMING.md` and
 sources — don't assume `docs/TESTING.md` alone reflects current
 verification status. There is no separate formal test suite; validation is
 build → boot → (install →) boot-installed, done manually on real
-VirtualBox/hardware by the user, since this repo's own development
-environment (macOS) cannot run `mkarchiso` or boot the result.
+VirtualBox/hardware by the owner, since this repo's own development
+environment (macOS) cannot run `mkarchiso` or boot the result. See
+Validation integrity for how to report validation status honestly.
 
 Minimum validation expected after a change:
 - **Package list change**: full build + live boot.
@@ -369,6 +535,11 @@ Do not casually reverse these without re-reading the linked reasoning:
 - **Live-session config and installed-system config are separate files**
   (`liveuser`'s home vs. `/etc/skel`) — never assume editing one affects
   the other.
+- **Development and integration happen in `oblinux-arch-iso-dev`, not
+  here** — this repository only receives owner-approved, validated
+  changes (see Stable repository safety and Promotion policy).
+- **Shared branding is owned by `oblinux-brand-master`, not forked or
+  redesigned here** — see Brand Master.
 - **Commit messages and all project files never name a specific
   individual, and never list an AI tool as author/contributor** — see
   Development Rules.
@@ -440,10 +611,18 @@ Do not casually reverse these without re-reading the linked reasoning:
 
 Everything else under `airootfs/` is itself the authoritative source —
 there is no separate templating layer for config files, dconf overrides,
-systemd units, or Calamares config in this repo.
+systemd units, or Calamares config in this repo. Once `oblinux-brand-master`
+releases are actually integrated (via dev, then promoted here — see Brand
+Master), the `docs/branding/` sources listed above are expected to
+themselves become generated from Brand Master output; that has not
+happened yet as of this update.
 
 ## Development rules
 
+- **This is the stable repository — default to inspect, understand,
+  validate, preserve** (see Stable repository safety). Confirm a task is
+  actually meant for this repository, not `oblinux-arch-iso-dev`, before
+  making non-trivial changes.
 - Inspect the existing implementation and the relevant `docs/` file
   before changing a subsystem — most decisions here have documented
   reasoning; don't re-litigate or silently reverse one without reading
@@ -456,14 +635,17 @@ systemd units, or Calamares config in this repo.
   check primary sources (upstream source code, real package file lists,
   official docs) for anything non-trivial rather than relying on
   general/remembered knowledge. Several real bugs in this project's
-  history trace back to an unverified assumption.
+  history trace back to an unverified assumption. The same standard
+  applies to reporting validation status — see Validation integrity.
 - Never commit credentials or secrets. The `oblinux_repo` signing
   private key lives only on the build machine's own GnuPG keyring —
-  never in this repo.
+  never in this or any other OBLinux repository.
 - **Never attribute an AI tool as author/contributor anywhere** — no
   `Co-Authored-By` trailers, no listing in `AUTHORS`/`README`/`PKGBUILD`
-  files, in this repo or either sibling repo. Verified: zero such
-  trailers exist in this repo's git history: keep it that way.
+  files, in this repository or any other OBLinux repository (dev,
+  legacy `oblinux`, `oblinux_repo`, `oblinux-icon-theme`,
+  `oblinux-brand-master`). Verified: zero such trailers exist in this
+  repo's git history: keep it that way.
 - **Never name a specific individual in project documentation, commit
   messages, or any user-visible file** — this is a public project
   repository, kept professional; use neutral phrasing.
@@ -475,7 +657,10 @@ systemd units, or Calamares config in this repo.
   own established practice.
 - Don't claim a build/boot/install verification happened unless it
   actually did on real hardware/VM — this repo cannot self-verify from
-  macOS.
+  macOS (see Validation integrity).
+- Do not force-push, create releases/tags, or rewrite history in this
+  repository without explicit owner authorization (see Force-push
+  policy and Stable repository safety).
 
 ## Documentation map
 
@@ -499,20 +684,25 @@ closest current equivalent for those topics.
 
 ## Agent start-of-task workflow
 
-1. Read this file.
+1. Read this file, including Repository architecture and Stable
+   repository safety — confirm the requested task actually belongs in
+   this repository rather than `oblinux-arch-iso-dev`.
 2. Check `git log`/`git status` for recent, possibly-uncommitted context.
 3. Read the `docs/` file(s) relevant to the requested task (see
    Documentation Map) — don't rely on this file's summaries for
    subsystem detail.
 4. Inspect the actual current implementation (config files, not just
    docs) — docs can lag behind a fast-moving repo like this one.
-5. Determine ownership: does this change belong in this repo, or in
-   `oblinux_repo`/`oblinux-icon-theme`?
+5. Determine ownership: does this change belong in this repository at
+   all, or in `oblinux-arch-iso-dev`, `oblinux-brand-master`,
+   `oblinux_repo`, or `oblinux-icon-theme`? Most non-trivial changes
+   belong in dev, not here — see Promotion policy.
 6. Make the smallest complete change; match the existing style/comment
    density in the file being edited.
 7. State plainly what validation would confirm the change works, and
-   whether that validation actually happened (this repo can't
-   self-verify builds/boots — say so rather than implying it did).
+   whether that validation actually happened (see Validation integrity)
+   — this repo can't self-verify builds/boots — say so rather than
+   implying it did.
 8. Update the relevant `docs/` file(s) when the change is
    architecturally meaningful (see Maintaining This File for the bar).
 9. Summarize what changed and what still needs verification.
@@ -520,12 +710,13 @@ closest current equivalent for those topics.
 ## Maintaining this file
 
 Update `AGENTS.md` when a change materially affects: repository
-responsibilities, the high-level architecture, the build workflow,
-important file paths, package-sourcing strategy, GNOME configuration
-strategy, Calamares module sequence/architecture, testing expectations,
-or a development rule/lesson future agents need to not repeat. Don't
-update it for routine implementation details already obvious from the
-code, and don't let it grow into a second `TESTING.md` or `THEMING.md` —
-point to those instead of duplicating them. Remove or correct sections
-that become obsolete rather than leaving stale information alongside
-new information.
+responsibilities or architecture, the promotion/approval model, the
+high-level build/boot/install architecture, important file paths,
+package-sourcing strategy, GNOME configuration strategy, Calamares
+module sequence/architecture, testing expectations, or a development
+rule/lesson future agents need to not repeat. Don't update it for
+routine implementation details already obvious from the code, and don't
+let it grow into a second `TESTING.md` or `THEMING.md` — point to those
+instead of duplicating them. Remove or correct sections that become
+obsolete rather than leaving stale information alongside new
+information.
