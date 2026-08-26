@@ -32,5 +32,45 @@ not a restatement:
   owner approval — a successful dev build is not approval.
 - Preserve this repo's actual architecture and conventions; don't carry
   over assumptions from another OBLinux repository.
+- Consult the relevant `docs/` file(s) `AGENTS.md`'s Documentation Map
+  points to before modifying the associated subsystem.
 
 When in doubt, re-read `AGENTS.md` rather than guessing.
+
+## Git commit policy
+
+This policy applies to every Git commit Claude Code creates in this
+repository, and it is not optional:
+
+- Use only the repository's configured Git author identity. Never
+  modify Git author/committer identity to represent Claude or
+  Anthropic, and never add Claude or Anthropic as a contributor.
+- Do not add `Co-Authored-By` trailers for Claude, Anthropic, or any AI
+  system.
+- Do not add `Generated-By`, `Assisted-By`, `AI-Generated`, or similar
+  AI-attribution trailers.
+- Do not mention Claude, Anthropic, Claude Code, AI assistance, or
+  automated generation anywhere in the commit message.
+- Do not add any attribution trailer unless the owner explicitly
+  requests one for that specific commit.
+- Write normal, professional commit messages that describe the actual
+  repository change — nothing else.
+
+Example — correct:
+
+```
+Integrate Brand Master v1.0.2
+```
+
+Example — incorrect:
+
+```
+Integrate Brand Master v1.0.2
+
+Co-Authored-By: Claude Sonnet <noreply@anthropic.com>
+```
+
+The repository's configured human Git identity remains the sole commit
+attribution unless the owner explicitly instructs otherwise. This is
+consistent with, and reinforces, `AGENTS.md`'s Development Rules on AI
+attribution — it does not add competing policy.
