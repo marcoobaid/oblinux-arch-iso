@@ -35,3 +35,37 @@ Specifically, when working here:
   summaries alone.
 
 When in doubt, defer to `AGENTS.md` over anything above.
+
+## Git commit policy
+
+This policy applies to every commit Claude Code creates in this
+repository:
+
+- Use only the repository's configured Git author identity. Never
+  modify Git author or committer identity to represent Claude or
+  Anthropic, and never add Claude or Anthropic as a contributor.
+- Do not add `Co-Authored-By` trailers for Claude, Anthropic, or any
+  AI system.
+- Do not add `Generated-By`, `Assisted-By`, `AI-Generated`, or similar
+  AI-attribution trailers.
+- Do not mention Claude, Anthropic, Claude Code, AI assistance, or
+  automated generation anywhere in a commit message.
+- Do not add attribution trailers of any kind unless the owner
+  explicitly requests one for that specific commit.
+- Write normal, professional commit messages that describe the actual
+  repository change — nothing else.
+
+For example, a commit should look like:
+
+    Integrate Brand Master v1.0.2
+
+and **not**:
+
+    Integrate Brand Master v1.0.2
+
+    Co-Authored-By: Claude Sonnet <noreply@anthropic.com>
+
+The repository's configured human Git identity remains the sole commit
+attribution unless the owner explicitly instructs otherwise. This is
+consistent with, and does not override, `AGENTS.md`'s Development
+Rules on never attributing an AI tool as author/contributor.
