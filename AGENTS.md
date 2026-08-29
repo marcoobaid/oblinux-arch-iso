@@ -581,6 +581,35 @@ systemd units, or Calamares config in this repo.
   actually did on real hardware/VM — this repo cannot self-verify from
   macOS.
 
+## Release and tagging policy
+
+Release tags are governance events, not routine development steps: they
+mark this repository's own release points and get the same care as the
+stable-repo protections above.
+
+- **Tags are always the last step of a release** — never part of normal
+  day-to-day development. Do not create, move, delete, or push a release
+  tag as part of ordinary commits, fixes, or feature work.
+- **Required release sequence**: Change → Validate → Commit → Push `main`
+  → CI passes → Tag. No step may be skipped or reordered.
+- **Before tagging**, all of the following must already be true: every
+  intended change is committed; the working tree is clean; release/
+  package metadata (e.g. version strings, `profiledef.sh`) is internally
+  consistent; repository validation passes; the changes are pushed to
+  `main`; and CI on that final `main` commit is green.
+- Once all of the above holds, **stop and report the repository as
+  "release-ready"** — do not tag automatically. Only create or push the
+  tag when the owner explicitly authorizes tagging *after* that report.
+- **Never tag an intermediate release-preparation commit** if further
+  validation, metadata fixes, packaging, or corrective commits are still
+  expected before release.
+- **If a published tag turns out to be wrong**, do not move, delete, or
+  replace it automatically — stop and ask the owner how to proceed.
+
+This complements, and does not replace, the origin/remote and force-push
+safety rules under Pipeline role and governance and Development rules
+above.
+
 ## Documentation map
 
 | Document | Authoritative for |
