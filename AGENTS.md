@@ -108,7 +108,7 @@ owner explicitly instructs otherwise for a specific task, do not:
   repository
 - perform speculative cleanup or unrelated refactoring
 - rewrite published git history
-- create releases or tags
+- create releases or tags (see Release and tagging policy)
 - promote development changes on the assumption that a successful dev
   build implies approval (see Promotion policy)
 
@@ -141,6 +141,30 @@ a one-time action to replace a GitHub-generated placeholder commit — it
 is not standing repository policy, and it does not imply force-push is
 routine or acceptable going forward. Published stable history should be
 preserved; do not rewrite it otherwise.
+
+## Release and tagging policy
+
+A release tag is always the **final** step of the release process, never
+a routine or intermediate development action.
+
+- Never create, move, delete, or push a release tag as part of normal
+  development work.
+- Required release sequence: **Change → Validate → Commit → Push `main`
+  → CI passes → Tag.**
+- Before a release can be tagged, all of the following must hold: all
+  intended changes are committed; the working tree is clean; release/
+  package metadata is internally consistent; repository validation
+  passes; the changes are pushed to `main`; and CI on that final `main`
+  commit passes.
+- Once every condition above is met, stop and report the repository
+  **"release-ready"** — do not create or push the tag yourself. Tagging
+  requires the owner's explicit authorization, given after that report.
+- Never tag an intermediate release-preparation commit while further
+  validation, metadata, packaging, or corrective commits are still
+  needed — "release-ready" means nothing further is expected to change.
+- If a tag has already been published and a problem is discovered
+  afterward, do not move, delete, or replace it automatically — stop
+  and ask the owner how to proceed.
 
 ## Validation integrity
 
@@ -660,7 +684,7 @@ happened yet as of this update.
   macOS (see Validation integrity).
 - Do not force-push, create releases/tags, or rewrite history in this
   repository without explicit owner authorization (see Force-push
-  policy and Stable repository safety).
+  policy, Release and tagging policy, and Stable repository safety).
 
 ## Documentation map
 
