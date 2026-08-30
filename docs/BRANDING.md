@@ -53,11 +53,41 @@ cleanly from favicon size up to a boot-splash centerpiece.
 | Asset | Path in repo | Format | Status |
 |---|---|---|---|
 | Logo mark | `docs/branding/oblinux-mark*.svg` | SVG source | **Done** — see above |
-| BIOS boot menu background | `syslinux/splash.png` | PNG, 640×480 | **Done** — mark + wordmark, Space Grotesk |
-| UEFI boot menu | uses same visual language via `efiboot/loader/entries/*.conf` titles (text only, systemd-boot has no background image) | — | Text branding done already |
-| Plymouth boot theme | `airootfs/usr/share/plymouth/themes/oblinux/` + `plymouth` package | `.plymouth` + `.script` + 3 PNGs | **Done** — see below |
+| BIOS boot menu background | `syslinux/splash.png` | PNG, 640×480 | **Superseded by Brand Master** — see "Brand Master boot-chain integration" below |
+| UEFI boot menu | uses same visual language via `efiboot/loader/entries/*.conf` titles (text only, systemd-boot has no background image) | — | Text branding done already; verified still compliant, see "Brand Master boot-chain integration" below |
+| Plymouth boot theme | `airootfs/usr/share/plymouth/themes/oblinux/` + `plymouth` package | `.plymouth` + `.script` + PNGs | **Superseded by Brand Master** — see "Brand Master boot-chain integration" below |
 | GDM logo + background | `airootfs/usr/share/glib-2.0/schemas/50_oblinux-gdm.gschema.override` | GSettings override + SVG | **Done** — see below |
 | OS logo (About panel, `LOGO=oblinux-logo` in os-release) | `airootfs/usr/share/pixmaps/oblinux-logo.{svg,png}` | SVG + PNG, plain mark | **Done** — see below |
+
+## Brand Master boot-chain integration (Phase 1: 2026-08-30)
+
+BIOS boot, UEFI boot, GRUB, and Plymouth now source their visual assets from
+`oblinux-brand-master` (tagged release `v1.0.5`), replacing this repo's
+original Slate & Amber boot artwork. GDM, the desktop, os-release, and
+Calamares elsewhere in this file are still the legacy Slate & Amber assets
+described below, pending a separate, explicitly-authorized later phase —
+Brand Master integration is not assumed to extend to them.
+
+| Boot stage | File(s) in this repo | Brand Master source |
+|---|---|---|
+| BIOS boot menu (syslinux) | `syslinux/splash.png` | rasterized from `assets/iso/oblinux-media-lockup.svg`, composited onto Brand Master's near-black (`#0b1118`); Brand Master ships no pre-rendered syslinux-resolution asset, so this one raster/composite step is downstream integration, not a redesign of the master artwork |
+| UEFI boot menu (systemd-boot) | `efiboot/loader/entries/*.conf` | text only, already read "OBLinux" before this phase; systemd-boot has no background-image mechanism, so there is no image asset to source |
+| GRUB (installed-system theme, wired via Calamares `airootfs/etc/calamares/modules/grubcfg.conf`) | `airootfs/usr/share/grub/themes/oblinux/` | copied verbatim from Brand Master's `themes/grub/oblinux/` (`theme.txt`, `background.png`, `logo.png`) |
+| Plymouth | `airootfs/usr/share/plymouth/themes/oblinux/` | copied verbatim from Brand Master's `themes/plymouth/oblinux/` (`.plymouth`, `.script`, PNGs, and their SVG sources) |
+
+Brand Master's GRUB theme uses a flat `selected_item_color` instead of the
+old 9-slice `pixmap_style` highlight images, so the old `highlight_*.png`
+files were removed as no longer referenced by `theme.txt`. The Calamares
+wiring itself (`always_use_defaults: true`, `GRUB_TERMINAL_OUTPUT: gfxterm`,
+`GRUB_THEME` pointing at this same path) did not need to change — only the
+theme payload at that path did.
+
+Treat every file copied from Brand Master exactly like any other Brand
+Master payload (see `AGENTS.md`'s Pipeline role and governance): never
+hand-edit it, never re-derive it from a screenshot or approximation, and
+never regenerate it independently in this repo. A defect in the shared
+asset itself belongs upstream in `oblinux-brand-master` and is re-consumed
+here as a new released version.
 
 ## GDM login screen
 

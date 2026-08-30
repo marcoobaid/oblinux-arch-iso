@@ -301,12 +301,18 @@ reasoning and the real config search path if this ever needs revisiting.
 
 ## Branding
 
-**Current state**: this is the legacy "Slate & Amber" branding inherited
-from the `oblinux` baseline at initialization — the current dev baseline
-until a future, explicit task integrates the released OBLinux Brand
-Master R5 identity from `oblinux-brand-master` (see Pipeline role and
-governance above). Do not redesign or R5-integrate branding as a side
-effect of unrelated work.
+**Current state (updated 2026-08-30, Phase 1 boot-branding integration)**:
+BIOS boot (syslinux), UEFI boot (systemd-boot), GRUB (the installed-system
+theme wired via Calamares), and Plymouth now source their assets from the
+released OBLinux Brand Master R5 identity (`oblinux-brand-master` tagged
+`v1.0.5`) — see `docs/BRANDING.md`'s "Brand Master boot-chain integration"
+section for the exact file-by-file mapping. GDM, the desktop, os-release,
+and Calamares' own branding/slideshow are still the legacy "Slate & Amber"
+identity inherited from the `oblinux` baseline at initialization, pending a
+future, explicit, separately-authorized task to R5-integrate them too. Do
+not redesign, hand-edit, or independently regenerate any file sourced from
+Brand Master, and do not extend R5 integration to the still-legacy surfaces
+above as a side effect of unrelated work.
 
 **Legacy identity strings not yet updated**: `profiledef.sh`'s
 `iso_publisher`, `airootfs/etc/os-release`'s `HOME_URL`/`SUPPORT_URL`/
@@ -350,7 +356,11 @@ not assumed — see `docs/THEMING.md` for the verification detail on each):
   Sixel support compiled out on Arch's build, verified in VTE's own
   source, not assumed) + Starship prompt, both configured system-wide
   under `airootfs/etc/xdg/`.
-- **Boot**: Plymouth theme + GRUB theme, both under `airootfs/usr/share/`.
+- **Boot**: Plymouth theme + GRUB theme, both under `airootfs/usr/share/`
+  — as of Phase 1, both copied verbatim from `oblinux-brand-master`
+  (tagged release), not authored in this repo; BIOS (`syslinux/splash.png`)
+  and UEFI (`efiboot/loader/entries/*.conf`, text only) are also now Brand
+  Master-sourced/verified — see `docs/BRANDING.md`.
 
 ## Calamares
 
