@@ -8,7 +8,10 @@ bcachefs-tools
 bind
 bolt
 brltty
-broadcom-wl-dkms
+# Temporarily disabled: Arch's broadcom-wl-dkms 6.30.223.271-48 does not
+# build against Linux 7.2 after the kernel removed strncpy(). Re-enable this
+# and linux-headers below when Arch publishes a compatible package.
+# broadcom-wl-dkms
 btrfs-progs
 clonezilla
 cloud-init
@@ -51,7 +54,7 @@ lftp
 libfido2
 libusb-compat
 linux
-linux-headers
+# linux-headers  # Required by broadcom-wl-dkms when it is re-enabled above.
 linux-atm
 linux-firmware
 linux-firmware-marvell
