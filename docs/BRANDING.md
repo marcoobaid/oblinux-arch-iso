@@ -335,7 +335,11 @@ the hand-authored `grub/grub.cfg`, so neither live path executes this fragment.
 **Live UEFI GRUB integration (2026-08-31)**: the ArchISO boot mode is
 `uefi.grub`, replacing `uefi.systemd-boot`. ArchISO consumes
 `grub/grub.cfg`; that configuration enables `gfxterm` and selects
-`${prefix}/themes/oblinux/theme.txt`. The complete theme directory is a
+`/boot/grub/themes/oblinux/theme.txt` from the ISO filesystem. ArchISO's
+standalone EFI binary keeps `${prefix}` on its embedded memdisk while its
+bootstrap sets GRUB's `root` to the discovered ISO before loading the profile
+configuration; using `${prefix}` for the theme therefore searches the embedded
+binary instead of the ISO and fails. The complete theme directory is a
 verbatim copy of the same released Brand Master `v1.0.5` payload used at
 `airootfs/usr/share/grub/themes/oblinux/` for installed systems. Keeping the
 live copy under `grub/` is required because the boot loader must render the
@@ -344,7 +348,10 @@ retain `archisobasedir`, `archisosearchuuid`, `cow_spacesize=75%`, and
 `copytoram=n`; the normal entry also retains `quiet splash`, while the speech
 entry retains `accessibility=on`. The existing `efiboot/loader/` files remain
 as inactive systemd-boot reference configuration and are not consumed by the
-selected boot modes.
+selected boot modes. The upstream profile's optional COM0 serial initialization
+is omitted: probing a nonexistent COM0 emits a GRUB error and pauses startup on
+UEFI systems without a serial port, while OBLinux's live menu uses the native
+console and `gfxterm` graphical output.
 
 ## Next steps
 
