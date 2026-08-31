@@ -135,9 +135,9 @@ no-ops, not worth the cleanup).
 
 Calamares' packaged desktop entry launches `sh -c "pkexec calamares"`.
 The executable annotation in
-`/usr/share/polkit-1/actions/com.github.calamares.calamares.policy` maps
+`/usr/share/polkit-1/actions/io.calamares.calamares.policy` maps
 `/usr/bin/calamares` to the action
-`com.github.calamares.calamares.pkexec.run`, whose normal active-session
+`io.calamares.calamares.pkexec.run`, whose normal active-session
 default is `auth_admin`. On the passwordless `liveuser` account this produces
 an authentication dialog that requires no password but still requires an
 extra confirmation.

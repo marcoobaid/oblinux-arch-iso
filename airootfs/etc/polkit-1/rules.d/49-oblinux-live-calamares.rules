@@ -8,7 +8,7 @@
  * system because unpackfs initially copies the complete live filesystem.
  */
 polkit.addRule(function(action, subject) {
-    if (action.id == "com.github.calamares.calamares.pkexec.run" &&
+    if (action.id == "io.calamares.calamares.pkexec.run" &&
         action.lookup("program") == "/usr/bin/calamares" &&
         subject.user == "liveuser" &&
         subject.local &&
