@@ -302,8 +302,8 @@ reasoning and the real config search path if this ever needs revisiting.
 ## Branding
 
 **Current state (updated 2026-08-30, Phase 1 boot-branding integration)**:
-BIOS boot (syslinux), UEFI boot (systemd-boot), GRUB (the installed-system
-theme wired via Calamares), and Plymouth now source their assets from the
+BIOS boot (syslinux), UEFI boot (GRUB), installed-system GRUB (wired via
+Calamares), and Plymouth now source their assets from the
 released OBLinux Brand Master R5 identity (`oblinux-brand-master` tagged
 `v1.0.5`) — see `docs/BRANDING.md`'s "Brand Master boot-chain integration"
 section for the exact file-by-file mapping. GDM, the desktop, os-release,
@@ -409,8 +409,9 @@ distilled lesson):
 
 ## Boot and installation
 
-Both BIOS (syslinux) and UEFI (systemd-boot for the live medium, GRUB for
-the installed system) are supported and have each been verified on both
+Both BIOS (syslinux) and UEFI (GRUB for the live medium and installed system,
+with separate configurations) are supported. The earlier systemd-boot-based
+UEFI live path and the BIOS path have each been verified on both
 VirtualBox and real hardware (see `docs/TESTING.md`). No disk-encryption
 support yet (deliberately dropped from the Calamares sequence, see
 above). `cow_spacesize`/`copytoram` live-medium boot parameters have each

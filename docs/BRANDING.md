@@ -54,7 +54,7 @@ cleanly from favicon size up to a boot-splash centerpiece.
 |---|---|---|---|
 | Logo mark | `docs/branding/oblinux-mark*.svg` | SVG source | **Done** — see above |
 | BIOS boot menu background | `syslinux/splash.png` | PNG, 640×480 | **Superseded by Brand Master** — see "Brand Master boot-chain integration" below |
-| UEFI boot menu | uses same visual language via `efiboot/loader/entries/*.conf` titles (text only, systemd-boot has no background image) | — | Text branding done already; verified still compliant, see "Brand Master boot-chain integration" below |
+| UEFI boot menu | `grub/grub.cfg` + `grub/themes/oblinux/` | GRUB config + Brand Master theme payload | **Done** — live UEFI uses GRUB with the Brand Master theme; see "Brand Master boot-chain integration" below |
 | Plymouth boot theme | `airootfs/usr/share/plymouth/themes/oblinux/` + `plymouth` package | `.plymouth` + `.script` + PNGs | **Superseded by Brand Master** — see "Brand Master boot-chain integration" below |
 | GDM logo + background | `airootfs/usr/share/glib-2.0/schemas/50_oblinux-gdm.gschema.override` | GSettings override + SVG | **Done** — see below |
 | OS logo (About panel, `LOGO=oblinux-logo` in os-release) | `airootfs/usr/share/pixmaps/oblinux-logo.{svg,png}` | SVG + PNG, plain mark | **Done** — see below |
@@ -71,7 +71,7 @@ Brand Master integration is not assumed to extend to them.
 | Boot stage | File(s) in this repo | Brand Master source |
 |---|---|---|
 | BIOS boot menu (syslinux) | `syslinux/splash.png` | rasterized from `assets/iso/oblinux-media-lockup.svg`, composited onto Brand Master's near-black (`#0b1118`); Brand Master ships no pre-rendered syslinux-resolution asset, so this one raster/composite step is downstream integration, not a redesign of the master artwork |
-| UEFI boot menu (systemd-boot) | `efiboot/loader/entries/*.conf` | text only, already read "OBLinux" before this phase; systemd-boot has no background-image mechanism, so there is no image asset to source |
+| UEFI boot menu (GRUB) | `grub/grub.cfg` + `grub/themes/oblinux/` | theme payload copied verbatim from Brand Master's `themes/grub/oblinux/`; `grub.cfg` selects it from the live GRUB prefix and preserves the established OBLinux live boot parameters |
 | GRUB (installed-system theme, wired via Calamares `airootfs/etc/calamares/modules/grubcfg.conf`) | `airootfs/usr/share/grub/themes/oblinux/` | copied verbatim from Brand Master's `themes/grub/oblinux/` (`theme.txt`, `background.png`, `logo.png`) |
 | Plymouth | `airootfs/usr/share/plymouth/themes/oblinux/` | copied verbatim from Brand Master's `themes/plymouth/oblinux/` (`.plymouth`, `.script`, PNGs, and their SVG sources) |
 
@@ -330,7 +330,21 @@ behind the terminal viewport without altering Brand Master assets, the selected
 graphics mode, `gfxpayload=keep`, kernel parameters, or the mkinitcpio/Plymouth
 hook order. Both installed BIOS and UEFI paths use this same generated GRUB
 configuration. The live ISO remains separate: BIOS uses syslinux and UEFI uses
-systemd-boot, so neither live path executes this fragment.
+the hand-authored `grub/grub.cfg`, so neither live path executes this fragment.
+
+**Live UEFI GRUB integration (2026-08-31)**: the ArchISO boot mode is
+`uefi.grub`, replacing `uefi.systemd-boot`. ArchISO consumes
+`grub/grub.cfg`; that configuration enables `gfxterm` and selects
+`${prefix}/themes/oblinux/theme.txt`. The complete theme directory is a
+verbatim copy of the same released Brand Master `v1.0.5` payload used at
+`airootfs/usr/share/grub/themes/oblinux/` for installed systems. Keeping the
+live copy under `grub/` is required because the boot loader must render the
+menu before the live squashfs under `airootfs/` is mounted. The live entries
+retain `archisobasedir`, `archisosearchuuid`, `cow_spacesize=75%`, and
+`copytoram=n`; the normal entry also retains `quiet splash`, while the speech
+entry retains `accessibility=on`. The existing `efiboot/loader/` files remain
+as inactive systemd-boot reference configuration and are not consumed by the
+selected boot modes.
 
 ## Next steps
 
