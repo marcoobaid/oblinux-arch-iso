@@ -302,6 +302,36 @@ Ink background, and the Primary highlight bar shows clearly on the
 selected menu entry — screenshot evidence, `docs/TESTING.md`. The
 installed-system GRUB theme is done.
 
+**Post-menu gfxterm handoff fix (2026-08-30)**: suppressing Arch GRUB's
+hardcoded `Loading Linux ...` / `Loading initial ramdisk ...` messages did
+not remove the large black rectangle visible between the graphical menu and
+Plymouth. BIOS and UEFI screenshots showed that the Brand Master desktop
+remained intact around a sharply bounded black region: GRUB had closed
+`gfxmenu` and cleared the now-visible `gfxterm` viewport to its default black
+background. `GRUB_GFXPAYLOAD_LINUX=keep` preserves the graphics *mode* passed
+to Linux; it does not preserve the theme's pixels, and Plymouth cannot draw
+until its initramfs hook starts.
+
+The installed system now records the shipped Brand Master image as
+`GRUB_BACKGROUND` and ships an executable
+`/etc/grub.d/09_oblinux_gfxterm_background` generator fragment. It runs after
+`00_header` and before `10_linux`, emitting exactly:
+
+```grub
+insmod png
+background_image -m stretch /usr/share/grub/themes/oblinux/background.png
+```
+
+The explicit fragment is necessary because upstream `00_header` treats
+`GRUB_THEME` and `GRUB_BACKGROUND` as alternatives; setting both defaults
+alone does not guarantee that the terminal background command appears in the
+generated `/boot/grub/grub.cfg`. This keeps the authoritative theme background
+behind the terminal viewport without altering Brand Master assets, the selected
+graphics mode, `gfxpayload=keep`, kernel parameters, or the mkinitcpio/Plymouth
+hook order. Both installed BIOS and UEFI paths use this same generated GRUB
+configuration. The live ISO remains separate: BIOS uses syslinux and UEFI uses
+systemd-boot, so neither live path executes this fragment.
+
 ## Next steps
 
 1. ~~Logo/wordmark~~ — done, see above.

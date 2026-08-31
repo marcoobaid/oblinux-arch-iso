@@ -68,6 +68,15 @@ The line used is OBLinux's own live-boot HOOKS
 memdisk hooks removed and `fsck` added — same relative order already
 proven working by this project's own boot testing, not a fresh guess.
 
+Installed GRUB also consumes the executable
+`/etc/grub.d/09_oblinux_gfxterm_background` fragment inherited through
+`unpackfs`. Calamares' `grubcfg` module records the Brand Master image as
+`GRUB_BACKGROUND`; the fragment ensures `grub-mkconfig` emits the matching
+`insmod png` and `background_image -m stretch` commands even while
+`GRUB_THEME` is active. This prevents GRUB's post-menu gfxterm viewport from
+becoming a black rectangle before Plymouth starts, without changing the
+graphics payload or initramfs configuration.
+
 That drop-in file itself also has to be deleted on the target (same
 shellprocess step) — it's where OBLinux's *live-only* HOOKS actually live;
 the base `/etc/mkinitcpio.conf` (shipped untouched by the `mkinitcpio`

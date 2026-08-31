@@ -18,6 +18,7 @@ file_permissions=(
   ["/etc/shadow"]="0:0:400"
   ["/etc/sudoers.d"]="0:0:750"
   ["/etc/sudoers.d/g_wheel"]="0:0:440"
+  ["/etc/grub.d/09_oblinux_gfxterm_background"]="0:0:755"
   ["/root"]="0:0:750"
   ["/root/.automated_script.sh"]="0:0:755"
   ["/root/.gnupg"]="0:0:700"
