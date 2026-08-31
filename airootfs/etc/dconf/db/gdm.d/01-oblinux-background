@@ -26,3 +26,8 @@ primary-color='#0B1118'
 secondary-color='#0D2742'
 color-shading-type='vertical'
 picture-options='none'
+
+# Match the accepted Debian greeter's normal blue focus treatment without
+# changing the orange accent used by live and installed user sessions.
+[org/gnome/desktop/interface]
+accent-color='blue'

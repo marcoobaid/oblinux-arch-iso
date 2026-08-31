@@ -120,10 +120,12 @@ Full verification of both mechanisms, not just visual inspection:
 **Phase 2A update (2026-08-31):** the durable GDM-only mechanism remains, but
 Brand Master supersedes the legacy Ink-to-Slate values with its near-black to
 navy treatment (`#0B1118` to `#0D2742`) and replaces the legacy product lockup
-with the untouched R5 white lockup. The GNOME session lock screen now has its
-own unlocked `org.gnome.desktop.screensaver` default pointing to Brand Master's
-pre-rendered dark wallpaper. This does not change the desktop wallpaper
-described above.
+with Brand Master's untouched 64 px full-color R5 symbol, matching Debian's
+GDM vendor mark. A GDM-only interface override keeps the greeter focus accent
+blue while normal OBLinux user sessions retain orange. The GNOME session lock
+screen has its own unlocked `org.gnome.desktop.screensaver` default pointing
+to Brand Master's pre-rendered dark wallpaper. This does not change the desktop
+wallpaper described above.
 
 **Regression found and fixed 2026-08-14** (round 21): after items 2–4
 landed, the live session showed GDM falling back to a manual login
@@ -334,11 +336,13 @@ interface`'s `accent-color` key) — valid values are
 blue/teal/green/yellow/orange/red/pink/purple/slate; `orange` is the
 closest preset to Amber (`#d68a3c`). No new repo, no theme package —
 confirms the plan's assumption that this would just be a dconf default.
-Not scoped to the desktop session only: since GDM's dconf profile only
-overrides background keys (item 1), this falls through to the same
-compiled default for the GDM greeter too — a deliberate, cohesive
-choice, unlike the wallpaper split. **Confirmed**: orange shown
-selected under Settings → Appearance on the built VM.
+Phase 2A initially allowed this compiled default to reach GDM. Runtime visual
+comparison with the accepted Debian greeter showed that this produced an
+edition-specific orange focus outline. GDM's dedicated dconf database now
+overrides only its own `accent-color` to upstream blue; live and installed user
+sessions continue to receive orange. **Confirmed**: orange shown selected under
+Settings → Appearance on the built VM. The new GDM-only split still requires
+runtime confirmation.
 
 ### 3. Fonts — desktop UI + terminal — done, VM-confirmed 2026-08-13
 

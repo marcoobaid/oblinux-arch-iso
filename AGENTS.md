@@ -285,9 +285,10 @@ Layered, in order of what actually wins:
    below.
 2. **GDM-specific dconf profile/database** —
    `airootfs/etc/dconf/profile/gdm` + `airootfs/etc/dconf/db/gdm.d/` —
-   takes priority over (1) for the `gdm` user only. Currently used for
-   GDM's own background gradient, deliberately different from the
-   desktop session's wallpaper (see Branding).
+   takes priority over (1) for the `gdm` user only. Currently used for GDM's
+   own background gradient, deliberately different from the desktop session's
+   wallpaper, and the GDM-only blue accent that matches the accepted Debian
+   greeter without changing normal users' orange accent (see Branding).
 3. **Per-user dotfiles** (`~/.zshrc`, `~/.config/starship.toml`) — a
    real user can always override defaults; (1)/(2) only set what a
    fresh account sees.
@@ -347,8 +348,8 @@ not assumed — see `docs/THEMING.md` for the verification detail on each):
   requires patching `gnome-shell-theme.gresource` directly, which
   upstream itself flags as reverted by every `gnome-shell` update.
   Deliberately not done.
-- **GDM logo**: `org.gnome.login-screen logo`, points at the mark+wordmark
-  lockup SVG.
+- **GDM logo**: `org.gnome.login-screen logo`, points at the dedicated 64 px
+  full-color Brand Master symbol PNG, matching Debian's GDM vendor mark.
 - **Icon theme**: `oblinux-icon-theme` package (separate repo), an
   *inheriting* theme — only recolors `places` icons, inherits everything
   else from `papirus-icon-theme`.

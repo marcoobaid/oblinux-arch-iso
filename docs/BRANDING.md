@@ -9,10 +9,13 @@ the released sources named below; it does not modify or regenerate the masters.
 | Surface | File(s) in this repo | Brand Master source / mechanism |
 |---|---|---|
 | GDM background | `airootfs/etc/dconf/profile/gdm`, `airootfs/etc/dconf/db/gdm.d/01-oblinux-background` | GDM-only, image-free vertical gradient using Brand Master's near black `#0B1118` and derived navy `#0D2742`; the maintainable dconf mechanism matches the accepted Debian implementation |
-| GDM product mark | `airootfs/usr/share/pixmaps/oblinux-lockup-white.svg`, selected by `airootfs/usr/share/glib-2.0/schemas/50_oblinux-gdm.gschema.override` | byte-for-byte copy of Brand Master v1.0.4 `brand/master/oblinux-lockup-white.svg` |
+| GDM product mark | `airootfs/usr/share/pixmaps/oblinux-gdm-logo.png`, selected by `airootfs/usr/share/glib-2.0/schemas/50_oblinux-gdm.gschema.override` | byte-for-byte copy of Brand Master v1.0.5 `assets/icons/hicolor/64x64/apps/oblinux-logo.png`, matching Debian's selected 64 px GDM vendor mark |
 | GNOME lock screen | `airootfs/usr/share/backgrounds/oblinux/oblinux-dark-3840x2160.png`, selected by the same schema override under `org.gnome.desktop.screensaver` | byte-for-byte copy of Brand Master v1.0.5 `brand/wallpapers/3840x2160/oblinux-dark-3840x2160.png` |
 
-The GDM profile applies only to the `gdm` service account. The screensaver key
+The GDM profile applies only to the `gdm` service account. In addition to the
+background, it restores the greeter's upstream blue accent so focus treatment
+matches the accepted Debian implementation while user sessions remain orange.
+The screensaver key
 is an unlocked system default for every normal GNOME account, including the
 live session and accounts created by Calamares; users can change it normally.
 No file is seeded into `liveuser` or `/etc/skel`, and the existing desktop
@@ -178,11 +181,11 @@ is retained after Phase 2A:
 - `airootfs/usr/share/pixmaps/oblinux-logo.svg` / `.png` (256×256) — plain
   mark only, copied straight from `docs/branding/oblinux-mark.svg`, matching
   `LOGO=oblinux-logo` exactly.
-- `airootfs/usr/share/pixmaps/oblinux-lockup-white.svg` — the Brand Master R5
-  mark+wordmark lockup, used only by GDM's `logo` key (see above).
+- `airootfs/usr/share/pixmaps/oblinux-gdm-logo.png` — the Brand Master R5
+  64 px full-color symbol, used only by GDM's `logo` key (see above).
 
-The GDM lockup therefore remains distinct from `oblinux-logo.svg`, which is
-reserved for the plain-mark `os-release` identity.
+The dedicated GDM raster therefore remains distinct from `oblinux-logo.svg`,
+which is reserved for the legacy plain-mark `os-release` identity.
 
 ## Plymouth theme
 
