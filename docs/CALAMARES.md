@@ -113,6 +113,7 @@ list) — full reasoning is in `modules/services-systemd.conf` and
 | What | Where | How |
 |---|---|---|
 | Passwordless sudo | `/etc/sudoers.d/g_wheel` | removed |
+| Live-only Calamares Polkit authorization | `/etc/polkit-1/rules.d/49-oblinux-live-calamares.rules` | removed; installed users fall back to Calamares' normal authentication policy |
 | GDM autologin as liveuser | `/etc/gdm/custom.conf` | disabled, not deleted (keeps the file's section scaffolding) |
 | `liveuser` account | — | dedicated `removeuser` module |
 | Root tty1 rescue-script mechanism | `/root/.automated_script.sh`, `/root/.zlogin` | removed |
@@ -129,6 +130,25 @@ override (intentionally becomes the installed system's default too, per
 `docs/BRANDING.md`), the accessibility/speech live services (condition on
 a kernel cmdline flag that won't be present on a normal boot — harmless
 no-ops, not worth the cleanup).
+
+### Live-session Calamares authorization
+
+Calamares' packaged desktop entry launches `sh -c "pkexec calamares"`.
+The executable annotation in
+`/usr/share/polkit-1/actions/com.github.calamares.calamares.policy` maps
+`/usr/bin/calamares` to the action
+`com.github.calamares.calamares.pkexec.run`, whose normal active-session
+default is `auth_admin`. On the passwordless `liveuser` account this produces
+an authentication dialog that requires no password but still requires an
+extra confirmation.
+
+`/etc/polkit-1/rules.d/49-oblinux-live-calamares.rules` returns `YES` only
+when that exact action requests the exact `/usr/bin/calamares` program for
+the local, active `liveuser` session. Calamares continues to run elevated;
+the rule does not authorize other pkexec programs or other Polkit actions.
+Because `unpackfs` clones the live filesystem, `shellprocess@final` explicitly
+removes the rule from the target so installed users retain Calamares' normal
+authentication policy (and the packages module removes Calamares itself).
 
 ## Branding — status
 
