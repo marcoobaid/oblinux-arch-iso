@@ -301,16 +301,18 @@ reasoning and the real config search path if this ever needs revisiting.
 
 ## Branding
 
-**Current state (updated 2026-08-30, Phase 1 boot-branding integration)**:
+**Current state (updated 2026-08-31, Phase 2A GDM/lock integration)**:
 BIOS boot (syslinux), UEFI boot (GRUB), installed-system GRUB (wired via
 Calamares), and Plymouth now source their assets from the
 released OBLinux Brand Master R5 identity (`oblinux-brand-master` tagged
 `v1.0.5`) — see `docs/BRANDING.md`'s "Brand Master boot-chain integration"
-section for the exact file-by-file mapping. GDM, the desktop, os-release,
-and Calamares' own branding/slideshow are still the legacy "Slate & Amber"
-identity inherited from the `oblinux` baseline at initialization, pending a
-future, explicit, separately-authorized task to R5-integrate them too. Do
-not redesign, hand-edit, or independently regenerate any file sourced from
+section for the exact file-by-file mapping. GDM's product mark and dedicated
+background plus the GNOME session lock-screen default now consume released
+Brand Master R5 assets/guidance as documented in `docs/BRANDING.md` Phase 2A.
+The desktop, os-release, and Calamares' own branding/slideshow remain the
+legacy "Slate & Amber" identity inherited from the `oblinux` baseline,
+pending a future, explicit, separately-authorized task to R5-integrate them.
+Do not redesign, hand-edit, or independently regenerate any file sourced from
 Brand Master, and do not extend R5 integration to the still-legacy surfaces
 above as a side effect of unrelated work.
 

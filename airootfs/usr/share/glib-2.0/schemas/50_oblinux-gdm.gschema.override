@@ -1,4 +1,4 @@
-# OBLinux GDM/desktop branding overrides.
+# OBLinux GNOME defaults and GDM product-mark override.
 #
 # Same mechanism Arch's own gdm package uses for the default Arch logo
 # (30_org.archlinux.gdm.gschema.override) — a GSettings schema override,
@@ -11,14 +11,12 @@
 # wallpaper — this is how new user accounts (e.g. created by Calamares)
 # get OBLinux's own default wallpaper instead of upstream GNOME's.
 #
-# GDM itself no longer inherits this default as of the wallpaper set
-# added below: it now has its own dconf profile/database
-# (etc/dconf/profile/gdm + etc/dconf/db/gdm.d/) which takes priority for
-# the gdm user specifically, giving it a distinct Ink->Slate gradient
-# rather than this picture-based default. See that directory and
-# docs/THEMING.md item 1 for why (a real background image on GDM's
-# login screen needs fragile gresource theme-patching, not just a
-# schema override).
+# GDM has its own dconf profile/database (etc/dconf/profile/gdm +
+# etc/dconf/db/gdm.d/) which takes priority for the gdm user specifically,
+# giving the greeter a Brand Master near-black-to-navy gradient rather than
+# this picture-based desktop default. The session lock screen is independent:
+# org.gnome.desktop.screensaver below selects Brand Master's dark wallpaper as
+# an unlocked default, so users remain free to change it.
 
 [org.gnome.desktop.background]
 picture-uri='/usr/share/backgrounds/oblinux/oblinux-soft-waves.png'
@@ -28,7 +26,17 @@ primary-color='#151a22'
 color-shading-type='solid'
 
 [org.gnome.login-screen]
-logo='/usr/share/pixmaps/oblinux-logo-text-dark.svg'
+logo='/usr/share/pixmaps/oblinux-lockup-white.svg'
+
+# Phase 2A: Brand Master lock-screen default. This is deliberately separate
+# from org.gnome.desktop.background so the existing desktop wallpaper remains
+# unchanged. The PNG is copied byte-for-byte from Brand Master v1.0.5; it is
+# pre-rendered so the lock screen does not invoke GNOME's SVG loading pipeline.
+[org.gnome.desktop.screensaver]
+picture-uri='file:///usr/share/backgrounds/oblinux/oblinux-dark-3840x2160.png'
+picture-options='zoom'
+primary-color='#0B1118'
+secondary-color='#0D2742'
 
 # THEMING.md items 2+3: accent color and default fonts. Not overridden
 # per-user by GDM's dconf profile (unlike background), so these apply

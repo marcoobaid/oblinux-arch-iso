@@ -91,9 +91,9 @@ Field) were designed and approved in principle but are **not** shipped
 — set aside once the gresource constraint surfaced; worth revisiting if
 the pacman-hook approach ever becomes worth the maintenance cost.
 
-The mark+wordmark lockup already shown at GDM login (`org.gnome.
-login-screen logo`, `oblinux-logo-text-dark.svg`) is unrelated to this
-item — it predates this round and wasn't touched. Its exact on-screen
+The legacy mark+wordmark lockup shown at GDM login (`org.gnome.login-screen
+logo`, formerly `oblinux-logo-text-dark.svg`) was unrelated to this item and
+was not touched during this historical round. Its exact on-screen
 position (bottom-center, like Ubuntu's greeter) was the one thing left
 unverified for vanilla GNOME — **confirmed 2026-08-13 via VM
 screenshot**: it does land bottom-center, same as Ubuntu.
@@ -116,6 +116,14 @@ Full verification of both mechanisms, not just visual inspection:
   Slate are close in value by design) — checked and confirmed this is
   the gradient working as configured, not a defect. Kept as designed
   rather than increasing contrast.
+
+**Phase 2A update (2026-08-31):** the durable GDM-only mechanism remains, but
+Brand Master supersedes the legacy Ink-to-Slate values with its near-black to
+navy treatment (`#0B1118` to `#0D2742`) and replaces the legacy product lockup
+with the untouched R5 white lockup. The GNOME session lock screen now has its
+own unlocked `org.gnome.desktop.screensaver` default pointing to Brand Master's
+pre-rendered dark wallpaper. This does not change the desktop wallpaper
+described above.
 
 **Regression found and fixed 2026-08-14** (round 21): after items 2–4
 landed, the live session showed GDM falling back to a manual login

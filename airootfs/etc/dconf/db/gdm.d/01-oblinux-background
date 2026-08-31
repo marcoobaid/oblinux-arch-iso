@@ -1,4 +1,5 @@
-# GDM-specific background: an Ink -> Slate vertical gradient, distinct
+# GDM-specific Brand Master background: a near-black -> navy vertical
+# gradient, distinct
 # from the desktop session's own wallpaper (org.gnome.desktop.background
 # picture-uri, set via the gschema override — see
 # usr/share/glib-2.0/schemas/50_oblinux-gdm.gschema.override).
@@ -11,8 +12,8 @@
 # for the gdm user specifically, giving GDM its own look without
 # touching the desktop session's default.
 #
-# Deliberately a gradient, not the Circuit Field artwork explored during
-# design: an actual background *image* on GDM's login screen requires
+# Deliberately a gradient, not a wallpaper image: an actual background image
+# on GDM's login screen requires
 # patching gnome-shell-theme.gresource directly (ArchWiki: "This change
 # will be overwritten on subsequent updates of gnome-shell") — fragile,
 # gets silently reverted by the next gnome-shell upgrade on an installed
@@ -21,7 +22,7 @@
 # that's what shipped — see docs/THEMING.md item 1 for the full
 # reasoning and the deferred image-background option.
 [org/gnome/desktop/background]
-primary-color='#151a22'
-secondary-color='#2c3a4e'
+primary-color='#0B1118'
+secondary-color='#0D2742'
 color-shading-type='vertical'
 picture-options='none'
