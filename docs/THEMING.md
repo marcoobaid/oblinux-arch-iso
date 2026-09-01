@@ -361,6 +361,17 @@ sessions received orange at that historical point. **Confirmed historically**:
 orange was shown selected under Settings → Appearance on the built VM. Phase 3
 supersedes that session default with blue as described above.
 
+**Phase 3 Shell follow-up (2026-09-01):** runtime testing confirmed that the
+blue GSettings preference affected GTK/libadwaita applications but the custom
+OBLinux Shell theme still rendered Quick Settings and other Shell states in
+its compiled legacy Amber primary. The authoritative SCSS primary and its
+accent-dependent toggle/checkbox SVGs now use GNOME's official blue accent
+background value `#3584e4`; `gnome-shell.css` was regenerated from that source.
+This keeps the Ink/Slate Shell surfaces while aligning selected tiles, menus,
+sliders, focus rings, and other Shell accent states with the blue session
+preference and Debian's stock GNOME presentation. Runtime visual confirmation
+of all affected Shell surfaces remains required.
+
 ### 3. Fonts — desktop UI + terminal — done, VM-confirmed 2026-08-13
 
 Desktop UI default: **Inter** (`inter-font` package — confirmed on

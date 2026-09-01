@@ -6,6 +6,12 @@ Normal GNOME sessions now select GNOME's unlocked blue accent default, matching
 the accepted OBLinux Debian behavior. GDM already used the same blue enum value
 through its isolated dconf profile, so this correction changes no GDM files.
 
+Runtime testing exposed that the custom User Themes stylesheet did not consume
+the GSettings accent dynamically and retained its compiled legacy Amber
+primary. The authoritative Shell SCSS and accent-dependent assets now use
+GNOME blue `#3584e4`, aligning Quick Settings and other Shell states with the
+blue session preference without changing the established Ink/Slate surfaces.
+
 The neutral Horizon account avatar from the Debian reference is installed
 unchanged at `/usr/share/oblinux/branding/oblinux-default-avatar.svg` and seeded
 as `.face` plus the conventional `.face.icon` link for both `/etc/skel` and the

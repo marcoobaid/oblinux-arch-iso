@@ -9,7 +9,7 @@ future edits, only the compiled output ships.
 
 A fork of the `gnome-shell` module from
 [vinceliuice/Graphite-gtk-theme](https://github.com/vinceliuice/Graphite-gtk-theme)
-(GPL-3.0), recolored to OBLinux's Slate & Amber palette. Chosen over
+(GPL-3.0), recolored to OBLinux's Slate surfaces and GNOME blue accent. Chosen over
 Nordic, Orchis, and WhiteSur after comparing real GitHub activity, license,
 and shell-specific (not just overall repo) commit currency — see
 `docs/THEMING.md` item 5 for the full comparison. Only the `gnome-shell`
@@ -29,13 +29,13 @@ there, not a hack bolted on top:
 | Scrim / base-alt (`background(f)`) | `#242424` | `#1e2733` (interpolated) |
 | Background / base / login / titlebar (`background(g)`) | `#2C2C2C` | `#2c3a4e` (Slate — same hex as the GDM background/wallpaper) |
 | Surface — popovers/menus (`background(h)`) | `#3C3C3C` | `#3a4d68` (interpolated, deliberately short of Slate's lighter primary `#3f6690` — that tone stays reserved for the mark/accent gradient) |
-| Accent (`$theme_default_color` → `$primary`) | `$grey-300` | `#d68a3c` (Amber, exact — same hex as the spark, `accent-color='orange'`, the GDM logo) |
+| Accent (`$theme_default_color` → `$primary`) | `$grey-300` | `#3584e4` (GNOME blue — matches `accent-color='blue'` and Debian's stock GNOME presentation) |
 | Link | `$blue-500` (Material) | `#3f6690` (Slate primary — same hex as the mark's ring gradient) |
 
-Also recolored: the two accent-dependent asset SVGs
+Also recolored: the accent-dependent asset SVGs
 (`toggle-on(-dark).svg`, `checkbox-dark.svg`, sourced from Graphite's own
 built-in `orange` variant as the closest starting point) from Material
-orange (`#F57C00`/`#FB8C00`) to exact Amber (`#d68a3c`).
+orange (`#F57C00`/`#FB8C00`) to GNOME blue (`#3584e4`).
 
 Removed entirely: the `#lockDialogGroup` background image
 (`background.png`, bundled by upstream) — OBLinux's lock/login screen

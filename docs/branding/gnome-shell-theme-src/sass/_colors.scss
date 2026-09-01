@@ -29,12 +29,12 @@ $theme_blue_color:    if($variant == 'light', #3684dd, #5294e2);
 // OBLinux brand colors (docs/BRANDING.md), following the same pattern as
 // the 'nord' branch above: a full $color_type value, not a hack. Only
 // $theme_default_color is overridden here (OBLinux ships one theme, no
-// purple/pink/etc. variants) — Amber, the exact hex already used
-// everywhere else in the project (spark, accent-color='orange', GDM
-// logo). This becomes $primary via theme(color) below: selection
-// highlights, focus rings, toggle "on" state, calendar's selected day.
+// purple/pink/etc. variants). Phase 3 aligns the custom Shell theme with
+// GNOME's selected blue accent: #3584e4 is the official GNOME blue accent
+// background value. This becomes $primary via theme(color) below: selection
+// highlights, focus rings, toggle "on" state, and calendar's selected day.
 @if $color_type == 'oblinux' {
-  $theme_default_color: #d68a3c;
+  $theme_default_color: #3584e4;
 }
 
 @function gtkalpha($c, $a) {
