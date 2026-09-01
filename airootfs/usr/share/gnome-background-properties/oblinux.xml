@@ -1,10 +1,11 @@
 <?xml version="1.0"?>
 <!DOCTYPE wallpapers SYSTEM "gnome-wp-list.dtd">
 <!--
-  OBLinux Brand Master R5 production wallpaper set, for GNOME Settings'
-  background picker. These are the released PNGs rather than the generic SVG
-  catalog because OBLinux Arch deliberately excludes SVG wallpaper rendering
-  from the live-session startup path (docs/THEMING.md item 1).
+  OBLinux wallpaper set for GNOME Settings' background picker. The default R5
+  entries use Brand Master's released PNGs rather than the generic SVG catalog
+  because OBLinux Arch deliberately excludes SVG wallpaper rendering from the
+  live-session startup path (docs/THEMING.md item 1). The Obsidian Horizon
+  entries are established OBLinux artwork shared with the Debian edition.
   Schema verified verbatim against gnome-backgrounds' own source
   (gitlab.gnome.org/GNOME/gnome-backgrounds, backgrounds/*.xml.in) and
   its real install path on Arch (gnome-backgrounds package file list:
@@ -28,5 +29,23 @@
     <shade_type>solid</shade_type>
     <pcolor>#FF8A00</pcolor>
     <scolor>#0D2742</scolor>
+  </wallpaper>
+  <wallpaper deleted="false">
+    <name>OBLinux Obsidian Horizon</name>
+    <filename>/usr/share/backgrounds/oblinux/oblinux-horizon-branded-3840x2160.jpg</filename>
+    <filename-dark>/usr/share/backgrounds/oblinux/oblinux-horizon-branded-3840x2160.jpg</filename-dark>
+    <options>zoom</options>
+    <shade_type>solid</shade_type>
+    <pcolor>#111820</pcolor>
+    <scolor>#1B2836</scolor>
+  </wallpaper>
+  <wallpaper deleted="false">
+    <name>OBLinux Obsidian Horizon Clean</name>
+    <filename>/usr/share/backgrounds/oblinux/oblinux-horizon-clean-3840x2160.jpg</filename>
+    <filename-dark>/usr/share/backgrounds/oblinux/oblinux-horizon-clean-3840x2160.jpg</filename-dark>
+    <options>zoom</options>
+    <shade_type>solid</shade_type>
+    <pcolor>#111820</pcolor>
+    <scolor>#1B2836</scolor>
   </wallpaper>
 </wallpapers>
