@@ -161,6 +161,7 @@ airootfs/etc/xdg/fastfetch/             System-wide fastfetch config + logo
 airootfs/etc/xdg/starship.toml          System-wide Starship prompt config
 airootfs/etc/skel/                      Template for newly created users' homes
 airootfs/home/liveuser/                 Live-session-only account config
+airootfs/usr/share/oblinux/branding/    Shared desktop identity assets
 airootfs/etc/systemd/system/            Live-session systemd unit overrides
 airootfs/usr/share/glib-2.0/schemas/    GSettings/dconf compiled-default overrides
 airootfs/usr/share/themes/OBLinux/      GNOME Shell theme (compiled CSS + assets)
@@ -287,8 +288,8 @@ Layered, in order of what actually wins:
    `airootfs/etc/dconf/profile/gdm` + `airootfs/etc/dconf/db/gdm.d/` —
    takes priority over (1) for the `gdm` user only. Currently used for GDM's
    own background gradient, deliberately different from the desktop session's
-   wallpaper, and the GDM-only blue accent that matches the accepted Debian
-   greeter without changing normal users' orange accent (see Branding).
+   wallpaper. The greeter and normal user sessions both use the unlocked blue
+   accent default that matches the accepted Debian implementation (see Branding).
 3. **Per-user dotfiles** (`~/.zshrc`, `~/.config/starship.toml`) — a
    real user can always override defaults; (1)/(2) only set what a
    fresh account sees.

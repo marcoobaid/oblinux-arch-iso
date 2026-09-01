@@ -336,7 +336,15 @@ as the original SVG→PNG fix). **Confirmed 2026-08-17**: rebuilt, wordmark
 displays fully and correctly on both VirtualBox and the physical laptop
 that originally showed the crop. Closed.
 
-### 2. GTK theme — accent color — done, VM-confirmed 2026-08-13
+### 2. GTK theme — accent color — done, Phase 3 default updated 2026-08-31
+
+**Phase 3 update (2026-08-31):** normal GNOME sessions now use the unlocked
+`accent-color='blue'` compiled default, matching the accepted OBLinux Debian
+implementation. The same system default applies to the live account and to
+accounts created by Calamares, while a user's explicit Appearance selection
+continues to take precedence. GDM already selected blue through its dedicated
+dconf database, so no GDM configuration changed. Runtime visual confirmation
+of the new session default remains required.
 
 `org.gnome.desktop.interface accent-color='orange'`, added to the
 gschema override. Enum verified verbatim against
@@ -349,9 +357,9 @@ Phase 2A initially allowed this compiled default to reach GDM. Runtime visual
 comparison with the accepted Debian greeter showed that this produced an
 edition-specific orange focus outline. GDM's dedicated dconf database now
 overrides only its own `accent-color` to upstream blue; live and installed user
-sessions continue to receive orange. **Confirmed**: orange shown selected under
-Settings → Appearance on the built VM. The new GDM-only split still requires
-runtime confirmation.
+sessions received orange at that historical point. **Confirmed historically**:
+orange was shown selected under Settings → Appearance on the built VM. Phase 3
+supersedes that session default with blue as described above.
 
 ### 3. Fonts — desktop UI + terminal — done, VM-confirmed 2026-08-13
 

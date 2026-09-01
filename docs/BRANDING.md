@@ -1,5 +1,19 @@
 # OBLinux Branding
 
+## Phase 3 desktop findings (2026-08-31)
+
+Normal GNOME sessions now select GNOME's unlocked blue accent default, matching
+the accepted OBLinux Debian behavior. GDM already used the same blue enum value
+through its isolated dconf profile, so this correction changes no GDM files.
+
+The neutral Horizon account avatar from the Debian reference is installed
+unchanged at `/usr/share/oblinux/branding/oblinux-default-avatar.svg` and seeded
+as `.face` plus the conventional `.face.icon` link for both `/etc/skel` and the
+pre-created Arch live account. Calamares-created users therefore inherit the
+same default avatar as Debian users, while the live session receives it without
+depending on `/etc/skel`. GNOME/GDM can replace the default normally when a
+user chooses a personal account image.
+
 ## Brand Master desktop integration (Phase 2C: 2026-08-31)
 
 The GNOME desktop, GNOME About identity, and Fastfetch now consume the released

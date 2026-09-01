@@ -42,14 +42,14 @@ picture-options='zoom'
 primary-color='#0B1118'
 secondary-color='#0D2742'
 
-# THEMING.md items 2+3: accent color and default fonts. GDM's dconf profile
-# overrides accent-color back to upstream blue so the greeter matches the
-# accepted Debian implementation; normal user sessions retain orange.
+# THEMING.md items 2+3: accent color and default fonts. Phase 3 aligns normal
+# user sessions with the accepted Debian implementation's blue accent. GDM's
+# dedicated dconf profile already selects the same blue value.
 #
 # accent-color: enum verified verbatim against gsettings-desktop-schemas
 # upstream source (org.gnome.desktop.interface accent-color) — valid
 # values are blue/teal/green/yellow/orange/red/pink/purple/slate;
-# 'orange' is the closest preset to Amber (#d68a3c).
+# Phase 3 intentionally selects 'blue' for Debian parity.
 #
 # font-name / document-font-name: Inter (inter-font package, added to
 # packages.x86_64), registered family confirmed via the package's own
@@ -67,7 +67,7 @@ secondary-color='#0D2742'
 # vendored files: "JetBrainsMono Nerd Font Mono" (typographic family,
 # name ID 16) — matches this value.
 [org.gnome.desktop.interface]
-accent-color='orange'
+accent-color='blue'
 font-name='Inter 11'
 document-font-name='Inter 11'
 monospace-font-name='JetBrainsMono Nerd Font Mono 11'
