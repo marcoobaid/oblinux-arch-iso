@@ -96,3 +96,9 @@ enabled-extensions=['user-theme@gnome-shell-extensions.gcampax.github.com']
 # setup needed — same pattern as the OBLinux icon theme.
 [org.gnome.shell.extensions.user-theme]
 name='OBLinux'
+
+# Phase 3 follow-up: Ptyxis follows GNOME's light/dark system appearance by
+# default, matching the accepted Debian behavior. This is an unlocked compiled
+# default; an explicit per-user Light or Dark selection still takes precedence.
+[org.gnome.Ptyxis]
+interface-style='system'

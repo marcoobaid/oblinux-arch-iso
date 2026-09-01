@@ -372,6 +372,14 @@ sliders, focus rings, and other Shell accent states with the blue session
 preference and Debian's stock GNOME presentation. Runtime visual confirmation
 of all affected Shell surfaces remains required.
 
+**Phase 3 submenu follow-up (2026-09-01):** the first blue Shell build exposed
+that Graphite's styled-sidebar branch painted the entire expanded power menu in
+the primary color. OBLinux now keeps selected Quick Settings tiles and sliders
+blue while rendering expanded Quick Settings menus on the neutral Shell surface
+with normal primary/secondary text contrast, matching Debian's stock GNOME
+behavior more closely. This is scoped to the expanded submenu; it does not
+revert the blue session accent.
+
 ### 3. Fonts — desktop UI + terminal — done, VM-confirmed 2026-08-13
 
 Desktop UI default: **Inter** (`inter-font` package — confirmed on

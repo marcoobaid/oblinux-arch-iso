@@ -264,7 +264,19 @@
     padding: 0 !important;
   }
 
-  @if $sidebar == 'styled' {
+  // OBLinux keeps selected Quick Settings tiles blue, but expanded menus use
+  // a neutral surface like stock GNOME/Debian. A full primary-color submenu
+  // reduces text contrast and makes a transient menu read as a selected tile.
+  @if $color_type == 'oblinux' {
+    // Debian's stock expanded menu uses a neutral elevated gray rather than
+    // OBLinux's blue-tinted Slate surface ramp.
+    background-color: #4d4d4f !important;
+    color: $text !important;
+
+    .popup-separator-menu-item-separator {
+      background-color: $divider !important;
+    }
+  } @else if $sidebar == 'styled' {
     background-color: $primary !important;
     color: on($primary, secondary) !important;
 
@@ -287,7 +299,21 @@
     spacing: $base_padding;
     border-radius: $base_radius / 2 !important;
 
-    @if $sidebar == 'styled' {
+    @if $color_type == 'oblinux' {
+      color: $text-secondary !important;
+
+      StLabel { color: $text-secondary; }
+
+      &:focus, &.hover, &.selected {
+        color: $text !important;
+        background-color: rgba($text, 0.1) !important;
+      }
+
+      &:active, &.selected:active {
+        color: $text !important;
+        background-color: rgba($text, 0.2) !important;
+      }
+    } @else if $sidebar == 'styled' {
       color: on($primary, secondary) !important;
 
       StLabel { color: on($primary, secondary); }
@@ -349,6 +375,11 @@
         &.active {
           background-color: on($theme_green_color) !important;
           color: $theme_green_color;
+        }
+      } @else if $color_type == 'oblinux' {
+        &.active {
+          background-color: rgba($text, 0.15) !important;
+          color: $text;
         }
       } @else {
         &.active {

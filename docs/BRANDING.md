@@ -11,6 +11,14 @@ the GSettings accent dynamically and retained its compiled legacy Amber
 primary. The authoritative Shell SCSS and accent-dependent assets now use
 GNOME blue `#3584e4`, aligning Quick Settings and other Shell states with the
 blue session preference without changing the established Ink/Slate surfaces.
+Expanded Quick Settings submenus remain neutral rather than filling the whole
+menu with the accent color, preserving readable white/secondary text and
+matching Debian's stock GNOME system-menu hierarchy.
+
+Ptyxis now has an unlocked `interface-style='system'` compiled default, matching
+Debian's system-following terminal behavior. It follows GNOME light/dark style
+for both the live session and installed users unless a user explicitly chooses
+Light or Dark in Ptyxis.
 
 The neutral Horizon account avatar from the Debian reference is installed
 unchanged at `/usr/share/oblinux/branding/oblinux-default-avatar.svg` and seeded
