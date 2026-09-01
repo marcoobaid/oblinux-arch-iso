@@ -1,5 +1,30 @@
 # OBLinux Branding
 
+## Brand Master Calamares integration (Phase 2B: 2026-08-31)
+
+Calamares now consumes the Brand Master R5 installer theme, matching the
+known-good Debian OBLinux implementation wherever the two Calamares builds
+share a branding mechanism. The complete shared payload lives under
+`airootfs/etc/calamares/branding/oblinux/`: the R5 symbol and horizontal
+lockups, responsive Welcome artwork, seven SVG slideshow panels, completion
+panel, QML presentation, and navy/white/orange widget-sidebar palette.
+
+The shared artwork and QML are byte-for-byte copies of Brand Master's current
+`themes/calamares/oblinux/` payload. Only `branding.desc` is activated
+downstream: `welcomeExpandingLogo` is enabled to keep the horizontal lockup
+proportional and uncropped; release labels resolve to the distribution-neutral
+`OBLinux` name; optional project URLs are empty because the Welcome module does
+not expose those links and no non-legacy public project URL is configured.
+The Arch installer keeps its existing `/etc/calamares` location, module
+configuration, settings sequence, package handling, and installation behavior.
+
+This replaces the legacy 256 px mark, 1050×700 geometry, Slate/Amber sidebar,
+and locally authored five-slide presentation. Those retired files
+(`logo.png` and `show.qml`) are no longer present or referenced. Static source
+validation can establish correct payload wiring, but runtime visual parity
+still requires an ISO build and an installer walkthrough on the Linux test
+machine.
+
 ## Brand Master GDM and lock-screen integration (Phase 2A: 2026-08-31)
 
 GDM and the GNOME session lock screen now consume the released OBLinux Brand
@@ -93,11 +118,10 @@ cleanly from favicon size up to a boot-splash centerpiece.
 
 BIOS boot, UEFI boot, GRUB, and Plymouth now source their visual assets from
 `oblinux-brand-master` (tagged release `v1.0.5`), replacing this repo's
-original Slate & Amber boot artwork. The desktop, os-release, and
-Calamares elsewhere in this file are still the legacy Slate & Amber assets
-described below, pending a separate, explicitly-authorized later phase. GDM
-and the GNOME lock screen were integrated separately in Phase 2A; Brand Master
-integration is not assumed to extend to the remaining surfaces.
+original Slate & Amber boot artwork. The desktop and os-release remain on the
+legacy identity described below. GDM and the GNOME lock screen were integrated
+separately in Phase 2A, and Calamares in Phase 2B; Brand Master integration is
+not assumed to extend to the remaining surfaces.
 
 | Boot stage | File(s) in this repo | Brand Master source |
 |---|---|---|

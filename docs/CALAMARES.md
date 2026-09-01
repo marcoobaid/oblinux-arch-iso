@@ -152,24 +152,27 @@ authentication policy (and the packages module removes Calamares itself).
 
 ## Branding — status
 
-Real OBLinux assets (mark, Slate & Amber palette) are already wired in —
-this wasn't left as generic Calamares placeholder branding.
+**Phase 2B (2026-08-31)** replaces the legacy local installer artwork with the
+Brand Master R5 Calamares theme and follows the known-good Debian OBLinux
+activation. The branding directory now contains Brand Master's square symbol,
+horizontal Welcome lockup, white variants, seven supplied SVG slides,
+completion panel, and QML presentation. The descriptor selects the shared
+navy/white/orange widget-sidebar palette and the 900×600 window geometry.
 
-**Slideshow (2026-08-22, phase 3/4 item 3)**: upgraded from the earlier
-single-static-image placeholder to a real multi-slide QML presentation
-(`airootfs/etc/calamares/branding/oblinux/show.qml`, `slideshowAPI: 2`).
-Structure verified verbatim against Calamares' own reference slideshow
-(`src/branding/default/show.qml`) — `Presentation`/`Slide` elements, a
-`Timer` driving `goToNextSlide()`, `onActivate()`/`onLeave()` for proper
-start/stop when the execution step ends.
+Arch-specific activation is deliberately limited to metadata: enable
+`welcomeExpandingLogo` so Calamares scales the 1100×320 Welcome lockup with its
+proportional label path, resolve the optional version labels to plain
+`OBLinux`, and leave hidden project links empty instead of carrying the legacy
+repository URLs forward. `settings.conf` already selects `branding: oblinux`,
+so the module sequence and every functional module configuration remain
+unchanged.
 
-First-draft content: 5 slides (welcome, desktop, terminal, packages,
-"almost there"), each reusing the existing mark (`logo.png`) with a
-Slate & Amber background drawn explicitly per-slide, rather than new
-custom icons or real screenshots. Deliberately a first pass to react to
-before investing further — real screenshots of the actual desktop/
-terminal are a likely upgrade once there's a stable look to capture,
-and/or bespoke per-slide icons matching the mark's visual language.
+The superseded `logo.png` and `show.qml` files were removed. All remaining
+QML/SVG files are direct Brand Master payload files and must not be edited
+downstream. The static validation for this phase verifies YAML parsing, asset
+references, QML structure, SVG well-formedness, and an unchanged installer
+sequence. An ISO build and full visual walkthrough remain required before
+claiming visual parity with Debian.
 
 ## Build/install testing
 

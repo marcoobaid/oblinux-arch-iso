@@ -302,7 +302,7 @@ reasoning and the real config search path if this ever needs revisiting.
 
 ## Branding
 
-**Current state (updated 2026-08-31, Phase 2A GDM/lock integration)**:
+**Current state (updated 2026-08-31, Phase 2B Calamares integration)**:
 BIOS boot (syslinux), UEFI boot (GRUB), installed-system GRUB (wired via
 Calamares), and Plymouth now source their assets from the
 released OBLinux Brand Master R5 identity (`oblinux-brand-master` tagged
@@ -310,21 +310,21 @@ released OBLinux Brand Master R5 identity (`oblinux-brand-master` tagged
 section for the exact file-by-file mapping. GDM's product mark and dedicated
 background plus the GNOME session lock-screen default now consume released
 Brand Master R5 assets/guidance as documented in `docs/BRANDING.md` Phase 2A.
-The desktop, os-release, and Calamares' own branding/slideshow remain the
-legacy "Slate & Amber" identity inherited from the `oblinux` baseline,
-pending a future, explicit, separately-authorized task to R5-integrate them.
+Calamares now consumes Brand Master's R5 installer payload and the accepted
+Debian OBLinux layout/activation as documented in Phase 2B. The desktop and
+os-release remain on the legacy "Slate & Amber" identity inherited from the
+`oblinux` baseline, pending a future, explicit, separately-authorized task.
 Do not redesign, hand-edit, or independently regenerate any file sourced from
 Brand Master, and do not extend R5 integration to the still-legacy surfaces
 above as a side effect of unrelated work.
 
 **Legacy identity strings not yet updated**: `profiledef.sh`'s
 `iso_publisher`, `airootfs/etc/os-release`'s `HOME_URL`/`SUPPORT_URL`/
-`BUG_REPORT_URL`, and Calamares `branding.desc`'s `productUrl`/
-`supportUrl`/`knownIssuesUrl`/`releaseNotesUrl` all still point at
-`github.com/marcoobaid/oblinux` (the legacy repo). This is inherited,
-untouched initialization-baseline state, not a bug introduced here —
-leave it as-is until an explicit, owner-authorized task addresses project
-identity/URLs (likely alongside R5 integration).
+`BUG_REPORT_URL` still point at the legacy repository. Calamares Phase 2B
+removed its active legacy URL values and leaves the hidden optional project
+links empty until a non-legacy public project URL is explicitly authorized.
+The remaining identity URLs are inherited initialization-baseline state —
+leave them as-is until an explicit, owner-authorized task addresses them.
 
 Palette and full design system: `docs/BRANDING.md`. Core values used
 throughout the codebase (search for these hexes if tracing a color):
@@ -386,9 +386,8 @@ build cycle for every config tweak during active iteration).
 - **`modules/*.conf`** — per-module config, one file per module named in
   `settings.conf`.
 - **`branding/oblinux/`** — `branding.desc` (strings, palette, window
-  behavior), `logo.png`, `show.qml` (the installation-progress
-  slideshow — a real multi-slide QML `Presentation`, not a static image;
-  first content draft landed 2026-08-22, see `docs/CALAMARES.md`).
+  behavior), Brand Master R5 symbol/lockup SVGs, `slideshow.qml`, seven
+  slideshow SVGs, and `finished.qml`; see Phase 2B in `docs/CALAMARES.md`.
 - **`shellprocess-before.conf`** / **`shellprocess-final.conf`** — arbitrary
   shell commands run against the target root before/after the main exec
   sequence. `before` fixes things the standard modules can't express
