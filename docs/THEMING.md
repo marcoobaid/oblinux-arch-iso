@@ -53,7 +53,10 @@ first listed.
 desktop PNGs are superseded by Brand Master's released R5 production PNGs.
 GNOME pairs `oblinux-light-3840x2160.png` and
 `oblinux-dark-3840x2160.png` through `picture-uri`/`picture-uri-dark`, and the
-background chooser also offers `oblinux-orange-3840x2160.png`. The system-wide,
+background chooser also offers `oblinux-orange-3840x2160.png`. Following final
+runtime testing, the branded Obsidian Horizon JPEG supersedes that light/dark
+pair as both GNOME desktop defaults; all production and Horizon variants remain
+available in the chooser. The system-wide,
 unlocked schema-default mechanism is unchanged. Using Brand Master's production
 PNGs, rather than its generic SVG integration catalog, preserves the verified
 no-SVG boot-path constraint documented in this item.

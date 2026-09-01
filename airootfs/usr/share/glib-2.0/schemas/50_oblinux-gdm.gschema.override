@@ -14,19 +14,19 @@
 # GDM has its own dconf profile/database (etc/dconf/profile/gdm +
 # etc/dconf/db/gdm.d/) which takes priority for the gdm user specifically,
 # giving the greeter a Brand Master near-black-to-navy gradient rather than
-# this picture-based desktop default. Phase 2C selects Brand Master's released
-# 3840x2160 production PNGs rather than its generic SVG integration files: this
-# preserves the repository's runtime-validated rule that GNOME backgrounds must
-# not invoke the sandboxed SVG rendering path during live-session startup.
+# this picture-based desktop default. The desktop uses the established OBLinux
+# Obsidian Horizon branded 3840x2160 JPEG for both appearance modes, preserving
+# the repository's runtime-validated rule that GNOME backgrounds must not invoke
+# the sandboxed SVG rendering path during live-session startup.
 # The session lock screen is independent and remains on the same Brand Master
 # dark PNG as an unlocked default, so users remain free to change it.
 
 [org.gnome.desktop.background]
-picture-uri='file:///usr/share/backgrounds/oblinux/oblinux-light-3840x2160.png'
-picture-uri-dark='file:///usr/share/backgrounds/oblinux/oblinux-dark-3840x2160.png'
+picture-uri='file:///usr/share/backgrounds/oblinux/oblinux-horizon-branded-3840x2160.jpg'
+picture-uri-dark='file:///usr/share/backgrounds/oblinux/oblinux-horizon-branded-3840x2160.jpg'
 picture-options='zoom'
-primary-color='#F4F6F8'
-secondary-color='#1E4D8C'
+primary-color='#111820'
+secondary-color='#1B2836'
 color-shading-type='solid'
 
 [org.gnome.login-screen]

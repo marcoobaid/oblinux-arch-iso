@@ -33,12 +33,15 @@ user chooses a personal account image.
 ## Brand Master desktop integration (Phase 2C: 2026-08-31)
 
 The GNOME desktop, GNOME About identity, and Fastfetch now consume the released
-OBLinux Brand Master R5 identity. The desktop uses Brand Master's untouched
-3840x2160 light and dark production PNGs as GNOME's paired unlocked defaults;
-the orange production PNG is also available in the background chooser. Arch
-uses the PNG release assets instead of Brand Master's generic SVG catalog to
-preserve the runtime-validated rule that live-session startup must not invoke
-GNOME's sandboxed SVG wallpaper renderer.
+OBLinux identity. The desktop originally used Brand Master's untouched
+3840x2160 light and dark production PNGs as GNOME's paired unlocked defaults.
+Following runtime acceptance testing, the established branded Obsidian Horizon
+3840x2160 JPEG is now the unlocked default in both appearance modes, matching
+the accepted Debian presentation. The Brand Master light/dark/orange production
+wallpapers and the clean Obsidian Horizon variant remain available in the
+background chooser. Arch continues to use pre-rendered raster assets instead
+of SVG wallpapers so live-session startup does not invoke GNOME's sandboxed SVG
+renderer.
 
 GNOME About continues to use the standard `LOGO=oblinux-logo` os-release
 mechanism, now backed by Brand Master's complete `hicolor` product-icon set
