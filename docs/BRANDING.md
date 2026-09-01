@@ -1,5 +1,37 @@
 # OBLinux Branding
 
+## Brand Master desktop integration (Phase 2C: 2026-08-31)
+
+The GNOME desktop, GNOME About identity, and Fastfetch now consume the released
+OBLinux Brand Master R5 identity. The desktop uses Brand Master's untouched
+3840x2160 light and dark production PNGs as GNOME's paired unlocked defaults;
+the orange production PNG is also available in the background chooser. Arch
+uses the PNG release assets instead of Brand Master's generic SVG catalog to
+preserve the runtime-validated rule that live-session startup must not invoke
+GNOME's sandboxed SVG wallpaper renderer.
+
+GNOME About continues to use the standard `LOGO=oblinux-logo` os-release
+mechanism, now backed by Brand Master's complete `hicolor` product-icon set
+rather than the retired legacy pixmap mark. `PRETTY_NAME` identifies the system
+as `OBLinux (Arch Linux)`, while `ID_LIKE=arch`, `BUILD_ID=rolling`, and
+`VERSION="Rolling Release"` accurately retain the rolling Arch base. Debian's
+compiled vendor-emblem diversion is intentionally not copied because it solves
+a Debian GNOME Control Center packaging behavior that Arch does not share.
+
+Fastfetch's existing Arch-wide `/etc/xdg/fastfetch/config.jsonc` activation and
+useful Arch module list remain in place, but the logo path, generated 30x15
+quadrant-block artwork, canonical blue/orange truecolor values, spacing, and
+label treatment now match Brand Master and the accepted Debian implementation.
+The shared logo lives at `/usr/share/oblinux/terminal/fastfetch/logo.txt`; the
+retired local Slate/Amber block mark is removed.
+
+All three mechanisms are system-wide unlocked defaults. They apply to the live
+account and to accounts created by Calamares through the unpacked squashfs,
+without seeding a wallpaper or Fastfetch asset into either home directory.
+User wallpaper selections and per-user Fastfetch configurations continue to
+take precedence normally. Static validation does not replace an ISO build,
+live-session visual check, GNOME About inspection, or installed-user test.
+
 ## Brand Master Calamares integration (Phase 2B: 2026-08-31)
 
 Calamares now consumes the Brand Master R5 installer theme, matching the
@@ -112,7 +144,7 @@ cleanly from favicon size up to a boot-splash centerpiece.
 | UEFI boot menu | `grub/grub.cfg` + `grub/themes/oblinux/` | GRUB config + Brand Master theme payload | **Done** — live UEFI uses GRUB with the Brand Master theme; see "Brand Master boot-chain integration" below |
 | Plymouth boot theme | `airootfs/usr/share/plymouth/themes/oblinux/` + `plymouth` package | `.plymouth` + `.script` + PNGs | **Superseded by Brand Master** — see "Brand Master boot-chain integration" below |
 | GDM logo + background | `airootfs/usr/share/glib-2.0/schemas/50_oblinux-gdm.gschema.override` | GSettings override + SVG | **Superseded by Brand Master Phase 2A** — see above |
-| OS logo (About panel, `LOGO=oblinux-logo` in os-release) | `airootfs/usr/share/pixmaps/oblinux-logo.{svg,png}` | SVG + PNG, plain mark | **Done** — see below |
+| OS logo (About panel, `LOGO=oblinux-logo` in os-release) | `airootfs/usr/share/icons/hicolor/*/apps/oblinux-logo.*` | Brand Master R5 product icon set | **Superseded by Brand Master Phase 2C** — see above |
 
 ## Brand Master boot-chain integration (Phase 1: 2026-08-30)
 
@@ -183,8 +215,9 @@ Legacy assets/wiring (removed or superseded in Phase 2A):
   just GDM's — real user accounts default to solid Ink until they set their
   own wallpaper, same as how most distros ship a default wallpaper.
 
-## os-release LOGO (About panel)
+## os-release LOGO (About panel; historical implementation)
 
+The mechanism below explains the legacy implementation superseded by Phase 2C.
 `airootfs/etc/os-release` has set `LOGO=oblinux-logo` since the very first
 scaffold commit, but no file with that name existed until now — GNOME
 Settings' About panel (and anything else reading `LOGO=`, which the
@@ -202,14 +235,14 @@ unlike the hicolor route. Arch keeps this plain-mark file separate from its
 GDM lockup (`archlinux-logo-text-dark.svg`, mark+wordmark) — the same separation
 is retained after Phase 2A:
 
-- `airootfs/usr/share/pixmaps/oblinux-logo.svg` / `.png` (256×256) — plain
+- `airootfs/usr/share/pixmaps/oblinux-logo.svg` / `.png` (256×256) — formerly the plain
   mark only, copied straight from `docs/branding/oblinux-mark.svg`, matching
   `LOGO=oblinux-logo` exactly.
 - `airootfs/usr/share/pixmaps/oblinux-gdm-logo.png` — the Brand Master R5
   64 px full-color symbol, used only by GDM's `logo` key (see above).
 
-The dedicated GDM raster therefore remains distinct from `oblinux-logo.svg`,
-which is reserved for the legacy plain-mark `os-release` identity.
+The dedicated GDM raster remains distinct from the Phase 2C hicolor
+`oblinux-logo` product-icon set.
 
 ## Plymouth theme
 

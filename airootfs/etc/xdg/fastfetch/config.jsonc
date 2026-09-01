@@ -1,4 +1,4 @@
-// OBLinux fastfetch config (docs/THEMING.md item 6).
+// OBLinux Fastfetch config (docs/THEMING.md item 6; Brand Master Phase 2C).
 //
 // System-wide default — /etc/xdg/fastfetch/ is a real, verified fastfetch
 // config search path (confirmed against its own source,
@@ -12,14 +12,25 @@
     "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
     "logo": {
         "type": "file",
-        "source": "/etc/xdg/fastfetch/oblinux-mark.txt",
-        // Exact brand hexes (Slate ring, Amber spark) -- fastfetch supports
-        // #RRGGBB directly since v2.42.0, verified against its own wiki
-        // (Color-Format-Specification); Arch ships 2.67.1.
+        // Shared, generated R5 artwork copied byte-for-byte from Brand Master.
+        // ANSI truecolor matches Brand Master's portable configuration and the
+        // known-good Debian implementation.
+        "source": "/usr/share/oblinux/terminal/fastfetch/logo.txt",
         "color": {
-            "1": "#3f6690",
-            "2": "#d68a3c"
-        }
+            "1": "38;2;30;77;140",
+            "2": "38;2;255;138;0"
+        },
+        "padding": { "right": 3 }
+    },
+    "display": {
+        "separator": "  ",
+        "color": {
+            "keys": "38;2;30;77;140",
+            "title": "38;2;30;77;140",
+            "output": "default",
+            "separator": "default"
+        },
+        "key": { "width": 12 }
     },
     // Short, curated list -- same "deliberate defaults over an
     // overwhelming dump" philosophy as the package-list phase. Dropped

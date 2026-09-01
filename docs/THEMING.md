@@ -49,6 +49,15 @@ first listed.
 
 ### 1. Default wallpaper(s) — done; separate live-boot regression (see below) — root cause found and fixed, validated 11/11
 
+**Phase 2C update (2026-08-31):** the three locally designed Slate & Amber
+desktop PNGs are superseded by Brand Master's released R5 production PNGs.
+GNOME pairs `oblinux-light-3840x2160.png` and
+`oblinux-dark-3840x2160.png` through `picture-uri`/`picture-uri-dark`, and the
+background chooser also offers `oblinux-orange-3840x2160.png`. The system-wide,
+unlocked schema-default mechanism is unchanged. Using Brand Master's production
+PNGs, rather than its generic SVG integration catalog, preserves the verified
+no-SVG boot-path constraint documented in this item.
+
 Three-round design process (all SVG, built on the real
 `docs/branding/oblinux-mark.svg` mark, amber kept confined to the mark's
 own spark per the brand rule):

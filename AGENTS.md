@@ -302,7 +302,7 @@ reasoning and the real config search path if this ever needs revisiting.
 
 ## Branding
 
-**Current state (updated 2026-08-31, Phase 2B Calamares integration)**:
+**Current state (updated 2026-08-31, Phase 2C desktop integration)**:
 BIOS boot (syslinux), UEFI boot (GRUB), installed-system GRUB (wired via
 Calamares), and Plymouth now source their assets from the
 released OBLinux Brand Master R5 identity (`oblinux-brand-master` tagged
@@ -311,12 +311,12 @@ section for the exact file-by-file mapping. GDM's product mark and dedicated
 background plus the GNOME session lock-screen default now consume released
 Brand Master R5 assets/guidance as documented in `docs/BRANDING.md` Phase 2A.
 Calamares now consumes Brand Master's R5 installer payload and the accepted
-Debian OBLinux layout/activation as documented in Phase 2B. The desktop and
-os-release remain on the legacy "Slate & Amber" identity inherited from the
-`oblinux` baseline, pending a future, explicit, separately-authorized task.
-Do not redesign, hand-edit, or independently regenerate any file sourced from
-Brand Master, and do not extend R5 integration to the still-legacy surfaces
-above as a side effect of unrelated work.
+Debian OBLinux layout/activation as documented in Phase 2B. Phase 2C integrates
+the Brand Master light/dark production wallpapers, hicolor product icon, and R5
+Fastfetch artwork at the desktop level while retaining Arch-native activation
+mechanisms. Do not redesign, hand-edit, or independently regenerate any file
+sourced from Brand Master, and do not extend R5 integration to unrelated
+surfaces as a side effect of other work.
 
 **Legacy identity strings not yet updated**: `profiledef.sh`'s
 `iso_publisher`, `airootfs/etc/os-release`'s `HOME_URL`/`SUPPORT_URL`/
@@ -545,7 +545,7 @@ Do not casually reverse these without re-reading the linked reasoning:
 
 | Generated (don't hand-edit) | Authoritative source |
 |---|---|
-| `airootfs/usr/share/backgrounds/oblinux/*.png` | `docs/branding/wallpapers/*.svg` |
+| Brand Master wallpaper/icon/Fastfetch payloads under `airootfs/usr/share/` | released files in `oblinux-brand-master` v1.0.5 |
 | `airootfs/usr/share/themes/OBLinux/gnome-shell/gnome-shell.css` | `docs/branding/gnome-shell-theme-src/` (SCSS) |
 | `out/`, `work/` (mkarchiso build artifacts) | this repo's config, at build time |
 | `oblinux_repo`'s package database/`.pkg.tar.zst` files | that repo's own `PKGBUILD`s |
