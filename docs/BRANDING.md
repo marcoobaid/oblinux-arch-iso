@@ -6,14 +6,16 @@ Normal GNOME sessions now select GNOME's unlocked blue accent default, matching
 the accepted OBLinux Debian behavior. GDM already used the same blue enum value
 through its isolated dconf profile, so this correction changes no GDM files.
 
-Runtime testing exposed that the custom User Themes stylesheet did not consume
-the GSettings accent dynamically and retained its compiled legacy Amber
-primary. The authoritative Shell SCSS and accent-dependent assets now use
-GNOME blue `#3584e4`, aligning Quick Settings and other Shell states with the
-blue session preference without changing the established Ink/Slate surfaces.
-Expanded Quick Settings submenus remain neutral rather than filling the whole
-menu with the accent color, preserving readable white/secondary text and
-matching Debian's stock GNOME system-menu hierarchy.
+Runtime testing exposed that the Graphite-derived User Themes stylesheet
+compiled its accent and Shell surfaces to fixed colors. It therefore could not
+follow later accent selections and differed materially from Debian's stock
+GNOME Quick Settings and power dialog. OBLinux no longer installs or enables
+User Themes by default. GNOME Shell now uses its native runtime
+`-st-accent-color` mechanism, so the default remains blue and a user's later
+blue/teal/green/yellow/orange/red/pink/purple/slate selection is reflected
+throughout Shell. This also restores GNOME's neutral Quick Settings panel and
+dialog surfaces. The former theme source is retained only as development
+history and is not activated by the image.
 
 Ptyxis now has an unlocked `interface-style='system'` compiled default, matching
 Debian's system-following terminal behavior. It follows GNOME light/dark style

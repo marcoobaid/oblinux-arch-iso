@@ -148,7 +148,7 @@ docs/branding/            Design *sources* (SVG wallpapers, the mark,
                           image; compiled/rasterized output lives under
                           airootfs/.
 scripts/                  Standalone verification scripts
-                          (verify-shell-theme.sh) — dev tooling, not part
+                          (verify-shell-accent.sh) — dev tooling, not part
                           of the built image.
 ```
 
@@ -164,7 +164,7 @@ airootfs/home/liveuser/                 Live-session-only account config
 airootfs/usr/share/oblinux/branding/    Shared desktop identity assets
 airootfs/etc/systemd/system/            Live-session systemd unit overrides
 airootfs/usr/share/glib-2.0/schemas/    GSettings/dconf compiled-default overrides
-airootfs/usr/share/themes/OBLinux/      GNOME Shell theme (compiled CSS + assets)
+airootfs/usr/share/themes/OBLinux/      Retained inactive Shell-theme artifact
 airootfs/usr/share/fonts/OBLinux-jetbrains-mono-nerd/  Vendored font subset
 airootfs/usr/share/backgrounds/oblinux/ Shipped wallpapers (PNG, not SVG)
 airootfs/usr/share/plymouth/themes/oblinux/  Boot splash theme
@@ -217,8 +217,8 @@ built and published there — a stale/missing package there fails
 a Calamares install, boot the installed system. `docs/TESTING.md` (Phase
 1/2) and `docs/THEMING.md`/`docs/CALAMARES.md` (Phase 3/4) are the
 historical logs of what's been checked and how — see Testing and
-Validation below. `scripts/verify-shell-theme.sh` automates one specific
-mechanism check (the GNOME Shell theme extension).
+Validation below. `scripts/verify-shell-accent.sh` checks that stock GNOME
+Shell is active and reports the current session accent.
 
 ## Package management
 
@@ -280,8 +280,8 @@ Layered, in order of what actually wins:
    `airootfs/usr/share/glib-2.0/schemas/50_oblinux-gdm.gschema.override`.
    Sets the *compiled default* for `org.gnome.desktop.background`,
    `org.gnome.desktop.interface` (accent color, fonts, icon theme),
-   `org.gnome.login-screen` (logo), and `org.gnome.shell`/`org.gnome.
-   shell.extensions.user-theme` (Shell theme). Applies to every account
+   `org.gnome.login-screen` (logo), and `org.gnome.Ptyxis` (system-following
+   appearance). Applies to every account
    that hasn't set its own value, including GDM itself, unless overridden
    below.
 2. **GDM-specific dconf profile/database** —
@@ -294,12 +294,9 @@ Layered, in order of what actually wins:
    real user can always override defaults; (1)/(2) only set what a
    fresh account sees.
 
-GNOME Shell itself is styled via the **User Themes** extension
-(`gnome-shell-extensions` package, only that one component enabled) — a
-deliberate, one-time exception to the otherwise "stock GNOME, no
-extensions" policy, justified because it's an official GNOME-maintained
-extension, not third-party. See `docs/THEMING.md` item 5 for the full
-reasoning and the real config search path if this ever needs revisiting.
+GNOME Shell uses its stock theme and native runtime accent mechanism. The
+former Graphite-derived OBLinux Shell source/artifact is retained for history
+but is not enabled; see `docs/THEMING.md` item 5.
 
 ## Branding
 
@@ -447,10 +444,9 @@ Minimum validation expected after a change:
   to be probabilistic rather than deterministic in this project's
   history (see Known Pitfalls).
 
-`scripts/verify-shell-theme.sh` automates the GNOME Shell theme
-extension's activation check specifically; run it on the built system,
-not the build machine (needs a live GNOME session's D-Bus, and must be
-run without `sudo` for the same reason).
+`scripts/verify-shell-accent.sh` confirms that User Themes is not enabled and
+reports the active GNOME accent; run it on the built system without `sudo`
+because it needs the live session's D-Bus.
 
 ## Hardware targets
 
@@ -463,9 +459,8 @@ claim beyond that as unverified, not as an established support matrix.
 
 Do not casually reverse these without re-reading the linked reasoning:
 
-- **Stock GNOME, no extensions** — except User Themes (Shell styling),
-  a deliberate, documented one-time exception. Adding another extension
-  needs the same bar: official/upstream-maintained, not third-party.
+- **Stock GNOME, no extensions** — restored after runtime testing showed the
+  former custom Shell stylesheet could not follow GNOME 50's dynamic accent.
 - **No custom GTK theme** — GNOME's native accent-color system only.
   The GNOME Shell theme fork explicitly excludes Graphite's GTK modules
   for this reason; don't pull them in.
@@ -536,11 +531,8 @@ Do not casually reverse these without re-reading the linked reasoning:
   non-16:9 aspect ratios (16:10, 3:2), not just enough to look right on
   the aspect ratio it was designed at.
 - **Symptom**: shipping a large upstream package for one narrow use (a
-  single font style, one extension out of a bundle). **Correct
-  approach, applied twice in this project**: vendor only the files
-  actually used (fonts) or enable only the specific component needed
-  (User Themes out of `gnome-shell-extensions`) rather than installing
-  the whole thing by default.
+  single font style). **Correct approach**: vendor only the files actually
+  used, as applied to the terminal fonts.
 
 ## Generated vs. authoritative files
 

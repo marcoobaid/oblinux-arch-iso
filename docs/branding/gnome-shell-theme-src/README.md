@@ -5,6 +5,11 @@ Design source for `airootfs/usr/share/themes/OBLinux/gnome-shell/` (see
 separation as `docs/branding/wallpapers/`: SVG/SCSS sources live here for
 future edits, only the compiled output ships.
 
+> **Inactive by default (2026-09-01):** the compiled theme is retained for
+> development history but the ISO no longer installs/enables User Themes.
+> Its compile-time accent palette cannot follow GNOME Shell 50's runtime
+> `-st-accent-color`, so fresh OBLinux sessions use stock GNOME Shell styling.
+
 ## What this is
 
 A fork of the `gnome-shell` module from

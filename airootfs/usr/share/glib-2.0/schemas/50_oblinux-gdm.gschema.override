@@ -78,25 +78,6 @@ monospace-font-name='JetBrainsMono Nerd Font Mono 11'
 # ckbcomp).
 icon-theme='OBLinux'
 
-# THEMING.md item 5: GNOME Shell styling, via the "User Themes" extension
-# (gnome-shell-extensions package, added to packages.x86_64 — a
-# deliberate, one-time exception to the package-list phase's
-# "stock GNOME, no extensions" decision; see that file's comment for why
-# this specific extension was judged safe). UUID verified against the
-# package's real file list, not assumed.
-[org.gnome.shell]
-enabled-extensions=['user-theme@gnome-shell-extensions.gcampax.github.com']
-
-# name='OBLinux' looks for /usr/share/themes/OBLinux/gnome-shell/
-# gnome-shell.css — verified against the extension's own upstream
-# source (getThemeDirs() in util.js checks ~/.themes, then
-# $XDG_DATA_HOME/themes, then every system data dir's themes/
-# subdirectory, which includes /usr/share/themes). System-wide, so this
-# applies to liveuser and any account Calamares creates, no per-user
-# setup needed — same pattern as the OBLinux icon theme.
-[org.gnome.shell.extensions.user-theme]
-name='OBLinux'
-
 # Phase 3 follow-up: Ptyxis follows GNOME's light/dark system appearance by
 # default, matching the accepted Debian behavior. This is an unlocked compiled
 # default; an explicit per-user Light or Dark selection still takes precedence.

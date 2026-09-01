@@ -361,24 +361,17 @@ sessions received orange at that historical point. **Confirmed historically**:
 orange was shown selected under Settings → Appearance on the built VM. Phase 3
 supersedes that session default with blue as described above.
 
-**Phase 3 Shell follow-up (2026-09-01):** runtime testing confirmed that the
-blue GSettings preference affected GTK/libadwaita applications but the custom
-OBLinux Shell theme still rendered Quick Settings and other Shell states in
-its compiled legacy Amber primary. The authoritative SCSS primary and its
-accent-dependent toggle/checkbox SVGs now use GNOME's official blue accent
-background value `#3584e4`; `gnome-shell.css` was regenerated from that source.
-This keeps the Ink/Slate Shell surfaces while aligning selected tiles, menus,
-sliders, focus rings, and other Shell accent states with the blue session
-preference and Debian's stock GNOME presentation. Runtime visual confirmation
-of all affected Shell surfaces remains required.
-
-**Phase 3 submenu follow-up (2026-09-01):** the first blue Shell build exposed
-that Graphite's styled-sidebar branch painted the entire expanded power menu in
-the primary color. OBLinux now keeps selected Quick Settings tiles and sliders
-blue while rendering expanded Quick Settings menus on the neutral Shell surface
-with normal primary/secondary text contrast, matching Debian's stock GNOME
-behavior more closely. This is scoped to the expanded submenu; it does not
-revert the blue session accent.
+**Phase 3 Shell correction (2026-09-01):** runtime comparison found that the
+Graphite-derived custom Shell theme compiled its primary and surface colors to
+fixed CSS values. Replacing Amber with fixed blue corrected only the default
+appearance: changing the GNOME accent to green changed Debian's stock Shell but
+left Arch blue, and the custom Slate panel/dialog surfaces still differed from
+Debian. GNOME Shell 50.1's source confirms that stock Shell resolves
+`-st-accent-color` and `-st-accent-fg-color` dynamically through `StSettings`
+and `StThemeContext`. OBLinux therefore no longer installs or enables the User
+Themes extension by default. Stock GNOME Shell now owns Quick Settings and
+dialog styling, matching Debian and following every supported user-selected
+accent. The blue GSettings value remains only the unlocked initial default.
 
 ### 3. Fonts — desktop UI + terminal — done, VM-confirmed 2026-08-13
 
@@ -475,7 +468,16 @@ resolvable — `papirus-icon-theme` comes along automatically as its
 declared dependency, no separate `packages.x86_64` entry needed for
 that. Not yet build/boot tested.
 
-### 5. GNOME Shell styling — done, VM-confirmed 2026-08-19
+### 5. GNOME Shell styling — superseded by stock GNOME, 2026-09-01
+
+**Current decision:** the custom Graphite-derived Shell stylesheet documented
+below is no longer activated by default. Runtime testing showed that its
+compile-time palette could not consume GNOME Shell 50's dynamic accent colors
+and that its fixed Slate Quick Settings/dialog surfaces diverged from the
+accepted Debian presentation. The `gnome-shell-extensions` package and User
+Themes gschema defaults have been removed. The historical implementation notes
+and source remain for traceability, but fresh live and installed sessions use
+stock GNOME Shell styling.
 
 Goal: make the top bar, overview, and quick-settings panel visually
 appealing and on-brand. Real technical constraint resolved before design,
@@ -508,13 +510,13 @@ primary sources rather than assumed —
    overview chrome stay the same dark neutral regardless. Already shipped
    (item 2) — doesn't give item 5 much new on its own.
 
-**Decision: option 1**, as a deliberate, one-time exception to the
+**Historical decision: option 1**, as a deliberate, one-time exception to the
 package-list phase's "stock GNOME, no extensions" rule — judged safe
 specifically because this is an official GNOME package, not a
 third-party extension, and only the User Themes component of the bundle
 gets enabled.
 
-**Plumbing implemented**:
+**Historical plumbing (removed 2026-09-01)**:
 - `gnome-shell-extensions` added to `packages.x86_64`.
 - `org.gnome.shell enabled-extensions` set to the User Themes UUID
   (`user-theme@gnome-shell-extensions.gcampax.github.com`, confirmed
@@ -562,10 +564,10 @@ tops out around Shell 48; OBLinux ships 50.4. Built against the most
 current chain Graphite has (`widgets-48-0`/`extensions-46-0`) — turned
 out not to matter in practice; see verification below.
 
-**VM-confirmed 2026-08-19**: `scripts/verify-shell-theme.sh` (extension
-listed in `enabled-extensions`, theme name correct, CSS file present)
-plus direct visual inspection — top bar and Quick Settings panel
-correctly Ink/Slate, toggled tiles (Wired, Dark Style) and the volume
+**VM-confirmed 2026-08-19 (historical custom-theme build)**: the then-current
+mechanism check found the extension listed in `enabled-extensions`, the theme
+name correct, and its CSS present. Direct visual inspection found the top bar
+and Quick Settings panel correctly Ink/Slate, toggled tiles (Wired, Dark Style) and the volume
 slider solid Amber, untoggled tiles (Power Mode, Do Not Disturb)
 correctly staying neutral Slate rather than all going accent-colored.
 The Shell 48-vs-50.4 gap flagged above didn't cause any visible breakage.
