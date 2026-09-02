@@ -75,9 +75,12 @@ a functional system without hitting a wall on day one.
 - **Editors**: Nano and Vim were already inherited from the releng base. Their
   system files now provide conservative OBLinux defaults: syntax highlighting,
   line numbers, four-space indentation, readable search/status feedback, and a
-  restrained Slate & Amber terminal palette. Nano reads `~/.nanorc` after
-  `/etc/nanorc`; Vim reads `~/.vimrc` after `/etc/vimrc`, so users retain normal
-  override behavior. Vim uses one local colorscheme and no plugins.
+  restrained Slate & Amber terminal palette. Nano's shortcut keys are bold
+  cyan while its function labels use the terminal's bold adaptive foreground,
+  preserving contrast in both light and dark appearance modes. Nano reads
+  `~/.nanorc` after `/etc/nanorc`; Vim reads `~/.vimrc` after `/etc/vimrc`, so
+  users retain normal override behavior. Vim uses one local colorscheme and no
+  plugins.
 - **Bluetooth**: `bluez` + `bluez-utils`.
 - **Firewall**: `ufw` + `gufw` over `firewalld` — simpler mental model,
   friendlier to users switching from macOS/Windows. Base packages only;

@@ -10,8 +10,10 @@ set minibar
 set stateflags
 set titlecolor white,blue
 set statuscolor black,yellow
-set keycolor cyan
-set functioncolor white
+set keycolor bold,cyan
+# Follow the terminal foreground so help labels stay high-contrast in both
+# light and dark appearance modes; bold keeps the shortcut menu prominent.
+set functioncolor bold,normal
 
 # Use the syntax definitions shipped and maintained by Arch's nano package.
 include "/usr/share/nano/*.nanorc"
