@@ -131,6 +131,8 @@ one — do not invent others:
 packages.x86_64          Full package list: unmodified archiso releng base,
                           then OBLinux additions below a clear comment
                           boundary (search for "## OBLinux:").
+VERSION                  Authoritative current OBLinux release version; see
+                          docs/VERSIONING.md. Never change it incidentally.
 pacman.conf               Build-time pacman config (used by mkarchiso's
                           pacstrap). Mirrored, not symlinked, into
                           airootfs/etc/pacman.conf for the live/installed
@@ -147,15 +149,15 @@ docs/branding/            Design *sources* (SVG wallpapers, the mark,
                           GNOME Shell theme SCSS) — not shipped on the
                           image; compiled/rasterized output lives under
                           airootfs/.
-scripts/                  Standalone verification scripts
-                          (verify-shell-accent.sh) — dev tooling, not part
-                          of the built image.
+scripts/                  ISO build wrapper and standalone verification
+                          scripts — dev tooling, not part of the built image.
 ```
 
 Inside `airootfs/`, the paths that matter most:
 
 ```
 airootfs/etc/calamares/                 Installer config (see Calamares section)
+airootfs/etc/os-release.in              Build-rendered OS identity template
 airootfs/etc/dconf/                     GDM-specific dconf profile/database
 airootfs/etc/xdg/fastfetch/             System-wide fastfetch config + logo
 airootfs/etc/xdg/starship.toml          System-wide Starship prompt config
@@ -202,10 +204,18 @@ that verification rather than claim it.
 
 Primary entry point (on the Linux build machine, from the repo root):
 ```bash
-sudo mkarchiso -v .
+cat VERSION
+./scripts/build-iso.sh
 ```
 Output ISO lands in `out/` (gitignored, along with `work/`, mkarchiso's
 build workspace — neither is source-controlled).
+
+`VERSION` is the authoritative release identity. The wrapper generates one
+local-time `BUILD_ID`, renders it with `VERSION` into the temporary build
+profile, and uses both in the ISO filename and `/etc/os-release`. Direct
+`mkarchiso -v .` is intentionally unsupported because it cannot guarantee
+that single-ID propagation. See `docs/VERSIONING.md` for the authoritative
+policy and build/verification details.
 
 **Prerequisite**: any package sourced from `oblinux_repo` must already be
 built and published there — a stale/missing package there fails
@@ -432,6 +442,9 @@ VirtualBox/hardware by the user, since this repo's own development
 environment (macOS) cannot run `mkarchiso` or boot the result.
 
 Minimum validation expected after a change:
+- **Every release candidate**: verify the ISO filename and the live and
+  installed `/etc/os-release` values against `VERSION` and the exact build ID,
+  following `docs/VERSIONING.md` and `docs/TESTING.md`.
 - **Package list change**: full build + live boot.
 - **GNOME/dconf/theming change**: build + boot + visually confirm the
   specific surface changed (screenshot or direct inspection) — do not
@@ -538,6 +551,7 @@ Do not casually reverse these without re-reading the linked reasoning:
 
 | Generated (don't hand-edit) | Authoritative source |
 |---|---|
+| Build profile's `airootfs/etc/os-release` | `VERSION`, one generated `BUILD_ID`, and `airootfs/etc/os-release.in` |
 | Brand Master wallpaper/icon/Fastfetch payloads under `airootfs/usr/share/` | released files in `oblinux-brand-master` v1.0.5 |
 | `airootfs/usr/share/themes/OBLinux/gnome-shell/gnome-shell.css` | `docs/branding/gnome-shell-theme-src/` (SCSS) |
 | `out/`, `work/` (mkarchiso build artifacts) | this repo's config, at build time |
@@ -593,6 +607,14 @@ Release tags are governance events, not routine development steps: they
 mark this repository's own release points and get the same care as the
 stable-repo protections above.
 
+`docs/VERSIONING.md` is authoritative for version syntax and lifecycle.
+`VERSION` is the current repository version and must never be invented,
+independently incremented, or changed by unrelated work. Development versions
+use `-dev`; stable versions do not. Promotion removes `-dev`, and development
+advances to the next quarter only after promotion. `BUILD_ID` is generated
+once per build and propagated consistently; it is build metadata, not part of
+the release version or stable Git tag (for example, `v26.3.0`).
+
 - **Tags are always the last step of a release** — never part of normal
   day-to-day development. Do not create, move, delete, or push a release
   tag as part of ordinary commits, fixes, or feature work.
@@ -620,6 +642,7 @@ above.
 
 | Document | Authoritative for |
 |---|---|
+| `docs/VERSIONING.md` | Release version format/lifecycle, build IDs, ISO naming, and live/installed identity |
 | `docs/BRANDING.md` | Palette, semantic color mapping, boot-chain branding (GDM/Plymouth/GRUB/os-release) |
 | `docs/THEMING.md` | The 7-item GNOME theming pass (wallpaper, accent color, fonts, icon theme, Shell theme, fastfetch, Starship) — decisions, verification evidence, and the full GDM/Plymouth boot-regression investigation |
 | `docs/CALAMARES.md` | Installer module sequence, branding, live-artifact cleanup, install-breaking gotchas |

@@ -1,11 +1,15 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2034
 
-iso_name="oblinux"
+profile_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+oblinux_version="$(<"${profile_dir}/VERSION")"
+: "${OBLINUX_BUILD_ID:?Build with scripts/build-iso.sh so BUILD_ID is generated once}"
+
+iso_name="oblinux-arch-${oblinux_version}"
 iso_label="OBL_$(date --date="@${SOURCE_DATE_EPOCH:-$(date +%s)}" +%Y%m)"
 iso_publisher="OBLinux <https://github.com/marcoobaid/oblinux>"
 iso_application="OBLinux GNOME Live/Install Medium"
-iso_version="$(date --date="@${SOURCE_DATE_EPOCH:-$(date +%s)}" +%Y.%m.%d)"
+iso_version="${OBLINUX_BUILD_ID}"
 install_dir="oblinux"
 buildmodes=('iso')
 bootmodes=('bios.syslinux'

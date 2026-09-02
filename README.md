@@ -89,8 +89,13 @@ result is written to `out/`.
 
 ```bash
 sudo pacman -S --needed archiso
-sudo mkarchiso -v .
+cat VERSION
+./scripts/build-iso.sh
 ```
+
+The wrapper gives every image one exact build identity and produces an ISO
+named from the repository release version and that build identity. See the
+[versioning and build-identification policy](docs/VERSIONING.md).
 
 Packages supplied by the signed
 [`oblinux_repo`](https://github.com/marcoobaid/oblinux_repo)—currently
@@ -120,6 +125,7 @@ source checks from actual build, boot, and installation results.
 
 | Topic | Document |
 |---|---|
+| Release versioning and build identification | [`docs/VERSIONING.md`](docs/VERSIONING.md) |
 | Build and verification history | [`docs/TESTING.md`](docs/TESTING.md) |
 | Calamares architecture and configuration | [`docs/CALAMARES.md`](docs/CALAMARES.md) |
 | Brand system and integration | [`docs/BRANDING.md`](docs/BRANDING.md) |

@@ -131,7 +131,11 @@ fine on an installed system too), the GDM background/logo GSettings
 override (intentionally becomes the installed system's default too, per
 `docs/BRANDING.md`), the accessibility/speech live services (condition on
 a kernel cmdline flag that won't be present on a normal boot — harmless
-no-ops, not worth the cleanup).
+no-ops, not worth the cleanup), and `/etc/os-release`. The build wrapper
+renders the latter with the release `VERSION` and exact ISO `BUILD_ID` before
+the squashfs is created. `unpackfs` clones it to the target, and no later
+module replaces or removes it, so the installed system remains traceable to
+the exact ISO. See `docs/VERSIONING.md`.
 
 ### Live-session Calamares authorization
 

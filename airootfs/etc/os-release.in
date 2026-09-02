@@ -1,9 +1,10 @@
 NAME="OBLinux"
-PRETTY_NAME="OBLinux (Arch Linux)"
+VERSION="@OBLINUX_VERSION@"
+VERSION_ID="@OBLINUX_VERSION@"
+PRETTY_NAME="OBLinux @OBLINUX_VERSION@"
 ID=oblinux
 ID_LIKE=arch
-BUILD_ID=rolling
-VERSION="Rolling Release"
+BUILD_ID="@OBLINUX_BUILD_ID@"
 ANSI_COLOR="38;2;23;147;209"
 HOME_URL="https://github.com/marcoobaid/oblinux"
 DOCUMENTATION_URL="https://wiki.archlinux.org/"

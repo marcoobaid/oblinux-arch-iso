@@ -45,9 +45,10 @@ renderer.
 
 GNOME About continues to use the standard `LOGO=oblinux-logo` os-release
 mechanism, now backed by Brand Master's complete `hicolor` product-icon set
-rather than the retired legacy pixmap mark. `PRETTY_NAME` identifies the system
-as `OBLinux (Arch Linux)`, while `ID_LIKE=arch`, `BUILD_ID=rolling`, and
-`VERSION="Rolling Release"` accurately retain the rolling Arch base. Debian's
+rather than the retired legacy pixmap mark. `PRETTY_NAME` identifies the
+OBLinux release, while `ID_LIKE=arch` retains the Arch base and
+`VERSION`/`VERSION_ID` plus `BUILD_ID` identify the release and exact ISO build
+as defined in `docs/VERSIONING.md`. Debian's
 compiled vendor-emblem diversion is intentionally not copied because it solves
 a Debian GNOME Control Center packaging behavior that Arch does not share.
 

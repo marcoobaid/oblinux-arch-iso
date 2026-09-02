@@ -1,5 +1,47 @@
 # Build verification log
 
+## Release and build identity regression checklist
+
+Apply this checklist to every development, stable, and maintenance ISO. The
+authoritative policy and field meanings are in `docs/VERSIONING.md`.
+
+Before the build:
+
+- Run `cat VERSION`; confirm it is the intended release version and matches
+  `YY.QUARTER.MAINTENANCE[-dev]`.
+- Confirm a development release contains `-dev` and a stable release does not.
+- Build with `./scripts/build-iso.sh`, not `mkarchiso` directly. Record the
+  single `VERSION`, `BUILD_ID`, and ISO filename printed by the wrapper.
+
+After the build:
+
+- Confirm the filename is
+  `oblinux-arch-${VERSION}-${BUILD_ID}-x86_64.iso`.
+- Confirm the filename contains the exact `VERSION` read before the build.
+- Confirm the filename's `BUILD_ID` is `YYYYMMDD-HHMM` and exactly matches the
+  wrapper's recorded value.
+
+In the booted live environment, run `cat /etc/os-release` and confirm:
+
+- `VERSION` exactly matches the repository `VERSION`.
+- `VERSION_ID` exactly matches the repository `VERSION`.
+- `BUILD_ID` exactly matches the ISO filename.
+- `PRETTY_NAME` includes the release version.
+- Development values contain `-dev`; stable values do not.
+
+Complete a Calamares installation from that ISO, boot the installed system,
+run `cat /etc/os-release`, and confirm:
+
+- installed `VERSION` exactly matches the live value and repository `VERSION`;
+- installed `VERSION_ID` exactly matches the live value and repository
+  `VERSION`;
+- installed `BUILD_ID` exactly matches the live value and ISO filename; and
+- the installed system therefore identifies the exact ISO used for the
+  installation, not merely its release line or build date.
+
+These live and installed checks require a real ISO build/boot/install cycle;
+source inspection alone does not satisfy them.
+
 ## 2026-08-06 — first successful build (VirtualBox)
 
 **Build:** `sudo mkarchiso -v .` on a physical Arch Linux build machine, at
