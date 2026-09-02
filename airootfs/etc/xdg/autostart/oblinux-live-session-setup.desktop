@@ -1,8 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=OBLinux live-session setup
-Comment=Prepare live-only installer shortcuts
-Exec=/usr/local/lib/oblinux-live-session-setup
-OnlyShowIn=GNOME;
-NoDisplay=true
-X-GNOME-Autostart-Phase=Initialization

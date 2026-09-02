@@ -6,17 +6,33 @@ set -eu
 [ "${USER:-}" = liveuser ] || exit 0
 
 desktop_dir="${XDG_DESKTOP_DIR:-$HOME/Desktop}"
-launcher=/usr/share/applications/install-oblinux.desktop
+desktop_launcher="$desktop_dir/Install OBLinux.desktop"
 mkdir -p "$desktop_dir"
-install -m 0755 "$launcher" "$desktop_dir/Install OBLinux.desktop"
+
+# The profile already seeds this file so the desktop shortcut exists even if
+# the graphical-session hook is delayed. Repair it from the canonical launcher
+# if a live-session process removed it.
+if [ ! -f "$desktop_launcher" ]; then
+    install -m 0755 /usr/share/applications/install-oblinux.desktop "$desktop_launcher"
+fi
+chmod 0755 "$desktop_launcher"
 
 # Mark the launcher trusted in the session's GVfs metadata store. The
 # executable bit remains the portable fallback if the metadata daemon has not
 # started yet.
-gio set "$desktop_dir/Install OBLinux.desktop" metadata::trusted true || :
+gio set "$desktop_launcher" metadata::trusted true || :
 
 gsettings set org.gnome.shell favorite-apps "['org.gnome.Nautilus.desktop', 'firefox.desktop', 'org.gnome.Ptyxis.desktop', 'install-oblinux.desktop']"
 
 # Desktop Icons NG is used only to make the requested live desktop shortcut
-# visible. OBLinux intentionally ships no other enabled Shell extensions.
+# visible. OBLinux intentionally ships no other enabled Shell extensions. The
+# graphical-session target can become active just before GNOME Shell exposes
+# its extension-control D-Bus interface, so retry explicit activation briefly;
+# writing enabled-extensions alone does not activate a late-added extension.
 gsettings set org.gnome.shell enabled-extensions "['ding@rastersoft.com']"
+attempt=0
+while ! gnome-extensions enable ding@rastersoft.com; do
+    attempt=$((attempt + 1))
+    [ "$attempt" -lt 30 ] || exit 1
+    sleep 1
+done

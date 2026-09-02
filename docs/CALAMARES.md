@@ -124,7 +124,7 @@ list) — full reasoning is in `modules/services-systemd.conf` and
 | Live-session MOTD | `/etc/motd` | removed |
 | The installer itself | `calamares` package | removed via `packages.conf` |
 | Live-only desktop-icons extension | `gnome-shell-extension-desktop-icons-ng` package | removed via `packages.conf` |
-| Live installer launcher | `/usr/share/applications/install-oblinux.desktop`, `/etc/xdg/autostart/oblinux-live-session-setup.desktop`, `/usr/local/lib/oblinux-live-session-setup` | removed by `shellprocess-final`; the Desktop copy and live-only dock/extension dconf state disappear with `liveuser` |
+| Live installer launcher | `/usr/share/applications/install-oblinux.desktop`, `/etc/systemd/user/oblinux-live-session-setup.service`, `/usr/local/lib/oblinux-live-session-setup` | removed by `shellprocess-final`; the seeded Desktop copy and live-only dock/extension dconf state disappear with `liveuser` |
 
 **Not** cleaned up, deliberately: `/etc/issue` (branded console banner,
 fine on an installed system too), the GDM background/logo GSettings
@@ -158,13 +158,22 @@ The OBLinux launcher is `/usr/share/applications/install-oblinux.desktop`,
 displayed as **Install OBLinux** with the released Brand Master-derived
 `oblinux-logo` hicolor icon already shipped by this profile. It executes
 `pkexec /usr/bin/calamares`, matching the package's Polkit action and the
-live-only authorization above. An XDG autostart helper runs only for
-`liveuser`: it adds the launcher to GNOME Shell's favorites, copies and marks
-an executable launcher in `~/Desktop`, and enables Arch's packaged Desktop
-Icons NG extension so stock GNOME can actually render that shortcut. No dconf
-database or template is seeded for installed users. The final cleanup removes
-all system-level helper/launcher files from the cloned target, and the packages
-module removes Desktop Icons NG together with Calamares.
+live-only authorization above. An overlay at
+`/usr/share/applications/calamares.desktop` uses the freedesktop `Hidden=true`
+mechanism to suppress Calamares' generic **Install System** entry, avoiding a
+duplicate app-grid launcher while retaining the package-owned desktop-file ID.
+Pacman removes that hidden entry when Calamares is removed from the installed
+target. The profile seeds an executable copy of the branded launcher in
+`liveuser`'s `~/Desktop`. A systemd user service enabled for
+`graphical-session.target` and guarded by `ConditionUser=liveuser` adds the
+launcher to GNOME Shell's favorites, marks the desktop file trusted, and
+explicitly enables Arch's packaged Desktop Icons NG extension so stock GNOME
+can render that shortcut. Extension activation retries briefly because the
+graphical-session target can precede GNOME Shell's extension-control D-Bus
+interface. No dconf database or template is seeded for installed users. The
+final cleanup removes all system-level helper/launcher files from the cloned
+target, while the seeded Desktop file and dconf state disappear with
+`liveuser`; the packages module removes Desktop Icons NG with Calamares.
 
 Printing services are explicitly enabled in `services-systemd.conf` alongside
 NetworkManager so CUPS, Avahi discovery, and cups-browsed remain functional
