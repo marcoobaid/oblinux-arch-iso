@@ -210,6 +210,20 @@ fwupd
 sushi
 totem
 
+## Productivity — the complete current LibreOffice branch plus GNOME's
+## lightweight advanced-settings utility. LibreOffice's GTK integration is
+## supplied by its own package and the GTK stack already present for GNOME.
+libreoffice-fresh
+gnome-tweaks
+
+## Curated lightweight games: one polished GNOME-native falling-block game,
+## chess (including the optional engine required for single-player), and the
+## established GNOME card-game collection. See docs/DEFAULT_APPS.md.
+quadrapassel
+gnome-chess
+gnuchess
+aisleriot
+
 ## Shell experience — zsh is already the default shell; these give it a
 ## modern out-of-the-box feel (autosuggestions/syntax-highlighting/prompt)
 ## without a full framework like oh-my-zsh.
@@ -270,11 +284,20 @@ inter-font
 ## used removes it as a variable regardless.
 
 ## Printing — GNOME Settings' printer panel needs cups running;
-## avahi/nss-mdns enable driverless network-printer discovery.
+## avahi/nss-mdns/cups-browsed enable driverless network discovery, while
+## ipp-usb exposes compatible USB printers through the same IPP Everywhere
+## path. No vendor-specific driver collection is installed by default.
 avahi
 cups
+cups-browsed
 cups-pdf
+ipp-usb
 nss-mdns
+
+## Live installer desktop shortcut support. Stock GNOME does not render
+## ~/Desktop; Desktop Icons NG is enabled only for liveuser by the live-session
+## setup helper and is removed from the target by Calamares after install.
+gnome-shell-extension-desktop-icons-ng
 
 ## Bluetooth — GNOME Settings' Bluetooth panel needs the daemon present.
 bluez

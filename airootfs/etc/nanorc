@@ -1,0 +1,17 @@
+# OBLinux system-wide Nano defaults. Nano reads ~/.nanorc after this file, so
+# every setting remains user-overridable.
+set linenumbers
+set autoindent
+set tabsize 4
+set tabstospaces
+set smarthome
+set indicator
+set minibar
+set stateflags
+set titlecolor white,blue
+set statuscolor black,yellow
+set keycolor cyan
+set functioncolor white
+
+# Use the syntax definitions shipped and maintained by Arch's nano package.
+include "/usr/share/nano/*.nanorc"

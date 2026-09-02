@@ -123,6 +123,8 @@ list) — full reasoning is in `modules/services-systemd.conf` and
 | Mirror ranking | `reflector.service` | disabled, not masked (stays available to run manually/periodically) |
 | Live-session MOTD | `/etc/motd` | removed |
 | The installer itself | `calamares` package | removed via `packages.conf` |
+| Live-only desktop-icons extension | `gnome-shell-extension-desktop-icons-ng` package | removed via `packages.conf` |
+| Live installer launcher | `/usr/share/applications/install-oblinux.desktop`, `/etc/xdg/autostart/oblinux-live-session-setup.desktop`, `/usr/local/lib/oblinux-live-session-setup` | removed by `shellprocess-final`; the Desktop copy and live-only dock/extension dconf state disappear with `liveuser` |
 
 **Not** cleaned up, deliberately: `/etc/issue` (branded console banner,
 fine on an installed system too), the GDM background/logo GSettings
@@ -149,6 +151,26 @@ the rule does not authorize other pkexec programs or other Polkit actions.
 Because `unpackfs` clones the live filesystem, `shellprocess@final` explicitly
 removes the rule from the target so installed users retain Calamares' normal
 authentication policy (and the packages module removes Calamares itself).
+
+### Live-session launcher
+
+The OBLinux launcher is `/usr/share/applications/install-oblinux.desktop`,
+displayed as **Install OBLinux** with the released Brand Master-derived
+`oblinux-logo` hicolor icon already shipped by this profile. It executes
+`pkexec /usr/bin/calamares`, matching the package's Polkit action and the
+live-only authorization above. An XDG autostart helper runs only for
+`liveuser`: it adds the launcher to GNOME Shell's favorites, copies and marks
+an executable launcher in `~/Desktop`, and enables Arch's packaged Desktop
+Icons NG extension so stock GNOME can actually render that shortcut. No dconf
+database or template is seeded for installed users. The final cleanup removes
+all system-level helper/launcher files from the cloned target, and the packages
+module removes Desktop Icons NG together with Calamares.
+
+Printing services are explicitly enabled in `services-systemd.conf` alongside
+NetworkManager so CUPS, Avahi discovery, and cups-browsed remain functional
+after installation rather than depending only on symlinks inherited from the
+live squashfs. IPP-over-USB uses the package's normal udev-triggered service
+activation and therefore does not need a persistent Calamares enable action.
 
 ## Branding — status
 

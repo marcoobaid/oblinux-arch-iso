@@ -1,0 +1,22 @@
+#!/bin/sh
+# Configure liveuser's dock and visible desktop launcher at session startup.
+# This deliberately writes only to the ephemeral live account's dconf/home.
+set -eu
+
+[ "${USER:-}" = liveuser ] || exit 0
+
+desktop_dir="${XDG_DESKTOP_DIR:-$HOME/Desktop}"
+launcher=/usr/share/applications/install-oblinux.desktop
+mkdir -p "$desktop_dir"
+install -m 0755 "$launcher" "$desktop_dir/Install OBLinux.desktop"
+
+# Mark the launcher trusted in the session's GVfs metadata store. The
+# executable bit remains the portable fallback if the metadata daemon has not
+# started yet.
+gio set "$desktop_dir/Install OBLinux.desktop" metadata::trusted true || :
+
+gsettings set org.gnome.shell favorite-apps "['org.gnome.Nautilus.desktop', 'firefox.desktop', 'org.gnome.Ptyxis.desktop', 'install-oblinux.desktop']"
+
+# Desktop Icons NG is used only to make the requested live desktop shortcut
+# visible. OBLinux intentionally ships no other enabled Shell extensions.
+gsettings set org.gnome.shell enabled-extensions "['ding@rastersoft.com']"
