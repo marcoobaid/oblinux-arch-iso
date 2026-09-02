@@ -45,7 +45,7 @@ OBLinux is built around a few deliberate choices:
 ## Highlights
 
 - Rolling Arch Linux base with standard `pacman` package management
-- Stock GNOME desktop with OBLinux wallpapers, icons, fonts, and R5 branding
+- Stock GNOME desktop with OBLinux wallpapers, icons, fonts, and Slate & Amber branding
 - BIOS and UEFI live boot support through branded Syslinux and GRUB paths
 - Branded Plymouth startup, GDM login, and Calamares installation experience
 - Automatic live-session login and a graphical path from evaluation to install
@@ -63,7 +63,7 @@ Boot → Live environment → Installer → Login → GNOME desktop → Terminal
 
 OBLinux treats that path as one continuous experience rather than a collection
 of unrelated screens. Released assets from the OBLinux Brand Master provide the
-shared R5 identity across the boot chain, Calamares, GDM, desktop artwork,
+shared OBLinux identity across the boot chain, Calamares, GDM, desktop artwork,
 system icons, and terminal presentation. The Arch edition supplies the native
 configuration that carries those assets from the live medium into the installed
 system.
