@@ -83,3 +83,11 @@ icon-theme='OBLinux'
 # default; an explicit per-user Light or Dark selection still takes precedence.
 [org.gnome.Ptyxis]
 interface-style='system'
+
+# Production-readiness follow-up: keep the default dock compact while making
+# the primary terminal immediately available in both the live session and
+# fresh installed accounts. This is an unlocked compiled default, so users can
+# remove, reorder, or replace any favorite normally. The live-session helper
+# adds Install OBLinux to the same base list only for liveuser.
+[org.gnome.shell]
+favorite-apps=['org.gnome.Nautilus.desktop', 'firefox.desktop', 'org.gnome.Ptyxis.desktop']

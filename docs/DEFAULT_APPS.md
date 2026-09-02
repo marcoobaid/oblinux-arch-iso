@@ -29,7 +29,10 @@ a functional system without hitting a wall on day one.
   so the next ISO build must confirm the resulting image-size change.
 - **Terminal: Ptyxis**, replacing `gnome-terminal`. Modern,
   GPU-accelerated, actively developed (what Fedora Workstation switched
-  its own default to) — `gnome-terminal` is feature-frozen upstream.
+  its own default to) — `gnome-terminal` is feature-frozen upstream. Ptyxis is
+  included in the unlocked `org.gnome.shell favorite-apps` compiled default,
+  alongside Files and Firefox, so it is pinned for the live session and newly
+  created installed users. Users retain normal control over dock favorites.
 - **Desktop feel: stock GNOME shell on installed systems.** `gnome-tweaks` is
   now included as a small, standard GNOME advanced-settings application. The
   Desktop Icons NG extension is packaged solely so the live session can show

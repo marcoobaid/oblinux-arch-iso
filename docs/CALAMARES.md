@@ -169,7 +169,8 @@ override is removed by `shellprocess-final` from the installed target. The
 profile seeds an executable copy of the branded launcher in
 `liveuser`'s `~/Desktop`. A systemd user service enabled for
 `graphical-session.target` and guarded by `ConditionUser=liveuser` adds the
-launcher to GNOME Shell's favorites, marks the desktop file trusted, and
+launcher to GNOME Shell's system-wide Files/Firefox/Ptyxis favorites, marks the
+desktop file trusted, and
 explicitly enables Arch's packaged Desktop Icons NG extension so stock GNOME
 can render that shortcut. Extension activation retries briefly because the
 graphical-session target can precede GNOME Shell's extension-control D-Bus
