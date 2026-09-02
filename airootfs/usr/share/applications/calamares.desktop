@@ -1,9 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=Install System
-Hidden=true
-
-# The Calamares package owns this desktop-file ID. OBLinux deliberately hides
-# it so the branded install-oblinux.desktop launcher is the only installer
-# shown in GNOME's app grid, dock, and desktop. Pacman removes this package-owned
-# path with Calamares from the installed target.

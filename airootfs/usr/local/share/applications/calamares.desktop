@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Install System
+Hidden=true
+
+# This higher-priority /usr/local desktop-file ID hides the Calamares package's
+# generic /usr/share/applications/calamares.desktop entry without occupying a
+# pacman-owned path during pacstrap. OBLinux's branded launcher remains visible.

@@ -159,11 +159,14 @@ displayed as **Install OBLinux** with the released Brand Master-derived
 `oblinux-logo` hicolor icon already shipped by this profile. It executes
 `pkexec /usr/bin/calamares`, matching the package's Polkit action and the
 live-only authorization above. An overlay at
-`/usr/share/applications/calamares.desktop` uses the freedesktop `Hidden=true`
-mechanism to suppress Calamares' generic **Install System** entry, avoiding a
-duplicate app-grid launcher while retaining the package-owned desktop-file ID.
-Pacman removes that hidden entry when Calamares is removed from the installed
-target. The profile seeds an executable copy of the branded launcher in
+`/usr/local/share/applications/calamares.desktop` uses the freedesktop
+`Hidden=true` mechanism and XDG's higher-priority `/usr/local/share` application
+directory to suppress Calamares' generic **Install System** entry. Keeping the
+override outside `/usr/share` is required because archiso places `airootfs`
+content before pacstrap installs packages; occupying Calamares' package-owned
+desktop-file path there causes pacman to abort with a file conflict. The local
+override is removed by `shellprocess-final` from the installed target. The
+profile seeds an executable copy of the branded launcher in
 `liveuser`'s `~/Desktop`. A systemd user service enabled for
 `graphical-session.target` and guarded by `ConditionUser=liveuser` adds the
 launcher to GNOME Shell's favorites, marks the desktop file trusted, and
