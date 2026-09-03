@@ -127,6 +127,7 @@ source checks from actual build, boot, and installation results.
 |---|---|
 | Release versioning and build identification | [`docs/VERSIONING.md`](docs/VERSIONING.md) |
 | Build and verification history | [`docs/TESTING.md`](docs/TESTING.md) |
+| Hardware compatibility notes | [`docs/HARDWARE_TARGETS.md`](docs/HARDWARE_TARGETS.md) |
 | Calamares architecture and configuration | [`docs/CALAMARES.md`](docs/CALAMARES.md) |
 | Brand system and integration | [`docs/BRANDING.md`](docs/BRANDING.md) |
 | GNOME and desktop theming | [`docs/THEMING.md`](docs/THEMING.md) |

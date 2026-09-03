@@ -1,5 +1,10 @@
 # Build verification log
 
+Hardware-specific compatibility findings that are not changes to the ISO are
+indexed in [`HARDWARE_TARGETS.md`](HARDWARE_TARGETS.md). The validated Lenovo
+ThinkPad T14s Gen 6 AMD Wi-Fi workaround is documented separately in
+[`HARDWARE_T14S_GEN6_WIFI.md`](HARDWARE_T14S_GEN6_WIFI.md).
+
 ## Release and build identity regression checklist
 
 Apply this checklist to every development, stable, and maintenance ISO. The

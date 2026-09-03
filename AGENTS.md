@@ -463,10 +463,11 @@ because it needs the live session's D-Bus.
 
 ## Hardware targets
 
-No formal hardware-target document exists in this repo. What's actually
-been verified, per `docs/TESTING.md`: VirtualBox (BIOS and UEFI), and one
-physical laptop (UEFI, real Wi-Fi/graphics hardware). Treat any hardware
-claim beyond that as unverified, not as an established support matrix.
+`docs/HARDWARE_TARGETS.md` indexes project-specific hardware compatibility
+results and links to detailed workaround notes. Historical platform testing in
+`docs/TESTING.md` covers VirtualBox (BIOS and UEFI) and physical-laptop UEFI,
+Wi-Fi, and graphics behavior. Treat any hardware claim beyond documented test
+evidence as unverified, not as an established support matrix.
 
 ## Important architectural decisions
 
@@ -643,6 +644,7 @@ above.
 | Document | Authoritative for |
 |---|---|
 | `docs/VERSIONING.md` | Release version format/lifecycle, build IDs, ISO naming, and live/installed identity |
+| `docs/HARDWARE_TARGETS.md` | Index of tested hardware compatibility findings and detailed hardware-specific notes |
 | `docs/BRANDING.md` | Palette, semantic color mapping, boot-chain branding (GDM/Plymouth/GRUB/os-release) |
 | `docs/THEMING.md` | The 7-item GNOME theming pass (wallpaper, accent color, fonts, icon theme, Shell theme, fastfetch, Starship) — decisions, verification evidence, and the full GDM/Plymouth boot-regression investigation |
 | `docs/CALAMARES.md` | Installer module sequence, branding, live-artifact cleanup, install-breaking gotchas |
@@ -652,8 +654,8 @@ above.
 | `docs/GDM_PLYMOUTH_AUTOLOGIN_FIX.md` | Standalone writeup of the GDM/Plymouth VT-race fix (condensed version of the THEMING.md item 1 investigation) |
 | `docs/TESTING.md` | Chronological build-verification log for Phase 1/2 only (20 rounds, through 2026-08-12) — later verification lives in `docs/THEMING.md`/`docs/CALAMARES.md` instead |
 
-No `ARCHITECTURE.md`, `BUILDING.md`, `HARDWARE_TARGETS.md`,
-`INSTALLER.md`, `ROADMAP.md`, `PROJECT_CHARTER.md`, `POC_SCOPE.md`, or
+No `ARCHITECTURE.md`, `BUILDING.md`, `INSTALLER.md`, `ROADMAP.md`,
+`PROJECT_CHARTER.md`, `POC_SCOPE.md`, or
 `DAILY_DRIVER_REQUIREMENTS.md` currently exist in this repo — don't
 reference them as if they do. This file's Architecture, ISO Build
 Process, Boot and Installation, and Hardware Targets sections are the
