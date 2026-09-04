@@ -29,21 +29,25 @@ a functional system without hitting a wall on day one.
   so the next ISO build must confirm the resulting image-size change.
 - **Terminal: Ptyxis**, replacing `gnome-terminal`. Modern,
   GPU-accelerated, actively developed (what Fedora Workstation switched
-  its own default to) — `gnome-terminal` is feature-frozen upstream. Ptyxis is
-  included in the unlocked `org.gnome.shell favorite-apps` compiled default,
-  alongside Files and Firefox, so it is pinned for the live session and newly
-  created installed users. Users retain normal control over dock favorites.
+  its own default to) — `gnome-terminal` is feature-frozen upstream. The live
+  session keeps Ptyxis pinned beside Files, Firefox, and Install OBLinux.
 - **Desktop feel: stock GNOME shell on installed systems.** `gnome-tweaks` is
   now included as a small, standard GNOME advanced-settings application. The
   Desktop Icons NG extension is packaged solely so the live session can show
   its installer shortcut; it is enabled only in `liveuser`'s ephemeral dconf
   state and Calamares removes its package from the installed system.
 - **GNOME core apps**: calendar, calculator, characters, clocks,
-  contacts, disk-utility, firmware (+ `fwupd`), online-accounts,
+  contacts, Evolution, disk-utility, firmware (+ `fwupd`), online-accounts,
   software, system-monitor, text-editor, weather, plus `baobab`, `eog`,
-  `evince`, `file-roller`, `sushi`, `totem`. `gnome-maps` deliberately
+  `evince`, `file-roller`, `sushi`, `totem`, and Yelp Help. `gnome-maps` deliberately
   left out (heavier, needs `geoclue`, least-used of the set) — easy to
   add later if wanted.
+- **Installed-system dash parity**: fresh installed users receive the same
+  unlocked favorites and ordering shown by the accepted Debian edition:
+  Firefox, Evolution, Files, Software, Text Editor, Calculator, and Help.
+  GNOME supplies Show Applications after the favorites. The live account's
+  separate runtime override remains Files, Firefox, Ptyxis, and Install
+  OBLinux so the installer stays immediately accessible.
 - **First-login guidance**: `gnome-tour` enables GNOME Shell's native welcome
   dialog for new installed users. GNOME Shell obtains `OBLinux <version>` from
   the build-rendered `/etc/os-release`, offers **Skip** and **Take Tour**, and

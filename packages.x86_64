@@ -199,6 +199,7 @@ gnome-characters
 gnome-clocks
 gnome-contacts
 gnome-disk-utility
+evolution
 gnome-firmware
 gnome-online-accounts
 gnome-software
@@ -212,6 +213,7 @@ file-roller
 fwupd
 sushi
 totem
+yelp
 
 ## Graphics and document tools. Impression is a current GNOME Circle,
 ## libadwaita application for writing bootable disk images to USB drives.
