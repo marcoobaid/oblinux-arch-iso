@@ -1,4 +1,4 @@
-# Default application package list (updated 2026-09-01)
+# Default application package list (updated 2026-09-03)
 
 Phase 3/4 item 1 (see `README.md`'s Status section for the full list and
 sequencing). Previously `packages.x86_64` had no curated end-user apps at
@@ -44,6 +44,21 @@ a functional system without hitting a wall on day one.
   `evince`, `file-roller`, `sushi`, `totem`. `gnome-maps` deliberately
   left out (heavier, needs `geoclue`, least-used of the set) — easy to
   add later if wanted.
+- **First-login guidance**: `gnome-tour` enables GNOME Shell's native welcome
+  dialog for new installed users. GNOME Shell obtains `OBLinux <version>` from
+  the build-rendered `/etc/os-release`, offers **Skip** and **Take Tour**, and
+  records `org.gnome.shell welcome-dialog-last-shown-version` when shown so it
+  does not repeat. A user-local `Hidden=true` desktop entry masks the Tour only
+  for the ephemeral `liveuser`; Calamares-created users get the packaged system
+  desktop entry and the one-time welcome flow.
+- **Graphics and document tools**: `gimp` provides the full image editor.
+  `impression` was selected for USB image writing because it is a maintained
+  GNOME Circle/libadwaita application in Arch's official `extra` repository,
+  purpose-built for creating bootable drives. `flameshot` matches the Debian
+  edition's dedicated screenshot application and adds a discoverable capture
+  and annotation GUI alongside GNOME Shell's built-in screenshot overlay.
+  `simple-scan` is GNOME Document Scanner. Each package ships an application
+  desktop entry and icon for GNOME's application grid.
 - **Shell experience**: `starship` + `zsh-autosuggestions` +
   `zsh-syntax-highlighting` on top of the already-default zsh — a modern
   out-of-the-box feel without the overhead of a full framework like
@@ -107,6 +122,9 @@ The printing service enablement, LibreOffice, GNOME Tweaks, three-game set,
 Desktop Icons NG live-launcher support, and editor defaults above are statically
 integrated but **not yet ISO-validated**. A new build, live boot, full install,
 installed-system boot, and targeted visual/functional checks are required.
+
+The first-login Tour, GIMP, Impression, Flameshot, and Document Scanner
+additions are likewise statically integrated but not yet ISO-validated.
 
 ## Earlier status
 

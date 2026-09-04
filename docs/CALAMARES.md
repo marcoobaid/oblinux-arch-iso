@@ -90,17 +90,28 @@ AUR-only. Added to `packages.x86_64`; needs building and publishing to
 `oblinux_repo` the same way. Optional in the sense that the installer
 still works without it — keyboard selection just loses the live preview.
 
-## Partitioning / filesystem / LVM — scope for this phase
+## Partitioning / filesystem / LVM
 
-- ext4 only: no `availableFileSystemTypes` list at all (confirmed via
-  Calamares' own docs: omitting it means no filesystem-choice UI is shown,
-  cleanest match for "basic")
-- `allowManualPartitioning: false` — hides the manual partition editor
-  only; Erase/Replace/Alongside (the automated modes) stay available,
-  Calamares doesn't support hiding those individually
+- Erase disk remains available and continues to use ext4 by default. There is
+  no `availableFileSystemTypes` list, so the automated workflow does not add a
+  filesystem-choice dropdown.
+- `allowManualPartitioning: true` exposes Calamares' manual partition editor
+  alongside the existing automated choices. On UEFI systems the configured
+  EFI mount point remains `/boot/efi`; a manual layout must provide the
+  required root mount and a suitable EFI System Partition. BIOS and UEFI
+  layouts require rebuilt-ISO install testing before this is considered
+  runtime-verified.
 - LVM disabled (`lvm.enable: false`)
 - No disk encryption (LUKS) support — `luksbootkeyfile`/
   `luksopenswaphookcfg` dropped from the sequence entirely
+
+## Installed-user password policy
+
+The users module matches Debian's current Calamares policy: passwords must be
+at least six characters (`passwordRequirements.minLength: 6`), there is no
+maximum length, and both `allowWeakPasswords` settings are `false`. The weak-
+password override checkbox is therefore hidden and users cannot bypass the
+configured requirement. Installed-system autologin remains disabled.
 
 ## Live-artifact cleanup — what and why
 

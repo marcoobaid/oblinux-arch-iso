@@ -190,6 +190,9 @@ firefox
 ptyxis
 
 ## Core GNOME apps for a functional, appealing out-of-the-box desktop.
+## GNOME Tour supplies the native first-login welcome flow for newly created
+## installed users; the live account masks it with a user-local desktop entry.
+gnome-tour
 gnome-calendar
 gnome-calculator
 gnome-characters
@@ -209,6 +212,16 @@ file-roller
 fwupd
 sushi
 totem
+
+## Graphics and document tools. Impression is a current GNOME Circle,
+## libadwaita application for writing bootable disk images to USB drives.
+## Flameshot matches the Debian edition's dedicated screenshot application and
+## complements GNOME Shell's built-in screenshot overlay. Document Scanner is
+## packaged as simple-scan on Arch.
+gimp
+impression
+flameshot
+simple-scan
 
 ## Productivity — the complete current LibreOffice branch plus GNOME's
 ## lightweight advanced-settings utility. LibreOffice's GTK integration is
