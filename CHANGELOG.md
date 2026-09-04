@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Restrict SquashFS XZ branch conversion to the x86 filter appropriate for the
+  x86_64 ISO, fixing reproducible `xz uncompress failed with error code 9`
+  build failures caused by also evaluating the unrelated ARM64 filter.
 - Align the Arch Zsh experience with the Debian edition: enable packaged
   autosuggestions and syntax highlighting, add persistent deduplicated history,
   familiar editing/navigation keys, top-level-only Fastfetch startup, and the
