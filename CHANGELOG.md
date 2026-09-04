@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Give the visible GRUB menu a five-second countdown before automatically
+  booting the normal OBLinux entry on live, loopback, and installed systems.
 - Restrict SquashFS XZ branch conversion to the x86 filter appropriate for the
   x86_64 ISO, fixing reproducible `xz uncompress failed with error code 9`
   build failures caused by also evaluating the unrelated ARM64 filter.

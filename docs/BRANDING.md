@@ -477,6 +477,16 @@ is omitted: probing a nonexistent COM0 emits a GRUB error and pauses startup on
 UEFI systems without a serial port, while OBLinux's live menu uses the native
 console and `gfxterm` graphical output.
 
+The live GRUB configuration explicitly sets `timeout=5`,
+`timeout_style=menu`, and the normal OBLinux entry ID as its default. The
+themed menu therefore remains visible for a five-second countdown and then
+boots the normal live/install entry unless the user interacts with it.
+`grub/loopback.cfg` carries the same default and timeout behavior for loopback
+booting. For installed systems, Calamares' `grubcfg` module merges
+`GRUB_TIMEOUT=5`, `GRUB_TIMEOUT_STYLE=menu`, and `GRUB_DEFAULT=0` into the
+target's `/etc/default/grub` before the bootloader module runs
+`grub-mkconfig`; the first generated entry is the normal OBLinux kernel entry.
+
 ## Next steps
 
 1. ~~Logo/wordmark~~ — done, see above.
