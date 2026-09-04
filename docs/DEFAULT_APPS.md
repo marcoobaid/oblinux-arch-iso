@@ -64,9 +64,10 @@ a functional system without hitting a wall on day one.
   `simple-scan` is GNOME Document Scanner. Each package ships an application
   desktop entry and icon for GNOME's application grid.
 - **Shell experience**: `starship` + `zsh-autosuggestions` +
-  `zsh-syntax-highlighting` on top of the already-default zsh — a modern
-  out-of-the-box feel without the overhead of a full framework like
-  oh-my-zsh.
+  `zsh-syntax-highlighting` on top of the already-default zsh. Both add-ons are
+  loaded from Arch's packaged plugin paths; persistent deduplicated history,
+  common terminal keybindings, and the Debian-aligned OBLinux prompt provide a
+  modern out-of-the-box feel without a full framework like oh-my-zsh.
 - **Modern CLI tools**: `bat`, `btop`, `eza`, `fd`, `fzf`, `ripgrep`,
   `zoxide` — plus filling a real gap, `unzip`/`zip`/`p7zip`/`wget` (only
   `squashfs-tools` existed before, no general-purpose archive/download

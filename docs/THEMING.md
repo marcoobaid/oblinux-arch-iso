@@ -9,10 +9,10 @@ per item as that work starts.
 ## Decisions locked in for this sub-phase
 
 - **Zsh prompt: keep starship** (already shipped in `packages.x86_64`
-  alongside `zsh-autosuggestions`/`zsh-syntax-highlighting`) — build a
-  custom `starship.toml` matching Slate & Amber rather than switching to
-  oh-my-zsh. Reaffirms the package-list phase's reasoning: lighter
-  weight, faster shell startup, no framework to maintain.
+  alongside `zsh-autosuggestions`/`zsh-syntax-highlighting`) — use the
+  Debian-aligned OBLinux `starship.toml` rather than switching to oh-my-zsh.
+  Reaffirms the package-list phase's reasoning: lighter weight, faster shell
+  startup, no framework to maintain.
 - **GTK theme: native accent color only**, not a custom GTK theme
   package. Modern GNOME's built-in accent-color system (Settings >
   Appearance) set to the closest preset to Amber (`#d68a3c`) gets a
@@ -653,7 +653,7 @@ fetch) or genuinely niche.
 new interactive shells as designed, logo and module list render
 correctly.
 
-### 7. Zsh custom prompt — done, VM-confirmed 2026-08-20
+### 7. Zsh custom prompt and add-ons — Debian-aligned, static validation 2026-09-03
 
 Real gap found before building anything: `starship` was already in
 `packages.x86_64` (added during the package-list phase) but never
@@ -671,17 +671,12 @@ or `~/.config/starship.toml` — no XDG system-config fallback like
 fastfetch has. A single shared file avoids two copies drifting out of
 sync.
 
-**Design**: Slate & Amber, no powerline blocks — colored text/glyphs
-directly on the terminal background, matching the minimal geometric look
-already established (wallpaper, icon theme, Shell theme). Directory in
-Slate Light, git branch/status and language-version modules (Python,
-Node, Rust, Go — invisible unless the directory's actually relevant) in
-Slate/Amber, command duration on slow commands in muted Slate Light,
-prompt character Amber on success. Deliberately kept **red** for the
-error state rather than forcing it onto the brand palette — errors need
-instant, unambiguous recognition, worth more there than strict on-brand
-consistency. Iterated on a live two-state preview (clean repo, and a
-slow/failed command) before finalizing.
+**Design**: aligned with the accepted Debian edition's clean OBLinux
+Starship presentation: cyan directory and success prompt, amber git branch
+and vi-mode prompt, compact git status, 1.5-second command-duration threshold,
+explicit non-zero exit status, and SSH-only user/host context. The palette and
+module formatting match Debian while the config remains system-wide on Arch.
+Red remains reserved for command failures.
 
 No hand-specified Nerd Font glyph codepoints anywhere in the config —
 relies entirely on Starship's own built-in default symbol per module,
@@ -691,9 +686,26 @@ caution as the fastfetch logo's block characters).
 **Implementation**:
 - `airootfs/etc/xdg/starship.toml` — validated as syntactically correct
   TOML before shipping.
-- Both `.zshrc`s: `export STARSHIP_CONFIG=/etc/xdg/starship.toml` +
-  `eval "$(starship init zsh)"`. `liveuser`'s old hardcoded `PS1` line
-  removed — Starship now owns prompt rendering entirely.
+- Both `.zshrc`s select the shared config and initialize Starship when it is
+  installed. They also configure a 10,000-entry persistent, deduplicated,
+  shared history; `auto_cd`; interactive comments; Emacs editing; and Home,
+  End, and Delete keys.
+- The already-installed `zsh-autosuggestions` and `zsh-syntax-highlighting`
+  packages are now sourced from their official Arch paths under
+  `/usr/share/zsh/plugins/`; syntax highlighting is deliberately loaded last.
+- Fastfetch now runs only in a top-level interactive TTY, avoiding repeated
+  banners in nested shells. Users can suppress it with
+  `OBLINUX_FASTFETCH=0`.
+
+Debian's separate Ptyxis 48.5 first-terminal palette reset is intentionally
+not copied: it works around a Debian 13 package-specific first-launch issue,
+whereas Arch follows current Ptyxis and GNOME settings directly. Fastfetch's
+configuration and released R5 logo were already equivalent and remain
+unchanged.
 
 **VM-confirmed 2026-08-20**: pulled, built, installed — the prompt is
 live and rendering correctly, replacing the old plain `PS1`.
+
+The 2026-09-03 Debian-alignment update has only been statically validated on
+the macOS development host; its terminal rendering still requires validation
+on a rebuilt Live ISO and installed system.
