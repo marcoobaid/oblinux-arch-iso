@@ -42,9 +42,9 @@ a functional system without hitting a wall on day one.
   `evince`, `file-roller`, `sushi`, `totem`, and Yelp Help. `gnome-maps` deliberately
   left out (heavier, needs `geoclue`, least-used of the set) — easy to
   add later if wanted.
-- **Installed-system dash parity**: fresh installed users receive the same
-  unlocked favorites and ordering shown by the accepted Debian edition:
-  Firefox, Evolution, Files, Software, Text Editor, Calculator, and Help.
+- **Installed-system dash**: fresh installed users receive these unlocked
+  favorites: Firefox, Ptyxis, Files, Software, Text Editor, Calculator, and Help.
+  This intentionally replaces Debian's Evolution favorite with the terminal.
   GNOME supplies Show Applications after the favorites. The live account's
   separate runtime override remains Files, Firefox, Ptyxis, and Install
   OBLinux so the installer stays immediately accessible.

@@ -13,5 +13,5 @@
   remove the weak-password override.
 - Add GIMP, Impression, Flameshot, and Document Scanner to the default
   Live ISO and installed-system application set.
-- Align the fresh installed-user GNOME dash with the Debian edition by adding
-  Evolution and Help and using the same seven default favorites and ordering.
+- Configure the fresh installed-user GNOME dash with Firefox, Ptyxis, Files,
+  Software, Text Editor, Calculator, and Help; Ptyxis replaces Evolution.
