@@ -1,17 +1,25 @@
 # AGENTS.md — OBLinux operating guide for coding agents
 
-Persistent operating guide for any coding agent (Claude Code or otherwise)
-working in this repository. Read this first. It is a map and a set of
-rules, not a tutorial — detailed specs live in the other `docs/` files
-this points to.
+Persistent operating guide for coding agents working in this repository.
+Claude (via Claude Code) is the primary maintenance agent for the OBLinux
+Arch repositories; this guide also applies to any other coding agent used
+here. Read this first. It is a map and a set of rules, not a tutorial —
+detailed specs live in the other `docs/` files this points to.
 
 ## Project overview
 
 OBLinux is an Arch Linux-based Linux distribution: GNOME desktop, Calamares
 graphical installer, built with `archiso`. It ships as a live/install ISO
-with a curated (not minimal, not maximal) default application set, and a
-consistent "Slate & Amber" visual identity applied from GRUB through GDM,
-the desktop, the terminal, and the installer.
+with a curated (not minimal, not maximal) default application set and one
+cohesive visual identity carried from boot through the desktop and
+installer, built on OBLinux's "Slate & Amber" color palette (see Branding
+below). Boot (GRUB/Plymouth), GDM and the lock screen, Calamares, and the
+desktop's wallpaper/icon/Fastfetch artwork now consume released assets
+from the shared `oblinux-brand-master` project (Brand Master R5); a few
+Arch-specific surfaces with no Brand Master asset release yet — currently
+the terminal editors' color scheme — still apply the Slate & Amber
+palette directly in this repo. `docs/BRANDING.md` is authoritative for the
+current per-surface breakdown.
 
 The project is presented as a public GitHub project, not an individual's
 personal build — project documentation and commit messages must stay
@@ -478,8 +486,9 @@ Do not casually reverse these without re-reading the linked reasoning:
 - **No custom GTK theme** — GNOME's native accent-color system only.
   The GNOME Shell theme fork explicitly excludes Graphite's GTK modules
   for this reason; don't pull them in.
-- **Wallpapers ship as PNG, never SVG** — removes an entire sandboxed
-  rendering pipeline that has already caused one real crash.
+- **Wallpapers ship as pre-rendered raster images (PNG or JPEG), never
+  SVG** — removes an entire sandboxed rendering pipeline that has
+  already caused one real crash.
 - **GDM background is solid/gradient color, never an image** — the image
   path requires an ongoing gresource-patching pacman hook that doesn't
   exist; don't add a background image without building that

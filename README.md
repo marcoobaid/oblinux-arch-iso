@@ -4,7 +4,7 @@
 
 ### A polished, practical GNOME desktop on an Arch Linux foundation
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-FF8A00.svg)](LICENSE)
+[![License: GPL-3.0-or-later](https://img.shields.io/badge/License-GPL--3.0--or--later-FF8A00.svg)](LICENSE)
 [![Base: Arch Linux](https://img.shields.io/badge/Base-Arch%20Linux-1E4D8C.svg)](https://archlinux.org/)
 [![Desktop: GNOME](https://img.shields.io/badge/Desktop-GNOME-1E4D8C.svg)](https://www.gnome.org/)
 [![Installer: Calamares](https://img.shields.io/badge/Installer-Calamares-0B1118.svg)](https://calamares.io/)
@@ -158,6 +158,6 @@ redesigned or patched in this repository.
 
 ## License
 
-The OBLinux project files are available under the [MIT License](LICENSE).
-Bundled and derived third-party assets retain their respective licenses and
+OBLinux Arch is licensed under [GPL-3.0-or-later](LICENSE). Bundled and
+derived third-party assets retain their respective licenses and
 attributions.

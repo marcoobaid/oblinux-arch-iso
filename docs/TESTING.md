@@ -433,9 +433,9 @@ the installed system and verified further from the desktop side:
 | Stage | Evidence | Result |
 |---|---|---|
 | Install | `session.log` | `completion: succeeded`, all 35 jobs |
-| GRUB → Plymouth → GDM → desktop | Screenshots | Boots cleanly; Plymouth animation plays correctly; reaches GDM, logs in as `marco` |
+| GRUB → Plymouth → GDM → desktop | Screenshots | Boots cleanly; Plymouth animation plays correctly; reaches GDM, logs in as the installed user account |
 | GRUB menu | Screenshot | Boots and lists "OBLinux Linux" / "Advanced options for OBLinux Linux" — functional, unthemed (plain GNU GRUB default look) |
-| `marco` account | Terminal, GDM | Created during install, can `sudo`, default shell `/bin/bash` (as configured — zsh is a live-session-only default, not yet carried into `users.conf`) |
+| Installed user account | Terminal, GDM | Created during install, can `sudo`, default shell `/bin/bash` (as configured — zsh is a live-session-only default, not yet carried into `users.conf`) |
 
 Also visible in `session.log`, confirming several earlier fixes at once:
 `mkinitcpio` completed cleanly (job 18), `packages` removed the
