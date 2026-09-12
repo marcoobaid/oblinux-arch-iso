@@ -17,6 +17,10 @@ underlying platform. This repository contains the development Arch edition: an
 [`archiso`](https://gitlab.archlinux.org/archlinux/archiso)-based live system
 with the GNOME desktop and a graphical Calamares installer.
 
+**Development:** `oblinux-arch-iso-dev` is the development and staging
+repository for the Arch edition. The Stable edition is maintained in
+[`oblinux-arch-iso`](https://github.com/marcoobaid/oblinux-arch-iso).
+
 ## What is OBLinux?
 
 The Arch edition turns a rolling Arch Linux base into a complete live and
@@ -45,7 +49,7 @@ OBLinux is built around a few deliberate choices:
 ## Highlights
 
 - Rolling Arch Linux base with standard `pacman` package management
-- Stock GNOME desktop with OBLinux wallpapers, icons, fonts, and Slate & Amber branding
+- Stock GNOME desktop with OBLinux wallpapers, icons, fonts, and R5 visual identity
 - BIOS and UEFI live boot support through branded Syslinux and GRUB paths
 - Branded Plymouth startup, GDM login, and Calamares installation experience
 - Automatic live-session login and a graphical path from evaluation to install
@@ -63,7 +67,7 @@ Boot → Live environment → Installer → Login → GNOME desktop → Terminal
 
 OBLinux treats that path as one continuous experience rather than a collection
 of unrelated screens. Released assets from the OBLinux Brand Master provide the
-shared OBLinux identity across the boot chain, Calamares, GDM, desktop artwork,
+shared OBLinux R5 identity across the boot chain, Calamares, GDM, desktop artwork,
 system icons, and terminal presentation. The Arch edition supplies the native
 configuration that carries those assets from the live medium into the installed
 system.
@@ -105,10 +109,14 @@ published before the build begins. See the
 [package-signing guide](docs/PACKAGE_SIGNING.md) before preparing a build
 machine.
 
+The current Arch development baseline has completed regression testing on
+virtual machines and physical hardware. See the
+[hardware compatibility notes](docs/HARDWARE_TARGETS.md) for tested hardware
+and known limitations.
+
 After building, validation should cover live boot, the GNOME session, a full
 Calamares installation, and the installed system. BIOS and UEFI paths should be
-tested separately. The documented test history and subsystem notes distinguish
-source checks from actual build, boot, and installation results.
+tested separately.
 
 ## Repository guide
 
@@ -141,9 +149,8 @@ source checks from actual build, boot, and installation results.
 Contributions should be focused, technically justified, and consistent with the
 documented architecture. Before proposing a change, read the relevant document
 above, prefer supported upstream mechanisms, and update documentation alongside
-meaningful configuration changes. Validation reports should state clearly
-whether a change was checked statically, built with `mkarchiso`, boot-tested, or
-installed and tested.
+meaningful configuration changes. Include relevant build, boot, and installation
+test results with contributions.
 
 Brand artwork is maintained in the separate OBLinux Brand Master project and is
 consumed here from released versions. Shared visual assets should not be
