@@ -13,13 +13,13 @@
 
 OBLinux is an independent Linux distribution project focused on delivering a
 cohesive, approachable desktop without giving up the flexibility of its
-underlying platform. This repository contains the development Arch edition: an
+underlying platform. This repository contains the stable Arch edition: an
 [`archiso`](https://gitlab.archlinux.org/archlinux/archiso)-based live system
 with the GNOME desktop and a graphical Calamares installer.
 
-**Development:** `oblinux-arch-iso-dev` is the development and staging
-repository for the Arch edition. The Stable edition is maintained in
-[`oblinux-arch-iso`](https://github.com/marcoobaid/oblinux-arch-iso).
+**Stable:** This is the stable, production Arch edition of OBLinux. Active
+development happens in
+[`oblinux-arch-iso-dev`](https://github.com/marcoobaid/oblinux-arch-iso-dev).
 
 ## What is OBLinux?
 
@@ -109,7 +109,7 @@ published before the build begins. See the
 [package-signing guide](docs/PACKAGE_SIGNING.md) before preparing a build
 machine.
 
-The current Arch development baseline has completed regression testing on
+The current Arch stable baseline has completed regression testing on
 virtual machines and physical hardware. See the
 [hardware compatibility notes](docs/HARDWARE_TARGETS.md) for tested hardware
 and known limitations.
