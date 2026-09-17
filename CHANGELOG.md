@@ -20,3 +20,7 @@
   Live ISO and installed-system application set.
 - Configure the fresh installed-user GNOME dash with Firefox, Ptyxis, Files,
   Software, Text Editor, Calculator, and Help; Ptyxis replaces Evolution.
+- Remove Flameshot from the default package set: it did not provide a
+  reliably functional/default experience under the OBLinux GNOME Wayland
+  environment. OBLinux relies on GNOME Shell's native screenshot
+  functionality instead.
