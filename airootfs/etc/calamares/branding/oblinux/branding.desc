@@ -1,64 +1,34 @@
-# OBLinux Calamares branding.
-#
-# Checked Calamares' own current default branding.desc rather than reuse
-# the reference project's version unverified — its style key names
-# (sidebarBackground, sidebarTextSelect, etc.) are wrong for the current
-# schema, which uses SidebarBackground/SidebarText/SidebarTextCurrent/
-# SidebarBackgroundCurrent instead.
-#
-# Slideshow is a real QML presentation (show.qml) as of docs/CALAMARES.md
-# phase 3/4 item 3 -- superseding the earlier single-static-image
-# placeholder from when "no feature-showcase content exists yet" was the
-# blocker. Structure/API verified verbatim against Calamares' own
-# reference slideshow (src/branding/default/show.qml).
 ---
-componentName:  oblinux
-
-welcomeStyleCalamares:   false
-
-welcomeExpandingLogo:   true
-
-windowSize: 1050px,700px
-
+componentName: oblinux
+welcomeStyleCalamares: false
+# Downstream activation: use Calamares' proportional expanding-label path so
+# Brand Master's horizontal Welcome lockup remains centered and uncropped at
+# the supported window sizes, matching the Debian OBLinux implementation.
+welcomeExpandingLogo: true
+windowExpanding: normal
+windowSize: 900px,600px
 windowPlacement: center
-
-sidebar: widget
-
-navigation: widget
-
 strings:
-    productName:         "${NAME}"
-    shortProductName:    OBLinux
-    version:             Rolling
-    shortVersion:        Rolling
-    versionedName:       "OBLinux (Rolling)"
-    shortVersionedName:  OBLinux
-    bootloaderEntryName: OBLinux
-    productUrl:          https://github.com/marcoobaid/oblinux
-    supportUrl:          https://github.com/marcoobaid/oblinux/issues
-    knownIssuesUrl:      https://github.com/marcoobaid/oblinux/issues
-    releaseNotesUrl:     https://github.com/marcoobaid/oblinux
-    donateUrl:           ""
-
+  productName: OBLinux
+  shortProductName: OBLinux
+  version: ""
+  shortVersion: ""
+  versionedName: OBLinux
+  shortVersionedName: OBLinux
+  bootloaderEntryName: OBLinux
+  productUrl: ""
+  supportUrl: ""
+  knownIssuesUrl: ""
 images:
-    productIcon:         "logo.png"
-    productLogo:         "logo.png"
-    productWelcome:      "logo.png"
-
-# Slate & Amber palette (docs/BRANDING.md) — Slate for sidebar chrome,
-# Cloud for text, Primary for the current-step highlight (matches this
-# project's own semantic mapping: Primary leads/selection, Amber is
-# reserved for actions/alerts, not decorative highlights).
+  productLogo: icon.svg
+  productIcon: icon.svg
+  productWelcome: welcome.svg
+  productLogoWhite: icon-white.svg
+  productIconWhite: icon-white.svg
+slideshow: slideshow.qml
+finished: finished.qml
 style:
-   SidebarBackground:        "#2c3a4e"
-   SidebarText:              "#f2f3f5"
-   SidebarTextCurrent:       "#f2f3f5"
-   SidebarBackgroundCurrent: "#3f6690"
-
-# QML (recommended) over a static image list — a real multi-slide
-# presentation, not the single-image placeholder this replaces. API 2
-# loads the show on startup and calls onActivate()/onLeave(), which
-# properly stops the presentation once installation finishes (verified
-# against Calamares' own branding.desc documentation of the two APIs).
-slideshow:    "show.qml"
-slideshowAPI: 2
+  SidebarBackground: "#0D2742"
+  SidebarText: "#FFFFFF"
+  SidebarTextCurrent: "#FF8A00"
+  SidebarBackgroundCurrent: "#0D2742"

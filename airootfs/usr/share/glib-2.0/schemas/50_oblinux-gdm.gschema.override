@@ -1,4 +1,4 @@
-# OBLinux GDM/desktop branding overrides.
+# OBLinux GNOME defaults and GDM product-mark override.
 #
 # Same mechanism Arch's own gdm package uses for the default Arch logo
 # (30_org.archlinux.gdm.gschema.override) — a GSettings schema override,
@@ -11,35 +11,45 @@
 # wallpaper — this is how new user accounts (e.g. created by Calamares)
 # get OBLinux's own default wallpaper instead of upstream GNOME's.
 #
-# GDM itself no longer inherits this default as of the wallpaper set
-# added below: it now has its own dconf profile/database
-# (etc/dconf/profile/gdm + etc/dconf/db/gdm.d/) which takes priority for
-# the gdm user specifically, giving it a distinct Ink->Slate gradient
-# rather than this picture-based default. See that directory and
-# docs/THEMING.md item 1 for why (a real background image on GDM's
-# login screen needs fragile gresource theme-patching, not just a
-# schema override).
+# GDM has its own dconf profile/database (etc/dconf/profile/gdm +
+# etc/dconf/db/gdm.d/) which takes priority for the gdm user specifically,
+# giving the greeter a Brand Master near-black-to-navy gradient rather than
+# this picture-based desktop default. The desktop uses the established OBLinux
+# Obsidian Horizon branded 3840x2160 JPEG for both appearance modes, preserving
+# the repository's runtime-validated rule that GNOME backgrounds must not invoke
+# the sandboxed SVG rendering path during live-session startup.
+# The session lock screen is independent and remains on the same Brand Master
+# dark PNG as an unlocked default, so users remain free to change it.
 
 [org.gnome.desktop.background]
-picture-uri='/usr/share/backgrounds/oblinux/oblinux-soft-waves.png'
-picture-uri-dark='/usr/share/backgrounds/oblinux/oblinux-soft-waves.png'
+picture-uri='file:///usr/share/backgrounds/oblinux/oblinux-horizon-branded-3840x2160.jpg'
+picture-uri-dark='file:///usr/share/backgrounds/oblinux/oblinux-horizon-branded-3840x2160.jpg'
 picture-options='zoom'
-primary-color='#151a22'
+primary-color='#111820'
+secondary-color='#1B2836'
 color-shading-type='solid'
 
 [org.gnome.login-screen]
-logo='/usr/share/pixmaps/oblinux-logo-text-dark.svg'
+logo='/usr/share/pixmaps/oblinux-gdm-logo.png'
 
-# THEMING.md items 2+3: accent color and default fonts. Not overridden
-# per-user by GDM's dconf profile (unlike background), so these apply
-# everywhere including the GDM greeter — a deliberate, cohesive choice
-# (unlike the wallpaper, there's no fragility/gresource concern here,
-# it's schema keys the same way accent-color/fonts always work).
+# Phase 2A: Brand Master lock-screen default. This is deliberately separate
+# from org.gnome.desktop.background so the existing desktop wallpaper remains
+# unchanged. The PNG is copied byte-for-byte from Brand Master v1.0.5; it is
+# pre-rendered so the lock screen does not invoke GNOME's SVG loading pipeline.
+[org.gnome.desktop.screensaver]
+picture-uri='file:///usr/share/backgrounds/oblinux/oblinux-dark-3840x2160.png'
+picture-options='zoom'
+primary-color='#0B1118'
+secondary-color='#0D2742'
+
+# THEMING.md items 2+3: accent color and default fonts. Phase 3 aligns normal
+# user sessions with the accepted Debian implementation's blue accent. GDM's
+# dedicated dconf profile already selects the same blue value.
 #
 # accent-color: enum verified verbatim against gsettings-desktop-schemas
 # upstream source (org.gnome.desktop.interface accent-color) — valid
 # values are blue/teal/green/yellow/orange/red/pink/purple/slate;
-# 'orange' is the closest preset to Amber (#d68a3c).
+# Phase 3 intentionally selects 'blue' for Debian parity.
 #
 # font-name / document-font-name: Inter (inter-font package, added to
 # packages.x86_64), registered family confirmed via the package's own
@@ -57,7 +67,7 @@ logo='/usr/share/pixmaps/oblinux-logo-text-dark.svg'
 # vendored files: "JetBrainsMono Nerd Font Mono" (typographic family,
 # name ID 16) — matches this value.
 [org.gnome.desktop.interface]
-accent-color='orange'
+accent-color='blue'
 font-name='Inter 11'
 document-font-name='Inter 11'
 monospace-font-name='JetBrainsMono Nerd Font Mono 11'
@@ -68,21 +78,16 @@ monospace-font-name='JetBrainsMono Nerd Font Mono 11'
 # ckbcomp).
 icon-theme='OBLinux'
 
-# THEMING.md item 5: GNOME Shell styling, via the "User Themes" extension
-# (gnome-shell-extensions package, added to packages.x86_64 — a
-# deliberate, one-time exception to the package-list phase's
-# "stock GNOME, no extensions" decision; see that file's comment for why
-# this specific extension was judged safe). UUID verified against the
-# package's real file list, not assumed.
-[org.gnome.shell]
-enabled-extensions=['user-theme@gnome-shell-extensions.gcampax.github.com']
+# Phase 3 follow-up: Ptyxis follows GNOME's light/dark system appearance by
+# default, matching the accepted Debian behavior. This is an unlocked compiled
+# default; an explicit per-user Light or Dark selection still takes precedence.
+[org.gnome.Ptyxis]
+interface-style='system'
 
-# name='OBLinux' looks for /usr/share/themes/OBLinux/gnome-shell/
-# gnome-shell.css — verified against the extension's own upstream
-# source (getThemeDirs() in util.js checks ~/.themes, then
-# $XDG_DATA_HOME/themes, then every system data dir's themes/
-# subdirectory, which includes /usr/share/themes). System-wide, so this
-# applies to liveuser and any account Calamares creates, no per-user
-# setup needed — same pattern as the OBLinux icon theme.
-[org.gnome.shell.extensions.user-theme]
-name='OBLinux'
+# OBLinux installed-system dash: Firefox, Ptyxis, Files, Software, Text Editor,
+# Calculator, and Help. This is an unlocked compiled default, so users can
+# remove, reorder, or replace any favorite normally.
+# The live-session helper deliberately replaces this list for liveuser with
+# Files, Firefox, Ptyxis, and Install OBLinux, preserving installer access.
+[org.gnome.shell]
+favorite-apps=['firefox.desktop', 'org.gnome.Ptyxis.desktop', 'org.gnome.Nautilus.desktop', 'org.gnome.Software.desktop', 'org.gnome.TextEditor.desktop', 'org.gnome.Calculator.desktop', 'org.gnome.Yelp.desktop']

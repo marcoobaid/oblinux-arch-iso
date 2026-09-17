@@ -1,5 +1,52 @@
 # Build verification log
 
+Hardware-specific compatibility findings that are not changes to the ISO are
+indexed in [`HARDWARE_TARGETS.md`](HARDWARE_TARGETS.md). The validated Lenovo
+ThinkPad T14s Gen 6 AMD Wi-Fi workaround is documented separately in
+[`HARDWARE_T14S_GEN6_WIFI.md`](HARDWARE_T14S_GEN6_WIFI.md).
+
+## Release and build identity regression checklist
+
+Apply this checklist to every development, stable, and maintenance ISO. The
+authoritative policy and field meanings are in `docs/VERSIONING.md`.
+
+Before the build:
+
+- Run `cat VERSION`; confirm it is the intended release version and matches
+  `YY.QUARTER.MAINTENANCE[-dev]`.
+- Confirm a development release contains `-dev` and a stable release does not.
+- Build with `./scripts/build-iso.sh`, not `mkarchiso` directly. Record the
+  single `VERSION`, `BUILD_ID`, and ISO filename printed by the wrapper.
+
+After the build:
+
+- Confirm the filename is
+  `oblinux-arch-${VERSION}-${BUILD_ID}-x86_64.iso`.
+- Confirm the filename contains the exact `VERSION` read before the build.
+- Confirm the filename's `BUILD_ID` is `YYYYMMDD-HHMM` and exactly matches the
+  wrapper's recorded value.
+
+In the booted live environment, run `cat /etc/os-release` and confirm:
+
+- `VERSION` exactly matches the repository `VERSION`.
+- `VERSION_ID` exactly matches the repository `VERSION`.
+- `BUILD_ID` exactly matches the ISO filename.
+- `PRETTY_NAME` includes the release version.
+- Development values contain `-dev`; stable values do not.
+
+Complete a Calamares installation from that ISO, boot the installed system,
+run `cat /etc/os-release`, and confirm:
+
+- installed `VERSION` exactly matches the live value and repository `VERSION`;
+- installed `VERSION_ID` exactly matches the live value and repository
+  `VERSION`;
+- installed `BUILD_ID` exactly matches the live value and ISO filename; and
+- the installed system therefore identifies the exact ISO used for the
+  installation, not merely its release line or build date.
+
+These live and installed checks require a real ISO build/boot/install cycle;
+source inspection alone does not satisfy them.
+
 ## 2026-08-06 — first successful build (VirtualBox)
 
 **Build:** `sudo mkarchiso -v .` on a physical Arch Linux build machine, at
@@ -386,9 +433,9 @@ the installed system and verified further from the desktop side:
 | Stage | Evidence | Result |
 |---|---|---|
 | Install | `session.log` | `completion: succeeded`, all 35 jobs |
-| GRUB → Plymouth → GDM → desktop | Screenshots | Boots cleanly; Plymouth animation plays correctly; reaches GDM, logs in as `marco` |
+| GRUB → Plymouth → GDM → desktop | Screenshots | Boots cleanly; Plymouth animation plays correctly; reaches GDM, logs in as the installed user account |
 | GRUB menu | Screenshot | Boots and lists "OBLinux Linux" / "Advanced options for OBLinux Linux" — functional, unthemed (plain GNU GRUB default look) |
-| `marco` account | Terminal, GDM | Created during install, can `sudo`, default shell `/bin/bash` (as configured — zsh is a live-session-only default, not yet carried into `users.conf`) |
+| Installed user account | Terminal, GDM | Created during install, can `sudo`, default shell `/bin/bash` (as configured — zsh is a live-session-only default, not yet carried into `users.conf`) |
 
 Also visible in `session.log`, confirming several earlier fixes at once:
 `mkinitcpio` completed cleanly (job 18), `packages` removed the

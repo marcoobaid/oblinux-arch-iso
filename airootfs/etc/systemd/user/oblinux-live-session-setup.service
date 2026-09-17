@@ -1,0 +1,11 @@
+[Unit]
+Description=Prepare OBLinux live-session installer shortcuts
+ConditionUser=liveuser
+PartOf=graphical-session.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/lib/oblinux-live-session-setup
+
+[Install]
+WantedBy=graphical-session.target

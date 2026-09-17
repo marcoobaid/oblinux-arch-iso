@@ -1,4 +1,125 @@
-# OBLinux Branding — Slate & Amber
+# OBLinux Branding
+
+## Phase 3 desktop findings (2026-08-31)
+
+Normal GNOME sessions now select GNOME's unlocked blue accent default, matching
+the accepted OBLinux Debian behavior. GDM already used the same blue enum value
+through its isolated dconf profile, so this correction changes no GDM files.
+
+Runtime testing exposed that the Graphite-derived User Themes stylesheet
+compiled its accent and Shell surfaces to fixed colors. It therefore could not
+follow later accent selections and differed materially from Debian's stock
+GNOME Quick Settings and power dialog. OBLinux no longer installs or enables
+User Themes by default. GNOME Shell now uses its native runtime
+`-st-accent-color` mechanism, so the default remains blue and a user's later
+blue/teal/green/yellow/orange/red/pink/purple/slate selection is reflected
+throughout Shell. This also restores GNOME's neutral Quick Settings panel and
+dialog surfaces. The former theme source is retained only as development
+history and is not activated by the image.
+
+Ptyxis now has an unlocked `interface-style='system'` compiled default, matching
+Debian's system-following terminal behavior. It follows GNOME light/dark style
+for both the live session and installed users unless a user explicitly chooses
+Light or Dark in Ptyxis.
+
+The neutral Horizon account avatar from the Debian reference is installed
+unchanged at `/usr/share/oblinux/branding/oblinux-default-avatar.svg` and seeded
+as `.face` plus the conventional `.face.icon` link for both `/etc/skel` and the
+pre-created Arch live account. Calamares-created users therefore inherit the
+same default avatar as Debian users, while the live session receives it without
+depending on `/etc/skel`. GNOME/GDM can replace the default normally when a
+user chooses a personal account image.
+
+## Brand Master desktop integration (Phase 2C: 2026-08-31)
+
+The GNOME desktop, GNOME About identity, and Fastfetch now consume the released
+OBLinux identity. The desktop originally used Brand Master's untouched
+3840x2160 light and dark production PNGs as GNOME's paired unlocked defaults.
+Following runtime acceptance testing, the established branded Obsidian Horizon
+3840x2160 JPEG is now the unlocked default in both appearance modes, matching
+the accepted Debian presentation. The Brand Master light/dark/orange production
+wallpapers and the clean Obsidian Horizon variant remain available in the
+background chooser. Arch continues to use pre-rendered raster assets instead
+of SVG wallpapers so live-session startup does not invoke GNOME's sandboxed SVG
+renderer.
+
+GNOME About continues to use the standard `LOGO=oblinux-logo` os-release
+mechanism, now backed by Brand Master's complete `hicolor` product-icon set
+rather than the retired legacy pixmap mark. `PRETTY_NAME` identifies the
+OBLinux release, while `ID_LIKE=arch` retains the Arch base and
+`VERSION`/`VERSION_ID` plus `BUILD_ID` identify the release and exact ISO build
+as defined in `docs/VERSIONING.md`. Debian's
+compiled vendor-emblem diversion is intentionally not copied because it solves
+a Debian GNOME Control Center packaging behavior that Arch does not share.
+
+Fastfetch's existing Arch-wide `/etc/xdg/fastfetch/config.jsonc` activation and
+useful Arch module list remain in place, but the logo path, generated 30x15
+quadrant-block artwork, canonical blue/orange truecolor values, spacing, and
+label treatment now match Brand Master and the accepted Debian implementation.
+The shared logo lives at `/usr/share/oblinux/terminal/fastfetch/logo.txt`; the
+retired local Slate/Amber block mark is removed.
+
+All three mechanisms are system-wide unlocked defaults. They apply to the live
+account and to accounts created by Calamares through the unpacked squashfs,
+without seeding a wallpaper or Fastfetch asset into either home directory.
+User wallpaper selections and per-user Fastfetch configurations continue to
+take precedence normally. Static validation does not replace an ISO build,
+live-session visual check, GNOME About inspection, or installed-user test.
+
+## Brand Master Calamares integration (Phase 2B: 2026-08-31)
+
+Calamares now consumes the Brand Master R5 installer theme, matching the
+known-good Debian OBLinux implementation wherever the two Calamares builds
+share a branding mechanism. The complete shared payload lives under
+`airootfs/etc/calamares/branding/oblinux/`: the R5 symbol and horizontal
+lockups, responsive Welcome artwork, seven SVG slideshow panels, completion
+panel, QML presentation, and navy/white/orange widget-sidebar palette.
+
+The shared artwork and QML are byte-for-byte copies of Brand Master's current
+`themes/calamares/oblinux/` payload. Only `branding.desc` is activated
+downstream: `welcomeExpandingLogo` is enabled to keep the horizontal lockup
+proportional and uncropped; release labels resolve to the distribution-neutral
+`OBLinux` name; optional project URLs are empty because the Welcome module does
+not expose those links and no non-legacy public project URL is configured.
+The Arch installer keeps its existing `/etc/calamares` location, module
+configuration, settings sequence, package handling, and installation behavior.
+
+This replaces the legacy 256 px mark, 1050×700 geometry, Slate/Amber sidebar,
+and locally authored five-slide presentation. Those retired files
+(`logo.png` and `show.qml`) are no longer present or referenced. Static source
+validation can establish correct payload wiring, but runtime visual parity
+still requires an ISO build and an installer walkthrough on the Linux test
+machine.
+
+## Brand Master GDM and lock-screen integration (Phase 2A: 2026-08-31)
+
+GDM and the GNOME session lock screen now consume the released OBLinux Brand
+Master R5 identity. The integration uses assets verified byte-for-byte against
+the released sources named below; it does not modify or regenerate the masters.
+
+| Surface | File(s) in this repo | Brand Master source / mechanism |
+|---|---|---|
+| GDM background | `airootfs/etc/dconf/profile/gdm`, `airootfs/etc/dconf/db/gdm.d/01-oblinux-background` | GDM-only, image-free vertical gradient using Brand Master's near black `#0B1118` and derived navy `#0D2742`; the maintainable dconf mechanism matches the accepted Debian implementation |
+| GDM product mark | `airootfs/usr/share/pixmaps/oblinux-gdm-logo.png`, selected by `airootfs/usr/share/glib-2.0/schemas/50_oblinux-gdm.gschema.override` | byte-for-byte copy of Brand Master v1.0.5 `assets/icons/hicolor/64x64/apps/oblinux-logo.png`, matching Debian's selected 64 px GDM vendor mark |
+| GNOME lock screen | `airootfs/usr/share/backgrounds/oblinux/oblinux-dark-3840x2160.png`, selected by the same schema override under `org.gnome.desktop.screensaver` | byte-for-byte copy of Brand Master v1.0.5 `brand/wallpapers/3840x2160/oblinux-dark-3840x2160.png` |
+
+The GDM profile applies only to the `gdm` service account. In addition to the
+background, it restores the greeter's upstream blue accent so focus treatment
+matches the accepted Debian implementation while user sessions remain orange.
+The screensaver key
+is an unlocked system default for every normal GNOME account, including the
+live session and accounts created by Calamares; users can change it normally.
+No file is seeded into `liveuser` or `/etc/skel`, and the existing desktop
+wallpaper remains unchanged. Because Calamares installs the live squashfs with
+`unpackfs` and does not remove these system-wide files, the same configuration
+persists on the installed system.
+
+This phase deliberately does not patch GNOME Shell's package-owned gresource or
+apply a custom GDM Shell theme. Authentication, accessibility, account avatars,
+and lock/unlock behavior remain owned by upstream GDM/GNOME.
+
+The Slate & Amber material below documents the legacy/downstream design that
+still applies to surfaces not yet migrated to Brand Master.
 
 ## Palette
 
@@ -53,13 +174,47 @@ cleanly from favicon size up to a boot-splash centerpiece.
 | Asset | Path in repo | Format | Status |
 |---|---|---|---|
 | Logo mark | `docs/branding/oblinux-mark*.svg` | SVG source | **Done** — see above |
-| BIOS boot menu background | `syslinux/splash.png` | PNG, 640×480 | **Done** — mark + wordmark, Space Grotesk |
-| UEFI boot menu | uses same visual language via `efiboot/loader/entries/*.conf` titles (text only, systemd-boot has no background image) | — | Text branding done already |
-| Plymouth boot theme | `airootfs/usr/share/plymouth/themes/oblinux/` + `plymouth` package | `.plymouth` + `.script` + 3 PNGs | **Done** — see below |
-| GDM logo + background | `airootfs/usr/share/glib-2.0/schemas/50_oblinux-gdm.gschema.override` | GSettings override + SVG | **Done** — see below |
-| OS logo (About panel, `LOGO=oblinux-logo` in os-release) | `airootfs/usr/share/pixmaps/oblinux-logo.{svg,png}` | SVG + PNG, plain mark | **Done** — see below |
+| BIOS boot menu background | `syslinux/splash.png` | PNG, 640×480 | **Superseded by Brand Master** — see "Brand Master boot-chain integration" below |
+| UEFI boot menu | `grub/grub.cfg` + `grub/themes/oblinux/` | GRUB config + Brand Master theme payload | **Done** — live UEFI uses GRUB with the Brand Master theme; see "Brand Master boot-chain integration" below |
+| Plymouth boot theme | `airootfs/usr/share/plymouth/themes/oblinux/` + `plymouth` package | `.plymouth` + `.script` + PNGs | **Superseded by Brand Master** — see "Brand Master boot-chain integration" below |
+| GDM logo + background | `airootfs/usr/share/glib-2.0/schemas/50_oblinux-gdm.gschema.override` | GSettings override + SVG | **Superseded by Brand Master Phase 2A** — see above |
+| OS logo (About panel, `LOGO=oblinux-logo` in os-release) | `airootfs/usr/share/icons/hicolor/*/apps/oblinux-logo.*` | Brand Master R5 product icon set | **Superseded by Brand Master Phase 2C** — see above |
+
+## Brand Master boot-chain integration (Phase 1: 2026-08-30)
+
+BIOS boot, UEFI boot, GRUB, and Plymouth now source their visual assets from
+`oblinux-brand-master` (tagged release `v1.0.5`), replacing this repo's
+original Slate & Amber boot artwork. The desktop and os-release remain on the
+legacy identity described below. GDM and the GNOME lock screen were integrated
+separately in Phase 2A, and Calamares in Phase 2B; Brand Master integration is
+not assumed to extend to the remaining surfaces.
+
+| Boot stage | File(s) in this repo | Brand Master source |
+|---|---|---|
+| BIOS boot menu (syslinux) | `syslinux/splash.png` | rasterized from `assets/iso/oblinux-media-lockup.svg`, composited onto Brand Master's near-black (`#0b1118`); Brand Master ships no pre-rendered syslinux-resolution asset, so this one raster/composite step is downstream integration, not a redesign of the master artwork |
+| UEFI boot menu (GRUB) | `grub/grub.cfg` + `grub/themes/oblinux/` | theme payload copied verbatim from Brand Master's `themes/grub/oblinux/`; `grub.cfg` selects it from the live GRUB prefix and preserves the established OBLinux live boot parameters |
+| GRUB (installed-system theme, wired via Calamares `airootfs/etc/calamares/modules/grubcfg.conf`) | `airootfs/usr/share/grub/themes/oblinux/` | copied verbatim from Brand Master's `themes/grub/oblinux/` (`theme.txt`, `background.png`, `logo.png`) |
+| Plymouth | `airootfs/usr/share/plymouth/themes/oblinux/` | copied verbatim from Brand Master's `themes/plymouth/oblinux/` (`.plymouth`, `.script`, PNGs, and their SVG sources) |
+
+Brand Master's GRUB theme uses a flat `selected_item_color` instead of the
+old 9-slice `pixmap_style` highlight images, so the old `highlight_*.png`
+files were removed as no longer referenced by `theme.txt`. The Calamares
+wiring itself (`always_use_defaults: true`, `GRUB_TERMINAL_OUTPUT: gfxterm`,
+`GRUB_THEME` pointing at this same path) did not need to change — only the
+theme payload at that path did.
+
+Treat every file copied from Brand Master exactly like any other Brand
+Master payload (see `AGENTS.md`'s Pipeline role and governance): never
+hand-edit it, never re-derive it from a screenshot or approximation, and
+never regenerate it independently in this repo. A defect in the shared
+asset itself belongs upstream in `oblinux-brand-master` and is re-consumed
+here as a new released version.
 
 ## GDM login screen
+
+**Historical implementation, superseded by Phase 2A above.** The mechanism
+research remains relevant, but the legacy lockup and Ink-to-Slate values no
+longer ship.
 
 Not the mechanism originally assumed (a blurred desktop-background image) — a
 reference screenshot of Ubuntu's login screen pointed at the right mechanism: GDM's `org.gnome.login-screen`
@@ -73,7 +228,7 @@ dconf database at all. `glib2` already ships the pacman hook
 `*.gschema.override` file changes, so no custom build hook is needed; the
 OBLinux override just has to sort after Arch's (`50_` vs `30_`) to win.
 
-Assets/wiring:
+Legacy assets/wiring (removed or superseded in Phase 2A):
 - [`oblinux-lockup.svg`](branding/oblinux-lockup.svg) — the ring (vector) +
   "OBLinux" wordmark (embedded as the same `oblinux-wordmark.png` used by the
   boot splash/Plymouth, as a base64 raster `<image>`) side by side. The
@@ -82,11 +237,11 @@ Assets/wiring:
   official Arch repos) — unlike the boot splash/Plymouth PNGs, which are
   pre-rasterized during this design session and ship as plain pixels with no
   font dependency at all.
-- Copied to `airootfs/usr/share/pixmaps/oblinux-logo-text-dark.svg` — named
+- Was copied to `airootfs/usr/share/pixmaps/oblinux-logo-text-dark.svg` — named
   to match Arch's own `archlinux-logo-text-dark.svg` (see the os-release
   section below for why this couldn't just be `oblinux-logo.svg`).
-- `airootfs/usr/share/glib-2.0/schemas/50_oblinux-gdm.gschema.override` sets
-  `org.gnome.login-screen`'s `logo` to that path, and separately sets
+- The schema override set `org.gnome.login-screen`'s `logo` to that path and
+  separately set
   `org.gnome.desktop.background` to solid Ink (`primary-color='#151a22'`,
   `picture-options='none'`) so the login (and default post-install desktop)
   background matches Plymouth/the boot splash instead of GNOME's default
@@ -94,8 +249,9 @@ Assets/wiring:
   just GDM's — real user accounts default to solid Ink until they set their
   own wallpaper, same as how most distros ship a default wallpaper.
 
-## os-release LOGO (About panel)
+## os-release LOGO (About panel; historical implementation)
 
+The mechanism below explains the legacy implementation superseded by Phase 2C.
 `airootfs/etc/os-release` has set `LOGO=oblinux-logo` since the very first
 scaffold commit, but no file with that name existed until now — GNOME
 Settings' About panel (and anything else reading `LOGO=`, which the
@@ -110,19 +266,17 @@ sets `LOGO=archlinux-logo` to match. `/usr/share/pixmaps/` is itself part of
 the freedesktop icon lookup spec (an unthemed fallback location every
 icon-consuming app checks), so this needs no icon-cache rebuild at all,
 unlike the hicolor route. Arch keeps this plain-mark file separate from its
-GDM lockup (`archlinux-logo-text-dark.svg`, mark+wordmark) — same split
-followed here:
+GDM lockup (`archlinux-logo-text-dark.svg`, mark+wordmark) — the same separation
+is retained after Phase 2A:
 
-- `airootfs/usr/share/pixmaps/oblinux-logo.svg` / `.png` (256×256) — plain
+- `airootfs/usr/share/pixmaps/oblinux-logo.svg` / `.png` (256×256) — formerly the plain
   mark only, copied straight from `docs/branding/oblinux-mark.svg`, matching
   `LOGO=oblinux-logo` exactly.
-- `airootfs/usr/share/pixmaps/oblinux-logo-text-dark.svg` — the mark+wordmark
-  lockup, used only by GDM's `logo` key (see above).
+- `airootfs/usr/share/pixmaps/oblinux-gdm-logo.png` — the Brand Master R5
+  64 px full-color symbol, used only by GDM's `logo` key (see above).
 
-This is why the GDM lockup file got renamed instead of staying at
-`oblinux-logo.svg` — that name was needed for the plain mark once the real
-`os-release`/Arch convention was checked, so the two assets couldn't share
-it.
+The dedicated GDM raster remains distinct from the Phase 2C hicolor
+`oblinux-logo` product-icon set.
 
 ## Plymouth theme
 
@@ -271,6 +425,67 @@ surface area worth keeping regardless.
 Ink background, and the Primary highlight bar shows clearly on the
 selected menu entry — screenshot evidence, `docs/TESTING.md`. The
 installed-system GRUB theme is done.
+
+**Post-menu gfxterm handoff fix (2026-08-30)**: suppressing Arch GRUB's
+hardcoded `Loading Linux ...` / `Loading initial ramdisk ...` messages did
+not remove the large black rectangle visible between the graphical menu and
+Plymouth. BIOS and UEFI screenshots showed that the Brand Master desktop
+remained intact around a sharply bounded black region: GRUB had closed
+`gfxmenu` and cleared the now-visible `gfxterm` viewport to its default black
+background. `GRUB_GFXPAYLOAD_LINUX=keep` preserves the graphics *mode* passed
+to Linux; it does not preserve the theme's pixels, and Plymouth cannot draw
+until its initramfs hook starts.
+
+The installed system now records the shipped Brand Master image as
+`GRUB_BACKGROUND` and ships an executable
+`/etc/grub.d/09_oblinux_gfxterm_background` generator fragment. It runs after
+`00_header` and before `10_linux`, emitting exactly:
+
+```grub
+insmod png
+background_image -m stretch /usr/share/grub/themes/oblinux/background.png
+```
+
+The explicit fragment is necessary because upstream `00_header` treats
+`GRUB_THEME` and `GRUB_BACKGROUND` as alternatives; setting both defaults
+alone does not guarantee that the terminal background command appears in the
+generated `/boot/grub/grub.cfg`. This keeps the authoritative theme background
+behind the terminal viewport without altering Brand Master assets, the selected
+graphics mode, `gfxpayload=keep`, kernel parameters, or the mkinitcpio/Plymouth
+hook order. Both installed BIOS and UEFI paths use this same generated GRUB
+configuration. The live ISO remains separate: BIOS uses syslinux and UEFI uses
+the hand-authored `grub/grub.cfg`, so neither live path executes this fragment.
+
+**Live UEFI GRUB integration (2026-08-31)**: the ArchISO boot mode is
+`uefi.grub`, replacing `uefi.systemd-boot`. ArchISO consumes
+`grub/grub.cfg`; that configuration enables `gfxterm` and selects
+`/boot/grub/themes/oblinux/theme.txt` from the ISO filesystem. ArchISO's
+standalone EFI binary keeps `${prefix}` on its embedded memdisk while its
+bootstrap sets GRUB's `root` to the discovered ISO before loading the profile
+configuration; using `${prefix}` for the theme therefore searches the embedded
+binary instead of the ISO and fails. The complete theme directory is a
+verbatim copy of the same released Brand Master `v1.0.5` payload used at
+`airootfs/usr/share/grub/themes/oblinux/` for installed systems. Keeping the
+live copy under `grub/` is required because the boot loader must render the
+menu before the live squashfs under `airootfs/` is mounted. The live entries
+retain `archisobasedir`, `archisosearchuuid`, `cow_spacesize=75%`, and
+`copytoram=n`; the normal entry also retains `quiet splash`, while the speech
+entry retains `accessibility=on`. The existing `efiboot/loader/` files remain
+as inactive systemd-boot reference configuration and are not consumed by the
+selected boot modes. The upstream profile's optional COM0 serial initialization
+is omitted: probing a nonexistent COM0 emits a GRUB error and pauses startup on
+UEFI systems without a serial port, while OBLinux's live menu uses the native
+console and `gfxterm` graphical output.
+
+The live GRUB configuration explicitly sets `timeout=5`,
+`timeout_style=menu`, and the normal OBLinux entry ID as its default. The
+themed menu therefore remains visible for a five-second countdown and then
+boots the normal live/install entry unless the user interacts with it.
+`grub/loopback.cfg` carries the same default and timeout behavior for loopback
+booting. For installed systems, Calamares' `grubcfg` module merges
+`GRUB_TIMEOUT=5`, `GRUB_TIMEOUT_STYLE=menu`, and `GRUB_DEFAULT=0` into the
+target's `/etc/default/grub` before the bootloader module runs
+`grub-mkconfig`; the first generated entry is the normal OBLinux kernel entry.
 
 ## Next steps
 

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Install OBLinux
+Comment=Install OBLinux to disk
+Exec=pkexec /usr/bin/calamares
+Icon=oblinux-logo
+Terminal=false
+Categories=System;
+StartupNotify=true
+Keywords=install;installer;system;

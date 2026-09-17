@@ -9,10 +9,10 @@ per item as that work starts.
 ## Decisions locked in for this sub-phase
 
 - **Zsh prompt: keep starship** (already shipped in `packages.x86_64`
-  alongside `zsh-autosuggestions`/`zsh-syntax-highlighting`) — build a
-  custom `starship.toml` matching Slate & Amber rather than switching to
-  oh-my-zsh. Reaffirms the package-list phase's reasoning: lighter
-  weight, faster shell startup, no framework to maintain.
+  alongside `zsh-autosuggestions`/`zsh-syntax-highlighting`) — use the
+  Debian-aligned OBLinux `starship.toml` rather than switching to oh-my-zsh.
+  Reaffirms the package-list phase's reasoning: lighter weight, faster shell
+  startup, no framework to maintain.
 - **GTK theme: native accent color only**, not a custom GTK theme
   package. Modern GNOME's built-in accent-color system (Settings >
   Appearance) set to the closest preset to Amber (`#d68a3c`) gets a
@@ -48,6 +48,18 @@ Order chosen for dependency reasons (noted per item), not just the order
 first listed.
 
 ### 1. Default wallpaper(s) — done; separate live-boot regression (see below) — root cause found and fixed, validated 11/11
+
+**Phase 2C update (2026-08-31):** the three locally designed Slate & Amber
+desktop PNGs are superseded by Brand Master's released R5 production PNGs.
+GNOME pairs `oblinux-light-3840x2160.png` and
+`oblinux-dark-3840x2160.png` through `picture-uri`/`picture-uri-dark`, and the
+background chooser also offers `oblinux-orange-3840x2160.png`. Following final
+runtime testing, the branded Obsidian Horizon JPEG supersedes that light/dark
+pair as both GNOME desktop defaults; all production and Horizon variants remain
+available in the chooser. The system-wide,
+unlocked schema-default mechanism is unchanged. Using Brand Master's production
+PNGs, rather than its generic SVG integration catalog, preserves the verified
+no-SVG boot-path constraint documented in this item.
 
 Three-round design process (all SVG, built on the real
 `docs/branding/oblinux-mark.svg` mark, amber kept confined to the mark's
@@ -91,9 +103,9 @@ Field) were designed and approved in principle but are **not** shipped
 — set aside once the gresource constraint surfaced; worth revisiting if
 the pacman-hook approach ever becomes worth the maintenance cost.
 
-The mark+wordmark lockup already shown at GDM login (`org.gnome.
-login-screen logo`, `oblinux-logo-text-dark.svg`) is unrelated to this
-item — it predates this round and wasn't touched. Its exact on-screen
+The legacy mark+wordmark lockup shown at GDM login (`org.gnome.login-screen
+logo`, formerly `oblinux-logo-text-dark.svg`) was unrelated to this item and
+was not touched during this historical round. Its exact on-screen
 position (bottom-center, like Ubuntu's greeter) was the one thing left
 unverified for vanilla GNOME — **confirmed 2026-08-13 via VM
 screenshot**: it does land bottom-center, same as Ubuntu.
@@ -116,6 +128,16 @@ Full verification of both mechanisms, not just visual inspection:
   Slate are close in value by design) — checked and confirmed this is
   the gradient working as configured, not a defect. Kept as designed
   rather than increasing contrast.
+
+**Phase 2A update (2026-08-31):** the durable GDM-only mechanism remains, but
+Brand Master supersedes the legacy Ink-to-Slate values with its near-black to
+navy treatment (`#0B1118` to `#0D2742`) and replaces the legacy product lockup
+with Brand Master's untouched 64 px full-color R5 symbol, matching Debian's
+GDM vendor mark. A GDM-only interface override keeps the greeter focus accent
+blue while normal OBLinux user sessions retain orange. The GNOME session lock
+screen has its own unlocked `org.gnome.desktop.screensaver` default pointing
+to Brand Master's pre-rendered dark wallpaper. This does not change the desktop
+wallpaper described above.
 
 **Regression found and fixed 2026-08-14** (round 21): after items 2–4
 landed, the live session showed GDM falling back to a manual login
@@ -317,7 +339,15 @@ as the original SVG→PNG fix). **Confirmed 2026-08-17**: rebuilt, wordmark
 displays fully and correctly on both VirtualBox and the physical laptop
 that originally showed the crop. Closed.
 
-### 2. GTK theme — accent color — done, VM-confirmed 2026-08-13
+### 2. GTK theme — accent color — done, Phase 3 default updated 2026-08-31
+
+**Phase 3 update (2026-08-31):** normal GNOME sessions now use the unlocked
+`accent-color='blue'` compiled default, matching the accepted OBLinux Debian
+implementation. The same system default applies to the live account and to
+accounts created by Calamares, while a user's explicit Appearance selection
+continues to take precedence. GDM already selected blue through its dedicated
+dconf database, so no GDM configuration changed. Runtime visual confirmation
+of the new session default remains required.
 
 `org.gnome.desktop.interface accent-color='orange'`, added to the
 gschema override. Enum verified verbatim against
@@ -326,11 +356,25 @@ interface`'s `accent-color` key) — valid values are
 blue/teal/green/yellow/orange/red/pink/purple/slate; `orange` is the
 closest preset to Amber (`#d68a3c`). No new repo, no theme package —
 confirms the plan's assumption that this would just be a dconf default.
-Not scoped to the desktop session only: since GDM's dconf profile only
-overrides background keys (item 1), this falls through to the same
-compiled default for the GDM greeter too — a deliberate, cohesive
-choice, unlike the wallpaper split. **Confirmed**: orange shown
-selected under Settings → Appearance on the built VM.
+Phase 2A initially allowed this compiled default to reach GDM. Runtime visual
+comparison with the accepted Debian greeter showed that this produced an
+edition-specific orange focus outline. GDM's dedicated dconf database now
+overrides only its own `accent-color` to upstream blue; live and installed user
+sessions received orange at that historical point. **Confirmed historically**:
+orange was shown selected under Settings → Appearance on the built VM. Phase 3
+supersedes that session default with blue as described above.
+
+**Phase 3 Shell correction (2026-09-01):** runtime comparison found that the
+Graphite-derived custom Shell theme compiled its primary and surface colors to
+fixed CSS values. Replacing Amber with fixed blue corrected only the default
+appearance: changing the GNOME accent to green changed Debian's stock Shell but
+left Arch blue, and the custom Slate panel/dialog surfaces still differed from
+Debian. GNOME Shell 50.1's source confirms that stock Shell resolves
+`-st-accent-color` and `-st-accent-fg-color` dynamically through `StSettings`
+and `StThemeContext`. OBLinux therefore no longer installs or enables the User
+Themes extension by default. Stock GNOME Shell now owns Quick Settings and
+dialog styling, matching Debian and following every supported user-selected
+accent. The blue GSettings value remains only the unlocked initial default.
 
 ### 3. Fonts — desktop UI + terminal — done, VM-confirmed 2026-08-13
 
@@ -427,7 +471,16 @@ resolvable — `papirus-icon-theme` comes along automatically as its
 declared dependency, no separate `packages.x86_64` entry needed for
 that. Not yet build/boot tested.
 
-### 5. GNOME Shell styling — done, VM-confirmed 2026-08-19
+### 5. GNOME Shell styling — superseded by stock GNOME, 2026-09-01
+
+**Current decision:** the custom Graphite-derived Shell stylesheet documented
+below is no longer activated by default. Runtime testing showed that its
+compile-time palette could not consume GNOME Shell 50's dynamic accent colors
+and that its fixed Slate Quick Settings/dialog surfaces diverged from the
+accepted Debian presentation. The `gnome-shell-extensions` package and User
+Themes gschema defaults have been removed. The historical implementation notes
+and source remain for traceability, but fresh live and installed sessions use
+stock GNOME Shell styling.
 
 Goal: make the top bar, overview, and quick-settings panel visually
 appealing and on-brand. Real technical constraint resolved before design,
@@ -460,13 +513,13 @@ primary sources rather than assumed —
    overview chrome stay the same dark neutral regardless. Already shipped
    (item 2) — doesn't give item 5 much new on its own.
 
-**Decision: option 1**, as a deliberate, one-time exception to the
+**Historical decision: option 1**, as a deliberate, one-time exception to the
 package-list phase's "stock GNOME, no extensions" rule — judged safe
 specifically because this is an official GNOME package, not a
 third-party extension, and only the User Themes component of the bundle
 gets enabled.
 
-**Plumbing implemented**:
+**Historical plumbing (removed 2026-09-01)**:
 - `gnome-shell-extensions` added to `packages.x86_64`.
 - `org.gnome.shell enabled-extensions` set to the User Themes UUID
   (`user-theme@gnome-shell-extensions.gcampax.github.com`, confirmed
@@ -514,10 +567,10 @@ tops out around Shell 48; OBLinux ships 50.4. Built against the most
 current chain Graphite has (`widgets-48-0`/`extensions-46-0`) — turned
 out not to matter in practice; see verification below.
 
-**VM-confirmed 2026-08-19**: `scripts/verify-shell-theme.sh` (extension
-listed in `enabled-extensions`, theme name correct, CSS file present)
-plus direct visual inspection — top bar and Quick Settings panel
-correctly Ink/Slate, toggled tiles (Wired, Dark Style) and the volume
+**VM-confirmed 2026-08-19 (historical custom-theme build)**: the then-current
+mechanism check found the extension listed in `enabled-extensions`, the theme
+name correct, and its CSS present. Direct visual inspection found the top bar
+and Quick Settings panel correctly Ink/Slate, toggled tiles (Wired, Dark Style) and the volume
 slider solid Amber, untoggled tiles (Power Mode, Do Not Disturb)
 correctly staying neutral Slate rather than all going accent-colored.
 The Shell 48-vs-50.4 gap flagged above didn't cause any visible breakage.
@@ -600,7 +653,7 @@ fetch) or genuinely niche.
 new interactive shells as designed, logo and module list render
 correctly.
 
-### 7. Zsh custom prompt — done, VM-confirmed 2026-08-20
+### 7. Zsh custom prompt and add-ons — Debian-aligned, static validation 2026-09-03
 
 Real gap found before building anything: `starship` was already in
 `packages.x86_64` (added during the package-list phase) but never
@@ -618,17 +671,12 @@ or `~/.config/starship.toml` — no XDG system-config fallback like
 fastfetch has. A single shared file avoids two copies drifting out of
 sync.
 
-**Design**: Slate & Amber, no powerline blocks — colored text/glyphs
-directly on the terminal background, matching the minimal geometric look
-already established (wallpaper, icon theme, Shell theme). Directory in
-Slate Light, git branch/status and language-version modules (Python,
-Node, Rust, Go — invisible unless the directory's actually relevant) in
-Slate/Amber, command duration on slow commands in muted Slate Light,
-prompt character Amber on success. Deliberately kept **red** for the
-error state rather than forcing it onto the brand palette — errors need
-instant, unambiguous recognition, worth more there than strict on-brand
-consistency. Iterated on a live two-state preview (clean repo, and a
-slow/failed command) before finalizing.
+**Design**: aligned with the accepted Debian edition's clean OBLinux
+Starship presentation: cyan directory and success prompt, amber git branch
+and vi-mode prompt, compact git status, 1.5-second command-duration threshold,
+explicit non-zero exit status, and SSH-only user/host context. The palette and
+module formatting match Debian while the config remains system-wide on Arch.
+Red remains reserved for command failures.
 
 No hand-specified Nerd Font glyph codepoints anywhere in the config —
 relies entirely on Starship's own built-in default symbol per module,
@@ -638,9 +686,26 @@ caution as the fastfetch logo's block characters).
 **Implementation**:
 - `airootfs/etc/xdg/starship.toml` — validated as syntactically correct
   TOML before shipping.
-- Both `.zshrc`s: `export STARSHIP_CONFIG=/etc/xdg/starship.toml` +
-  `eval "$(starship init zsh)"`. `liveuser`'s old hardcoded `PS1` line
-  removed — Starship now owns prompt rendering entirely.
+- Both `.zshrc`s select the shared config and initialize Starship when it is
+  installed. They also configure a 10,000-entry persistent, deduplicated,
+  shared history; `auto_cd`; interactive comments; Emacs editing; and Home,
+  End, and Delete keys.
+- The already-installed `zsh-autosuggestions` and `zsh-syntax-highlighting`
+  packages are now sourced from their official Arch paths under
+  `/usr/share/zsh/plugins/`; syntax highlighting is deliberately loaded last.
+- Fastfetch now runs only in a top-level interactive TTY, avoiding repeated
+  banners in nested shells. Users can suppress it with
+  `OBLINUX_FASTFETCH=0`.
+
+Debian's separate Ptyxis 48.5 first-terminal palette reset is intentionally
+not copied: it works around a Debian 13 package-specific first-launch issue,
+whereas Arch follows current Ptyxis and GNOME settings directly. Fastfetch's
+configuration and released R5 logo were already equivalent and remain
+unchanged.
 
 **VM-confirmed 2026-08-20**: pulled, built, installed — the prompt is
 live and rendering correctly, replacing the old plain `PS1`.
+
+The 2026-09-03 Debian-alignment update has only been statically validated on
+the macOS development host; its terminal rendering still requires validation
+on a rebuilt Live ISO and installed system.

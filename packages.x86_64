@@ -8,7 +8,10 @@ bcachefs-tools
 bind
 bolt
 brltty
-broadcom-wl
+# Temporarily disabled: Arch's broadcom-wl-dkms 6.30.223.271-48 does not
+# build against Linux 7.2 after the kernel removed strncpy(). Re-enable this
+# and linux-headers below when Arch publishes a compatible package.
+# broadcom-wl-dkms
 btrfs-progs
 clonezilla
 cloud-init
@@ -51,6 +54,7 @@ lftp
 libfido2
 libusb-compat
 linux
+# linux-headers  # Required by broadcom-wl-dkms when it is re-enabled above.
 linux-atm
 linux-firmware
 linux-firmware-marvell
@@ -145,17 +149,6 @@ upower
 xdg-desktop-portal
 xdg-desktop-portal-gnome
 
-## OBLinux: shell theming (THEMING.md item 5) — deliberate, one-time
-## exception to the package-list phase's "stock GNOME, no extensions"
-## decision. Only the "User Themes" extension from this bundle is
-## enabled (see the gschema override); it's an official GNOME-maintained
-## extension (part of this upstream package, not third-party), version
-## 50.3 verified compatible with the shipped gnome-shell (50.4). Loads a
-## CSS file from a stable runtime location — unlike the GDM background's
-## gresource-patch approach (item 1), it isn't reverted by every
-## gnome-shell update.
-gnome-shell-extensions
-
 ## OBLinux: networking (replaces releng's iwd/systemd-networkd default;
 ## NetworkManager is what GNOME Settings' network panel expects)
 networkmanager
@@ -197,12 +190,16 @@ firefox
 ptyxis
 
 ## Core GNOME apps for a functional, appealing out-of-the-box desktop.
+## GNOME Tour supplies the native first-login welcome flow for newly created
+## installed users; the live account masks it with a user-local desktop entry.
+gnome-tour
 gnome-calendar
 gnome-calculator
 gnome-characters
 gnome-clocks
 gnome-contacts
 gnome-disk-utility
+evolution
 gnome-firmware
 gnome-online-accounts
 gnome-software
@@ -216,6 +213,31 @@ file-roller
 fwupd
 sushi
 totem
+yelp
+
+## Graphics and document tools. Impression is a current GNOME Circle,
+## libadwaita application for writing bootable disk images to USB drives.
+## Flameshot matches the Debian edition's dedicated screenshot application and
+## complements GNOME Shell's built-in screenshot overlay. Document Scanner is
+## packaged as simple-scan on Arch.
+gimp
+impression
+flameshot
+simple-scan
+
+## Productivity — the complete current LibreOffice branch plus GNOME's
+## lightweight advanced-settings utility. LibreOffice's GTK integration is
+## supplied by its own package and the GTK stack already present for GNOME.
+libreoffice-fresh
+gnome-tweaks
+
+## Curated lightweight games: one polished GNOME-native falling-block game,
+## chess (including the optional engine required for single-player), and the
+## established GNOME card-game collection. See docs/DEFAULT_APPS.md.
+quadrapassel
+gnome-chess
+gnuchess
+aisleriot
 
 ## Shell experience — zsh is already the default shell; these give it a
 ## modern out-of-the-box feel (autosuggestions/syntax-highlighting/prompt)
@@ -277,11 +299,20 @@ inter-font
 ## used removes it as a variable regardless.
 
 ## Printing — GNOME Settings' printer panel needs cups running;
-## avahi/nss-mdns enable driverless network-printer discovery.
+## avahi/nss-mdns/cups-browsed enable driverless network discovery, while
+## ipp-usb exposes compatible USB printers through the same IPP Everywhere
+## path. No vendor-specific driver collection is installed by default.
 avahi
 cups
+cups-browsed
 cups-pdf
+ipp-usb
 nss-mdns
+
+## Live installer desktop shortcut support. Stock GNOME does not render
+## ~/Desktop; Desktop Icons NG is enabled only for liveuser by the live-session
+## setup helper and is removed from the target by Calamares after install.
+gnome-shell-extension-desktop-icons-ng
 
 ## Bluetooth — GNOME Settings' Bluetooth panel needs the daemon present.
 bluez

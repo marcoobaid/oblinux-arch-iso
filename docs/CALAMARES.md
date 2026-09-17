@@ -68,6 +68,15 @@ The line used is OBLinux's own live-boot HOOKS
 memdisk hooks removed and `fsck` added — same relative order already
 proven working by this project's own boot testing, not a fresh guess.
 
+Installed GRUB also consumes the executable
+`/etc/grub.d/09_oblinux_gfxterm_background` fragment inherited through
+`unpackfs`. Calamares' `grubcfg` module records the Brand Master image as
+`GRUB_BACKGROUND`; the fragment ensures `grub-mkconfig` emits the matching
+`insmod png` and `background_image -m stretch` commands even while
+`GRUB_THEME` is active. This prevents GRUB's post-menu gfxterm viewport from
+becoming a black rectangle before Plymouth starts, without changing the
+graphics payload or initramfs configuration.
+
 That drop-in file itself also has to be deleted on the target (same
 shellprocess step) — it's where OBLinux's *live-only* HOOKS actually live;
 the base `/etc/mkinitcpio.conf` (shipped untouched by the `mkinitcpio`
@@ -81,17 +90,28 @@ AUR-only. Added to `packages.x86_64`; needs building and publishing to
 `oblinux_repo` the same way. Optional in the sense that the installer
 still works without it — keyboard selection just loses the live preview.
 
-## Partitioning / filesystem / LVM — scope for this phase
+## Partitioning / filesystem / LVM
 
-- ext4 only: no `availableFileSystemTypes` list at all (confirmed via
-  Calamares' own docs: omitting it means no filesystem-choice UI is shown,
-  cleanest match for "basic")
-- `allowManualPartitioning: false` — hides the manual partition editor
-  only; Erase/Replace/Alongside (the automated modes) stay available,
-  Calamares doesn't support hiding those individually
+- Erase disk remains available and continues to use ext4 by default. There is
+  no `availableFileSystemTypes` list, so the automated workflow does not add a
+  filesystem-choice dropdown.
+- `allowManualPartitioning: true` exposes Calamares' manual partition editor
+  alongside the existing automated choices. On UEFI systems the configured
+  EFI mount point remains `/boot/efi`; a manual layout must provide the
+  required root mount and a suitable EFI System Partition. BIOS and UEFI
+  layouts require rebuilt-ISO install testing before this is considered
+  runtime-verified.
 - LVM disabled (`lvm.enable: false`)
 - No disk encryption (LUKS) support — `luksbootkeyfile`/
   `luksopenswaphookcfg` dropped from the sequence entirely
+
+## Installed-user password policy
+
+The users module matches Debian's current Calamares policy: passwords must be
+at least six characters (`passwordRequirements.minLength: 6`), there is no
+maximum length, and both `allowWeakPasswords` settings are `false`. The weak-
+password override checkbox is therefore hidden and users cannot bypass the
+configured requirement. Installed-system autologin remains disabled.
 
 ## Live-artifact cleanup — what and why
 
@@ -104,6 +124,7 @@ list) — full reasoning is in `modules/services-systemd.conf` and
 | What | Where | How |
 |---|---|---|
 | Passwordless sudo | `/etc/sudoers.d/g_wheel` | removed |
+| Live-only Calamares Polkit authorization | `/etc/polkit-1/rules.d/49-oblinux-live-calamares.rules` | removed; installed users fall back to Calamares' normal authentication policy |
 | GDM autologin as liveuser | `/etc/gdm/custom.conf` | disabled, not deleted (keeps the file's section scaffolding) |
 | `liveuser` account | — | dedicated `removeuser` module |
 | Root tty1 rescue-script mechanism | `/root/.automated_script.sh`, `/root/.zlogin` | removed |
@@ -113,34 +134,95 @@ list) — full reasoning is in `modules/services-systemd.conf` and
 | Mirror ranking | `reflector.service` | disabled, not masked (stays available to run manually/periodically) |
 | Live-session MOTD | `/etc/motd` | removed |
 | The installer itself | `calamares` package | removed via `packages.conf` |
+| Live-only desktop-icons extension | `gnome-shell-extension-desktop-icons-ng` package | removed via `packages.conf` |
+| Live installer launcher | `/usr/share/applications/install-oblinux.desktop`, `/etc/systemd/user/oblinux-live-session-setup.service`, `/usr/local/lib/oblinux-live-session-setup` | removed by `shellprocess-final`; the seeded Desktop copy and live-only dock/extension dconf state disappear with `liveuser` |
 
 **Not** cleaned up, deliberately: `/etc/issue` (branded console banner,
 fine on an installed system too), the GDM background/logo GSettings
 override (intentionally becomes the installed system's default too, per
 `docs/BRANDING.md`), the accessibility/speech live services (condition on
 a kernel cmdline flag that won't be present on a normal boot — harmless
-no-ops, not worth the cleanup).
+no-ops, not worth the cleanup), and `/etc/os-release`. The build wrapper
+renders the latter with the release `VERSION` and exact ISO `BUILD_ID` before
+the squashfs is created. `unpackfs` clones it to the target, and no later
+module replaces or removes it, so the installed system remains traceable to
+the exact ISO. See `docs/VERSIONING.md`.
+
+### Live-session Calamares authorization
+
+Calamares' packaged desktop entry launches `sh -c "pkexec calamares"`.
+The executable annotation in
+`/usr/share/polkit-1/actions/io.calamares.calamares.policy` maps
+`/usr/bin/calamares` to the action
+`io.calamares.calamares.pkexec.run`, whose normal active-session
+default is `auth_admin`. On the passwordless `liveuser` account this produces
+an authentication dialog that requires no password but still requires an
+extra confirmation.
+
+`/etc/polkit-1/rules.d/49-oblinux-live-calamares.rules` returns `YES` only
+when that exact action requests the exact `/usr/bin/calamares` program for
+the local, active `liveuser` session. Calamares continues to run elevated;
+the rule does not authorize other pkexec programs or other Polkit actions.
+Because `unpackfs` clones the live filesystem, `shellprocess@final` explicitly
+removes the rule from the target so installed users retain Calamares' normal
+authentication policy (and the packages module removes Calamares itself).
+
+### Live-session launcher
+
+The OBLinux launcher is `/usr/share/applications/install-oblinux.desktop`,
+displayed as **Install OBLinux** with the released Brand Master-derived
+`oblinux-logo` hicolor icon already shipped by this profile. It executes
+`pkexec /usr/bin/calamares`, matching the package's Polkit action and the
+live-only authorization above. An overlay at
+`/usr/local/share/applications/calamares.desktop` uses the freedesktop
+`Hidden=true` mechanism and XDG's higher-priority `/usr/local/share` application
+directory to suppress Calamares' generic **Install System** entry. Keeping the
+override outside `/usr/share` is required because archiso places `airootfs`
+content before pacstrap installs packages; occupying Calamares' package-owned
+desktop-file path there causes pacman to abort with a file conflict. The local
+override is removed by `shellprocess-final` from the installed target. The
+profile seeds an executable copy of the branded launcher in
+`liveuser`'s `~/Desktop`. A systemd user service enabled for
+`graphical-session.target` and guarded by `ConditionUser=liveuser` adds the
+launcher to GNOME Shell's system-wide Files/Firefox/Ptyxis favorites, marks the
+desktop file trusted, and
+explicitly enables Arch's packaged Desktop Icons NG extension so stock GNOME
+can render that shortcut. Extension activation retries briefly because the
+graphical-session target can precede GNOME Shell's extension-control D-Bus
+interface. No dconf database or template is seeded for installed users. The
+final cleanup removes all system-level helper/launcher files from the cloned
+target, while the seeded Desktop file and dconf state disappear with
+`liveuser`; the packages module removes Desktop Icons NG with Calamares.
+
+Printing services are explicitly enabled in `services-systemd.conf` alongside
+NetworkManager so CUPS, Avahi discovery, and cups-browsed remain functional
+after installation rather than depending only on symlinks inherited from the
+live squashfs. IPP-over-USB uses the package's normal udev-triggered service
+activation and therefore does not need a persistent Calamares enable action.
 
 ## Branding — status
 
-Real OBLinux assets (mark, Slate & Amber palette) are already wired in —
-this wasn't left as generic Calamares placeholder branding.
+**Phase 2B (2026-08-31)** replaces the legacy local installer artwork with the
+Brand Master R5 Calamares theme and follows the known-good Debian OBLinux
+activation. The branding directory now contains Brand Master's square symbol,
+horizontal Welcome lockup, white variants, seven supplied SVG slides,
+completion panel, and QML presentation. The descriptor selects the shared
+navy/white/orange widget-sidebar palette and the 900×600 window geometry.
 
-**Slideshow (2026-08-22, phase 3/4 item 3)**: upgraded from the earlier
-single-static-image placeholder to a real multi-slide QML presentation
-(`airootfs/etc/calamares/branding/oblinux/show.qml`, `slideshowAPI: 2`).
-Structure verified verbatim against Calamares' own reference slideshow
-(`src/branding/default/show.qml`) — `Presentation`/`Slide` elements, a
-`Timer` driving `goToNextSlide()`, `onActivate()`/`onLeave()` for proper
-start/stop when the execution step ends.
+Arch-specific activation is deliberately limited to metadata: enable
+`welcomeExpandingLogo` so Calamares scales the 1100×320 Welcome lockup with its
+proportional label path, resolve the optional version labels to plain
+`OBLinux`, and leave hidden project links empty instead of carrying the legacy
+repository URLs forward. `settings.conf` already selects `branding: oblinux`,
+so the module sequence and every functional module configuration remain
+unchanged.
 
-First-draft content: 5 slides (welcome, desktop, terminal, packages,
-"almost there"), each reusing the existing mark (`logo.png`) with a
-Slate & Amber background drawn explicitly per-slide, rather than new
-custom icons or real screenshots. Deliberately a first pass to react to
-before investing further — real screenshots of the actual desktop/
-terminal are a likely upgrade once there's a stable look to capture,
-and/or bespoke per-slide icons matching the mark's visual language.
+The superseded `logo.png` and `show.qml` files were removed. All remaining
+QML/SVG files are direct Brand Master payload files and must not be edited
+downstream. The static validation for this phase verifies YAML parsing, asset
+references, QML structure, SVG well-formedness, and an unchanged installer
+sequence. An ISO build and full visual walkthrough remain required before
+claiming visual parity with Debian.
 
 ## Build/install testing
 

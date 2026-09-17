@@ -1,0 +1,34 @@
+" OBLinux system-wide Vim defaults. Vim sources a user's ~/.vimrc afterward,
+" so these conservative defaults are fully user-overridable.
+if &compatible
+  set nocompatible
+endif
+
+syntax enable
+filetype plugin indent on
+
+set number
+set ruler
+set showcmd
+set laststatus=2
+set wildmenu
+set wildmode=longest:full,full
+set autoindent
+set smartindent
+set expandtab
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
+set backspace=indent,eol,start
+set incsearch
+set hlsearch
+set ignorecase
+set smartcase
+set scrolloff=3
+set splitbelow
+set splitright
+set nowrap
+set background=dark
+colorscheme oblinux
+
+set statusline=%#StatusLine#\ %f\ %m%r%h%w%=%y\ %{&fileencoding!=''?&fileencoding:&encoding}\ [%l:%c]\ %p%%

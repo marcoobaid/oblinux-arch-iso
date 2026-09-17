@@ -1,0 +1,13 @@
+#!/bin/sh
+# Keep the Brand Master background behind gfxterm after the graphical menu
+# closes. GRUB_THEME paints gfxmenu, but upstream 00_header treats that theme
+# and GRUB_BACKGROUND as alternatives, so the latter is not emitted while the
+# theme is active. Without this explicit terminal background, gfxterm clears
+# its viewport to a black rectangle before Linux and Plymouth take over.
+
+set -eu
+
+cat <<'EOF'
+insmod png
+background_image -m stretch /usr/share/grub/themes/oblinux/background.png
+EOF

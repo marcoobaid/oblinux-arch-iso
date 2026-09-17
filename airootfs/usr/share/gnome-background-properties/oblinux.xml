@@ -1,7 +1,11 @@
 <?xml version="1.0"?>
 <!DOCTYPE wallpapers SYSTEM "gnome-wp-list.dtd">
 <!--
-  OBLinux default wallpaper set, for GNOME Settings' background picker.
+  OBLinux wallpaper set for GNOME Settings' background picker. The default R5
+  entries use Brand Master's released PNGs rather than the generic SVG catalog
+  because OBLinux Arch deliberately excludes SVG wallpaper rendering from the
+  live-session startup path (docs/THEMING.md item 1). The Obsidian Horizon
+  entries are established OBLinux artwork shared with the Debian edition.
   Schema verified verbatim against gnome-backgrounds' own source
   (gitlab.gnome.org/GNOME/gnome-backgrounds, backgrounds/*.xml.in) and
   its real install path on Arch (gnome-backgrounds package file list:
@@ -9,30 +13,39 @@
 -->
 <wallpapers>
   <wallpaper deleted="false">
-    <name>OBLinux Soft Waves</name>
-    <filename>/usr/share/backgrounds/oblinux/oblinux-soft-waves.png</filename>
-    <filename-dark>/usr/share/backgrounds/oblinux/oblinux-soft-waves.png</filename-dark>
+    <name>OBLinux</name>
+    <filename>/usr/share/backgrounds/oblinux/oblinux-light-3840x2160.png</filename>
+    <filename-dark>/usr/share/backgrounds/oblinux/oblinux-dark-3840x2160.png</filename-dark>
     <options>zoom</options>
     <shade_type>solid</shade_type>
-    <pcolor>#151a22</pcolor>
-    <scolor>#151a22</scolor>
+    <pcolor>#F4F6F8</pcolor>
+    <scolor>#1E4D8C</scolor>
   </wallpaper>
   <wallpaper deleted="false">
-    <name>OBLinux Circuit Bloom</name>
-    <filename>/usr/share/backgrounds/oblinux/oblinux-circuit-bloom.png</filename>
-    <filename-dark>/usr/share/backgrounds/oblinux/oblinux-circuit-bloom.png</filename-dark>
+    <name>OBLinux Orange</name>
+    <filename>/usr/share/backgrounds/oblinux/oblinux-orange-3840x2160.png</filename>
+    <filename-dark>/usr/share/backgrounds/oblinux/oblinux-orange-3840x2160.png</filename-dark>
     <options>zoom</options>
     <shade_type>solid</shade_type>
-    <pcolor>#151a22</pcolor>
-    <scolor>#151a22</scolor>
+    <pcolor>#FF8A00</pcolor>
+    <scolor>#0D2742</scolor>
   </wallpaper>
   <wallpaper deleted="false">
-    <name>OBLinux Blueprint</name>
-    <filename>/usr/share/backgrounds/oblinux/oblinux-blueprint.png</filename>
-    <filename-dark>/usr/share/backgrounds/oblinux/oblinux-blueprint.png</filename-dark>
+    <name>OBLinux Obsidian Horizon</name>
+    <filename>/usr/share/backgrounds/oblinux/oblinux-horizon-branded-3840x2160.jpg</filename>
+    <filename-dark>/usr/share/backgrounds/oblinux/oblinux-horizon-branded-3840x2160.jpg</filename-dark>
     <options>zoom</options>
     <shade_type>solid</shade_type>
-    <pcolor>#151a22</pcolor>
-    <scolor>#151a22</scolor>
+    <pcolor>#111820</pcolor>
+    <scolor>#1B2836</scolor>
+  </wallpaper>
+  <wallpaper deleted="false">
+    <name>OBLinux Obsidian Horizon Clean</name>
+    <filename>/usr/share/backgrounds/oblinux/oblinux-horizon-clean-3840x2160.jpg</filename>
+    <filename-dark>/usr/share/backgrounds/oblinux/oblinux-horizon-clean-3840x2160.jpg</filename-dark>
+    <options>zoom</options>
+    <shade_type>solid</shade_type>
+    <pcolor>#111820</pcolor>
+    <scolor>#1B2836</scolor>
   </wallpaper>
 </wallpapers>
