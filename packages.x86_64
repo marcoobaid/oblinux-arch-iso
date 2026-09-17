@@ -217,12 +217,11 @@ yelp
 
 ## Graphics and document tools. Impression is a current GNOME Circle,
 ## libadwaita application for writing bootable disk images to USB drives.
-## Flameshot matches the Debian edition's dedicated screenshot application and
-## complements GNOME Shell's built-in screenshot overlay. Document Scanner is
-## packaged as simple-scan on Arch.
+## Document Scanner is packaged as simple-scan on Arch. OBLinux relies on
+## GNOME Shell's built-in screenshot overlay rather than a separate
+## screenshot utility (Flameshot was removed — see docs/DEFAULT_APPS.md).
 gimp
 impression
-flameshot
 simple-scan
 
 ## Productivity — the complete current LibreOffice branch plus GNOME's

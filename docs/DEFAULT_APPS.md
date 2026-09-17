@@ -58,11 +58,10 @@ a functional system without hitting a wall on day one.
 - **Graphics and document tools**: `gimp` provides the full image editor.
   `impression` was selected for USB image writing because it is a maintained
   GNOME Circle/libadwaita application in Arch's official `extra` repository,
-  purpose-built for creating bootable drives. `flameshot` matches the Debian
-  edition's dedicated screenshot application and adds a discoverable capture
-  and annotation GUI alongside GNOME Shell's built-in screenshot overlay.
-  `simple-scan` is GNOME Document Scanner. Each package ships an application
-  desktop entry and icon for GNOME's application grid.
+  purpose-built for creating bootable drives. `simple-scan` is GNOME Document
+  Scanner. Each package ships an application desktop entry and icon for
+  GNOME's application grid. `flameshot` was originally added here as well;
+  see "26.3.0 regression: Flameshot removed" below for why it was dropped.
 - **Shell experience**: `starship` + `zsh-autosuggestions` +
   `zsh-syntax-highlighting` on top of the already-default zsh. Both add-ons are
   loaded from Arch's packaged plugin paths; persistent deduplicated history,
@@ -128,8 +127,22 @@ Desktop Icons NG live-launcher support, and editor defaults above are statically
 integrated but **not yet ISO-validated**. A new build, live boot, full install,
 installed-system boot, and targeted visual/functional checks are required.
 
-The first-login Tour, GIMP, Impression, Flameshot, and Document Scanner
-additions are likewise statically integrated but not yet ISO-validated.
+The first-login Tour, GIMP, Impression, and Document Scanner additions
+are likewise statically integrated but not yet ISO-validated. (Flameshot,
+originally part of this batch, was removed — see below.)
+
+## 26.3.0 regression: Flameshot removed (2026-09-17)
+
+Flameshot remained included in the 26.3.0 Stable release candidate and was
+found during final regression testing of that ISO. It is not appropriate
+as an OBLinux default under the current GNOME Wayland environment, where
+it does not provide a reliably functional/default experience. OBLinux
+relies on GNOME's native screenshot functionality (GNOME Shell's built-in
+screenshot overlay) instead. Flameshot has been removed from
+`packages.x86_64` in Dev, with no replacement third-party screenshot
+package added, and the correction is being promoted to Stable before
+26.3.0 regression testing resumes. The final Stable ISO requires a fresh
+regression/smoke validation pass after this correction.
 
 ## Earlier status
 
