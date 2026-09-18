@@ -126,15 +126,22 @@ that `BUILD_ID` exactly matches the timestamp component of the ISO filename.
 
 ## Development, promotion, maintenance, and tags
 
-The current development line remains `26.3.0-dev` until an explicit,
-owner-approved promotion. The documented promotion sequence is:
+The current Stable release in `oblinux-arch-iso` is **26.3.0**. Promotion,
+final VM and physical laptop regression testing, tagging, and publication are
+complete. The immutable tag `v26.3.0` points to
+`67394522ded4b50b05ef150d8b71decddba2d824`. Subsequent documentation commits on
+Stable `main` do not move that tag or change `VERSION`. See `TESTING.md` for
+the owner-confirmed release artifact and verification record.
 
-1. Promote the accepted development state separately to
-   `oblinux-arch-iso`.
-2. Set stable `VERSION` to `26.3.0` (remove `-dev`).
-3. Complete release validation and the repository's release-readiness checks.
-4. After separate explicit authorization, tag the stable release `v26.3.0`.
-5. Advance this development repository to `26.4.0-dev` only after promotion.
+The separate `oblinux-arch-iso-dev` repository has subsequently advanced to
+`26.4.0-dev`. Earlier `26.3.0-dev` values in this document are examples of the
+version/build format, not the current development state.
+
+Future promotions require acceptance of the development state, separate owner
+authorization to promote into Stable, the intended stable version, and full
+release validation. Follow `AGENTS.md`'s release sequence: commit, push `main`,
+wait for CI to pass, report release-ready, then obtain separate authorization
+to tag. Advancing Dev afterward is another separately authorized operation.
 
 A Q3 maintenance release increments the third field, for example `26.3.1`,
 and uses tag `v26.3.1`. Stable Git tags are `v` followed by the stable release

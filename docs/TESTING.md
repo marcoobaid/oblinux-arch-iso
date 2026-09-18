@@ -5,6 +5,29 @@ indexed in [`HARDWARE_TARGETS.md`](HARDWARE_TARGETS.md). The validated Lenovo
 ThinkPad T14s Gen 6 AMD Wi-Fi workaround is documented separately in
 [`HARDWARE_T14S_GEN6_WIFI.md`](HARDWARE_T14S_GEN6_WIFI.md).
 
+## Stable 26.3.0 release verification (2026-09-17)
+
+The owner confirmed the following final release results. This record captures
+that confirmation; documentation reconciliation did not rerun the build,
+VM/laptop tests, public download, or checksum verification.
+
+- Release: **26.3.0**, tag `v26.3.0`.
+- Tagged release commit: `67394522ded4b50b05ef150d8b71decddba2d824`.
+- Final VM regression testing: **PASSED**.
+- Final physical laptop regression testing: **PASSED**.
+- Flameshot removal: **COMPLETE**; GNOME Shell's native screenshot
+  functionality is the default.
+- ISO: `oblinux-arch-26.3.0-20260916-2053-x86_64.iso`.
+- SHA-256: `047a1480bdd3040482b8a6d099da7471e775878a09174932de05650b43a9e499`.
+- ISO and SHA256 file publication on SourceForge under
+  `OBLinux-Arch-ISO/26.3.0/`: **COMPLETE**.
+- Public SourceForge download: **VERIFIED**.
+- Independent downloaded-ISO check with `sha256sum -c`: **OK**.
+
+The dated logs below preserve earlier investigation states. Their pending
+checks do not supersede the final release confirmation above or establish
+additional test coverage beyond what the owner confirmed.
+
 ## Release and build identity regression checklist
 
 Apply this checklist to every development, stable, and maintenance ISO. The

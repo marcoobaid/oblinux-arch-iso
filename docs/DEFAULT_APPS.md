@@ -1,4 +1,4 @@
-# Default application package list (updated 2026-09-03)
+# Default application package list (updated 2026-09-17)
 
 Phase 3/4 item 1 (see `README.md`'s Status section for the full list and
 sequencing). Previously `packages.x86_64` had no curated end-user apps at
@@ -122,14 +122,11 @@ a functional system without hitting a wall on day one.
 
 ## Production-readiness additions (2026-09-01)
 
-The printing service enablement, LibreOffice, GNOME Tweaks, three-game set,
-Desktop Icons NG live-launcher support, and editor defaults above are statically
-integrated but **not yet ISO-validated**. A new build, live boot, full install,
-installed-system boot, and targeted visual/functional checks are required.
-
-The first-login Tour, GIMP, Impression, and Document Scanner additions
-are likewise statically integrated but not yet ISO-validated. (Flameshot,
-originally part of this batch, was removed — see below.)
+The printing services, LibreOffice, GNOME Tweaks, games, live installer
+shortcut, editor defaults, first-login Tour, GIMP, Impression, and Document
+Scanner are included in Stable 26.3.0. The owner confirmed final VM and
+physical laptop regression testing passed after the Flameshot correction;
+see `TESTING.md` for the release validation record.
 
 ## 26.3.0 regression: Flameshot removed (2026-09-17)
 
@@ -139,10 +136,10 @@ as an OBLinux default under the current GNOME Wayland environment, where
 it does not provide a reliably functional/default experience. OBLinux
 relies on GNOME's native screenshot functionality (GNOME Shell's built-in
 screenshot overlay) instead. Flameshot has been removed from
-`packages.x86_64` in Dev, with no replacement third-party screenshot
-package added, and the correction is being promoted to Stable before
-26.3.0 regression testing resumes. The final Stable ISO requires a fresh
-regression/smoke validation pass after this correction.
+`packages.x86_64` in both Dev and Stable, with no replacement third-party
+screenshot package added. The correction was released in Stable 26.3.0
+(`v26.3.0`); final VM and physical laptop regression testing passed, as
+confirmed by the owner. Promotion and final validation are complete.
 
 ## Earlier status
 

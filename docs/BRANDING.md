@@ -184,10 +184,10 @@ cleanly from favicon size up to a boot-splash centerpiece.
 
 BIOS boot, UEFI boot, GRUB, and Plymouth now source their visual assets from
 `oblinux-brand-master` (tagged release `v1.0.5`), replacing this repo's
-original Slate & Amber boot artwork. The desktop and os-release remain on the
-legacy identity described below. GDM and the GNOME lock screen were integrated
-separately in Phase 2A, and Calamares in Phase 2B; Brand Master integration is
-not assumed to extend to the remaining surfaces.
+original Slate & Amber boot artwork. Subsequent integrations covered GDM and
+the GNOME lock screen in Phase 2A, Calamares in Phase 2B, and the desktop,
+os-release identity, and Fastfetch in Phase 2C, as documented above. These
+integrations are included in Stable 26.3.0.
 
 | Boot stage | File(s) in this repo | Brand Master source |
 |---|---|---|

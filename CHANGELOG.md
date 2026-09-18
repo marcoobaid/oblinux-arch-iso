@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Reconcile Stable release documentation and record the completed 26.3.0
+  validation and publication status.
+
+## 26.3.0
+
 - Give the visible GRUB menu a five-second countdown before automatically
   booting the normal OBLinux entry on live, loopback, and installed systems.
 - Restrict SquashFS XZ branch conversion to the x86 filter appropriate for the
@@ -16,7 +21,7 @@
 - Add Manual partitioning alongside the existing Calamares Erase disk flow.
 - Align Calamares password handling with Debian's six-character minimum and
   remove the weak-password override.
-- Add GIMP, Impression, Flameshot, and Document Scanner to the default
+- Add GIMP, Impression, and Document Scanner to the default
   Live ISO and installed-system application set.
 - Configure the fresh installed-user GNOME dash with Firefox, Ptyxis, Files,
   Software, Text Editor, Calculator, and Help; Ptyxis replaces Evolution.

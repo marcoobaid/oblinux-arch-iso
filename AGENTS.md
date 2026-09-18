@@ -10,7 +10,7 @@ this points to.
 OBLinux is an Arch Linux-based Linux distribution: GNOME desktop, Calamares
 graphical installer, built with `archiso`. It ships as a live/install ISO
 with a curated (not minimal, not maximal) default application set, and a
-consistent "Slate & Amber" visual identity applied from GRUB through GDM,
+released OBLinux R5 visual identity applied from GRUB through GDM,
 the desktop, the terminal, and the installer. **This repository
 (`oblinux-arch-iso`) is the stable/production implementation** — see
 Repository architecture below for how it relates to the other OBLinux
@@ -50,7 +50,7 @@ promotion flow:
   repository only through released/versioned Brand Master output,
   normally via `oblinux-arch-iso-dev` first (see Brand Master below).
 - **`oblinux-arch-iso-dev`** — the active development/staging repository.
-  New features, integrations (including R5), fixes, experiments, major
+  New features, integrations, fixes, experiments, major
   configuration changes, and ISO-level validation normally happen there
   first, not here.
 - **`oblinux-arch-iso`** (this repository) — stable/production. Its job
@@ -78,12 +78,24 @@ directly; see Package management):
   — the amber-recolored Papirus-derivative icon theme, packaged and
   published through `oblinux_repo` the same way.
 
-Do not invent other repositories beyond the ones named above. As of the
-most recent workspace inspection, `oblinux-brand-master` did not yet
-exist in the local workspace and `oblinux-arch-iso-dev` had not yet
-diverged from this repository's baseline — treat any Brand Master
-consumption or dev-to-stable promotion as forward-looking, not yet
-performed, unless the current `git log`/`git status` shows otherwise.
+The approved development baseline was promoted into Stable for 26.3.0,
+including released Brand Master R5 integration. Dev has subsequently advanced
+to `26.4.0-dev`; it is a separate development line, not the Stable version.
+Do not invent additional repositories. Inspect current repository state rather
+than assuming sibling checkouts exist.
+
+## Current Stable release
+
+OBLinux Arch **26.3.0** is the current Stable release. The immutable release
+tag `v26.3.0` resolves to `67394522ded4b50b05ef150d8b71decddba2d824`.
+Later documentation commits on `main` do not change that release tag or
+`VERSION`. Never move or recreate the tag to include documentation cleanup.
+
+The owner confirmed final VM and physical laptop regression testing passed,
+Flameshot removal was released, and SourceForge publication, public download,
+and downloaded-ISO SHA-256 verification succeeded. GNOME Shell's native
+screenshot functionality is the default. See `docs/TESTING.md` for the exact
+release artifact, checksum, and evidence attribution.
 
 ## This repository's role
 
@@ -211,9 +223,7 @@ to this repository. In this repository:
 
 - do not independently redesign or maintain a competing version of
   shared OBLinux branding — see Branding for what this repo currently
-  ships, which predates the Brand Master split and should be treated as
-  the thing Brand Master output eventually replaces, not a parallel
-  source of truth
+  ships from released Brand Master output, not a parallel source of truth
 - treat released/versioned Brand Master output as an immutable
   dependency once consumed
 - Brand Master's `main` branch (or any unreleased commit) is not a
@@ -241,15 +251,11 @@ bootstrap_packages        Minimal package set for the bootstrap tarball
 airootfs/                 Root of the live filesystem overlay — see
                           "Filesystem and live environment" below.
 docs/                     All project documentation; see Documentation Map.
-docs/branding/            Design *sources* (SVG wallpapers, the mark,
-                          GNOME Shell theme SCSS) — not shipped on the
-                          image; compiled/rasterized output lives under
-                          airootfs/. Pending Brand Master adoption, this
-                          is still this repo's own source of truth for
-                          branding (see Brand Master above).
-scripts/                  Standalone verification scripts
-                          (verify-shell-theme.sh) — dev tooling, not part
-                          of the built image.
+docs/branding/            Legacy SVG/SCSS sources retained as history;
+                          released shared artwork is owned by Brand Master.
+scripts/                  Build wrapper (build-iso.sh) and validation tools;
+                          see docs/VERSIONING.md for build identity.
+VERSION                   Stable release version; never bump incidentally.
 ```
 
 Inside `airootfs/`, the paths that matter most:
@@ -263,9 +269,9 @@ airootfs/etc/skel/                      Template for newly created users' homes
 airootfs/home/liveuser/                 Live-session-only account config
 airootfs/etc/systemd/system/            Live-session systemd unit overrides
 airootfs/usr/share/glib-2.0/schemas/    GSettings/dconf compiled-default overrides
-airootfs/usr/share/themes/OBLinux/      GNOME Shell theme (compiled CSS + assets)
+airootfs/etc/os-release.in             Template rendered by the build wrapper
 airootfs/usr/share/fonts/OBLinux-jetbrains-mono-nerd/  Vendored font subset
-airootfs/usr/share/backgrounds/oblinux/ Shipped wallpapers (PNG, not SVG)
+airootfs/usr/share/backgrounds/oblinux/ Shipped raster wallpapers (JPEG/PNG, not SVG)
 airootfs/usr/share/plymouth/themes/oblinux/  Boot splash theme
 airootfs/usr/share/pacman/keyrings/     oblinux_repo + Chaotic-AUR trust keys
 airootfs/etc/pacman.d/hooks/            Custom pacman hooks (live-session only)
@@ -273,7 +279,8 @@ airootfs/etc/pacman.d/hooks/            Custom pacman hooks (live-session only)
 
 ## Architecture
 
-Live medium build: `mkarchiso` (this repo's profile) → `pacstrap` installs
+Live medium build: `scripts/build-iso.sh` renders a temporary profile with
+release/build identity → `mkarchiso` → `pacstrap` installs
 `packages.x86_64` into a chroot → `airootfs/` is overlaid on top → squashfs
 + bootloaders assembled into the ISO. Booting the ISO: GRUB/syslinux →
 Plymouth splash → GDM (autologin as `liveuser`) → GNOME session. Installing:
@@ -301,8 +308,11 @@ that verification rather than claim it (see Validation integrity).
 
 Primary entry point (on the Linux build machine, from the repo root):
 ```bash
-sudo mkarchiso -v .
+./scripts/build-iso.sh
 ```
+The wrapper reads `VERSION`, captures one `BUILD_ID`, and renders
+`airootfs/etc/os-release.in` into the temporary profile. Direct `mkarchiso`
+is rejected without that build identity; see `docs/VERSIONING.md`.
 Output ISO lands in `out/` (gitignored, along with `work/`, mkarchiso's
 build workspace — neither is source-controlled).
 
@@ -316,8 +326,8 @@ built and published there — a stale/missing package there fails
 a Calamares install, boot the installed system. `docs/TESTING.md` (Phase
 1/2) and `docs/THEMING.md`/`docs/CALAMARES.md` (Phase 3/4) are the
 historical logs of what's been checked and how — see Testing and
-Validation below. `scripts/verify-shell-theme.sh` automates one specific
-mechanism check (the GNOME Shell theme extension).
+Validation below. Current release verification is recorded at the start
+of `docs/TESTING.md`.
 
 ## Package management
 
@@ -382,10 +392,9 @@ Layered, in order of what actually wins:
    `airootfs/usr/share/glib-2.0/schemas/50_oblinux-gdm.gschema.override`.
    Sets the *compiled default* for `org.gnome.desktop.background`,
    `org.gnome.desktop.interface` (accent color, fonts, icon theme),
-   `org.gnome.login-screen` (logo), and `org.gnome.shell`/`org.gnome.
-   shell.extensions.user-theme` (Shell theme). Applies to every account
-   that hasn't set its own value, including GDM itself, unless overridden
-   below.
+   `org.gnome.login-screen` (logo), and `org.gnome.shell` (favorites).
+   Applies to every account that hasn't set its own value, including GDM
+   itself, unless overridden below.
 2. **GDM-specific dconf profile/database** —
    `airootfs/etc/dconf/profile/gdm` + `airootfs/etc/dconf/db/gdm.d/` —
    takes priority over (1) for the `gdm` user only. Currently used for
@@ -395,33 +404,25 @@ Layered, in order of what actually wins:
    real user can always override defaults; (1)/(2) only set what a
    fresh account sees.
 
-GNOME Shell itself is styled via the **User Themes** extension
-(`gnome-shell-extensions` package, only that one component enabled) — a
-deliberate, one-time exception to the otherwise "stock GNOME, no
-extensions" policy, justified because it's an official GNOME-maintained
-extension, not third-party. See `docs/THEMING.md` item 5 for the full
-reasoning and the real config search path if this ever needs revisiting.
+GNOME Shell uses native styling and runtime accent colors. User Themes and
+the former Graphite-derived theme are no longer installed or enabled by
+default. Desktop Icons NG is a live-session-only exception for the installer
+shortcut; Calamares removes its package from the installed system. See
+`docs/DEFAULT_APPS.md`, `docs/THEMING.md`, and `docs/CALAMARES.md`.
 
 ## Branding
 
-Palette and full design system: `docs/BRANDING.md`. Core values used
-throughout the codebase (search for these hexes if tracing a color):
-Ink `#151a22`, Slate `#2c3a4e`, Primary `#3f6690`, Slate Light `#a9b8c8`,
-Amber `#d68a3c` (reserved for actions/alerts, never decorative), Cloud
-`#f2f3f5`. This is this repository's **current, shipped** branding — the
-state Brand Master output is expected to eventually supersede (see Brand
-Master above); until a Brand Master release is actually integrated and
-promoted, this section remains authoritative for what's on the image.
-
-Design sources (SVG, SCSS) live under `docs/branding/`; compiled/shipped
-output lives under `airootfs/`. This split matters: **editing a shipped
-PNG or compiled CSS directly will be silently overwritten the next time
-someone regenerates it from source** — always edit the source and
-regenerate (see each subsystem's own README under `docs/branding/`).
+Shared identity comes from released Brand Master R5 output; see
+`docs/BRANDING.md` for the integration and asset provenance. The old Slate &
+Amber palette and sources under `docs/branding/` are historical context,
+not a competing source of truth for released shared assets. Shared artwork
+changes originate in Brand Master and reach Stable through validated Dev
+promotion. Do not hand-edit consumed artwork or regenerate it from retired
+local sources.
 
 Per-surface mechanism (all real constraints, verified against upstream,
 not assumed — see `docs/THEMING.md` for the verification detail on each):
-- **Wallpaper**: pre-rendered PNG (not live SVG — a sandboxed-renderer
+- **Wallpaper**: pre-rendered JPEG/PNG (not live SVG — a sandboxed-renderer
   crash was traced to SVG `<text>` elements; see Known Pitfalls), set via
   the gschema override.
 - **GDM login background**: solid/gradient color only, via the GDM
@@ -429,14 +430,14 @@ not assumed — see `docs/THEMING.md` for the verification detail on each):
   requires patching `gnome-shell-theme.gresource` directly, which
   upstream itself flags as reverted by every `gnome-shell` update.
   Deliberately not done.
-- **GDM logo**: `org.gnome.login-screen logo`, points at the mark+wordmark
-  lockup SVG.
+- **GDM logo**: `org.gnome.login-screen logo`, points at the R5 symbol
+  PNG (`/usr/share/pixmaps/oblinux-gdm-logo.png`).
 - **Icon theme**: `oblinux-icon-theme` package (separate repo), an
   *inheriting* theme — only recolors `places` icons, inherits everything
   else from `papirus-icon-theme`.
-- **GNOME Shell**: forked/recolored from `Graphite-gtk-theme`'s
-  `gnome-shell` module only (not its GTK theme).
-- **Terminal**: `fastfetch` (ASCII-only logo — Ptyxis's underlying VTE has
+- **GNOME Shell**: native GNOME styling; the retired Graphite source is
+  retained only as history.
+- **Terminal**: `fastfetch` (released quadrant-block text logo — Ptyxis's VTE has
   Sixel support compiled out on Arch's build, verified in VTE's own
   source, not assumed) + Starship prompt, both configured system-wide
   under `airootfs/etc/xdg/`.
@@ -489,7 +490,7 @@ distilled lesson):
 
 ## Boot and installation
 
-Both BIOS (syslinux) and UEFI (systemd-boot for the live medium, GRUB for
+Both BIOS (syslinux) and UEFI (GRUB for the live medium and
 the installed system) are supported and have each been verified on both
 VirtualBox and real hardware (see `docs/TESTING.md`). No disk-encryption
 support yet (deliberately dropped from the Calamares sequence, see
@@ -499,17 +500,13 @@ Pitfalls before touching syslinux/EFI boot parameters.
 
 ## Testing and validation
 
-`docs/TESTING.md` is the chronological build-verification log for Phase
-1/2 (base system + installer), 20 rounds through 2026-08-12 — it has not
-been updated since. Verification since then (the Phase 3/4 theming and
-Calamares slideshow work) is logged inline in `docs/THEMING.md` and
-`docs/CALAMARES.md` instead, each with its own dated entries. Check both
-sources — don't assume `docs/TESTING.md` alone reflects current
-verification status. There is no separate formal test suite; validation is
-build → boot → (install →) boot-installed, done manually on real
-VirtualBox/hardware by the owner, since this repo's own development
-environment (macOS) cannot run `mkarchiso` or boot the result. See
-Validation integrity for how to report validation status honestly.
+`docs/TESTING.md` records the owner-confirmed 26.3.0 release validation and
+artifact verification, alongside the historical Phase 1/2 log and build
+identity checklist. Earlier theming and installer investigations remain in
+`docs/THEMING.md` and `docs/CALAMARES.md`; their dated pending-test notes are
+historical, not the current release status. Final 26.3.0 VM and physical laptop
+regression testing passed. This does not imply new changes are validated or
+that an agent reran those tests on macOS. See Validation integrity.
 
 Minimum validation expected after a change:
 - **Package list change**: full build + live boot.
@@ -524,29 +521,27 @@ Minimum validation expected after a change:
   to be probabilistic rather than deterministic in this project's
   history (see Known Pitfalls).
 
-`scripts/verify-shell-theme.sh` automates the GNOME Shell theme
-extension's activation check specifically; run it on the built system,
-not the build machine (needs a live GNOME session's D-Bus, and must be
-run without `sudo` for the same reason).
+The former `scripts/verify-shell-theme.sh` was removed with the retired
+custom Shell theme. Do not use historical extension-activation instructions
+as a validation requirement for the native Shell styling now shipped.
 
 ## Hardware targets
 
-No formal hardware-target document exists in this repo. What's actually
-been verified, per `docs/TESTING.md`: VirtualBox (BIOS and UEFI), and one
-physical laptop (UEFI, real Wi-Fi/graphics hardware). Treat any hardware
-claim beyond that as unverified, not as an established support matrix.
+`docs/HARDWARE_TARGETS.md` indexes tested hardware and known limitations,
+including the ThinkPad T14s Gen 6 AMD Wi-Fi findings. `docs/TESTING.md`
+contains historical BIOS/UEFI results and the owner-confirmed final 26.3.0
+VM/laptop regression status. Do not infer a broader support matrix.
 
 ## Important architectural decisions
 
 Do not casually reverse these without re-reading the linked reasoning:
 
-- **Stock GNOME, no extensions** — except User Themes (Shell styling),
-  a deliberate, documented one-time exception. Adding another extension
-  needs the same bar: official/upstream-maintained, not third-party.
+- **Stock GNOME on installed systems** — native Shell styling and accent
+  colors. Desktop Icons NG is enabled only for the live installer shortcut
+  and removed during installation; see `docs/DEFAULT_APPS.md`.
 - **No custom GTK theme** — GNOME's native accent-color system only.
-  The GNOME Shell theme fork explicitly excludes Graphite's GTK modules
-  for this reason; don't pull them in.
-- **Wallpapers ship as PNG, never SVG** — removes an entire sandboxed
+  Do not reactivate the retired Graphite Shell theme or import its GTK modules.
+- **Wallpapers ship as raster images, never live SVG** — removes an entire sandboxed
   rendering pipeline that has already caused one real crash.
 - **GDM background is solid/gradient color, never an image** — the image
   path requires an ongoing gresource-patching pacman hook that doesn't
@@ -628,18 +623,15 @@ Do not casually reverse these without re-reading the linked reasoning:
 
 | Generated (don't hand-edit) | Authoritative source |
 |---|---|
-| `airootfs/usr/share/backgrounds/oblinux/*.png` | `docs/branding/wallpapers/*.svg` |
-| `airootfs/usr/share/themes/OBLinux/gnome-shell/gnome-shell.css` | `docs/branding/gnome-shell-theme-src/` (SCSS) |
-| `out/`, `work/` (mkarchiso build artifacts) | this repo's config, at build time |
+| Shipped shared branding assets | Released Brand Master payload; integration/provenance in `docs/BRANDING.md` |
+| Build-time `airootfs/etc/os-release` | `airootfs/etc/os-release.in`, `VERSION`, and the wrapper's captured `BUILD_ID` |
+| `out/`, `work/` (mkarchiso build artifacts) | this repo's config, through `scripts/build-iso.sh` |
 | `oblinux_repo`'s package database/`.pkg.tar.zst` files | that repo's own `PKGBUILD`s |
 
-Everything else under `airootfs/` is itself the authoritative source —
-there is no separate templating layer for config files, dconf overrides,
-systemd units, or Calamares config in this repo. Once `oblinux-brand-master`
-releases are actually integrated (via dev, then promoted here — see Brand
-Master), the `docs/branding/` sources listed above are expected to
-themselves become generated from Brand Master output; that has not
-happened yet as of this update.
+Native configuration under `airootfs/` is authoritative unless a documented
+build template or released Brand Master payload supplies it. Legacy wallpaper
+SVGs and Graphite SCSS under `docs/branding/` are retained history, not inputs
+for regenerating the current Stable visual identity.
 
 ## Development rules
 
@@ -697,9 +689,11 @@ happened yet as of this update.
 | `docs/PACKAGE_SIGNING.md` | Signing key details, trust propagation (build machine / live session / installed system), Chaotic-AUR setup |
 | `docs/DEFAULT_APPS.md` | Rationale for every package-list addition |
 | `docs/GDM_PLYMOUTH_AUTOLOGIN_FIX.md` | Standalone writeup of the GDM/Plymouth VT-race fix (condensed version of the THEMING.md item 1 investigation) |
-| `docs/TESTING.md` | Chronological build-verification log for Phase 1/2 only (20 rounds, through 2026-08-12) — later verification lives in `docs/THEMING.md`/`docs/CALAMARES.md` instead |
+| `docs/TESTING.md` | Current release validation/artifact record, build identity checklist, and historical Phase 1/2 log |
+| `docs/VERSIONING.md` | Current Stable version, build wrapper, build identity, and immutable release tags |
+| `docs/HARDWARE_TARGETS.md` | Tested hardware and links to compatibility findings |
 
-No `ARCHITECTURE.md`, `BUILDING.md`, `HARDWARE_TARGETS.md`,
+No `ARCHITECTURE.md`, `BUILDING.md`,
 `INSTALLER.md`, `ROADMAP.md`, `PROJECT_CHARTER.md`, `POC_SCOPE.md`, or
 `DAILY_DRIVER_REQUIREMENTS.md` currently exist in this repo — don't
 reference them as if they do. This file's Architecture, ISO Build
