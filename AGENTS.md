@@ -678,6 +678,12 @@ for regenerating the current Stable visual identity.
   repository without explicit owner authorization (see Force-push
   policy, Release and tagging policy, and Stable repository safety).
 
+Public OBLinux documentation must use the project's voice and describe
+project/release facts directly. Do not refer to the maintainer as "the owner,"
+"project owner," or similar third-person terminology. Testing and release
+records should state what was tested, what passed, and what was released
+without attributing those actions to an unnamed owner.
+
 ## Documentation map
 
 | Document | Authoritative for |

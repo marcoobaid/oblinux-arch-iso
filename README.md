@@ -11,15 +11,10 @@
 
 </div>
 
-OBLinux is an independent Linux distribution project focused on delivering a
-cohesive, approachable desktop without giving up the flexibility of its
-underlying platform. This repository contains the stable Arch edition: an
-[`archiso`](https://gitlab.archlinux.org/archlinux/archiso)-based live system
-with the GNOME desktop and a graphical Calamares installer.
-
-**Stable:** This is the stable, production Arch edition of OBLinux. Active
-development happens in
-[`oblinux-arch-iso-dev`](https://github.com/marcoobaid/oblinux-arch-iso-dev).
+OBLinux is an independent Linux distribution project focused on a cohesive,
+approachable desktop. This repository, **oblinux-arch-iso**, contains the
+Stable Arch implementation: an `archiso`-based live and installable Arch Linux
+system with GNOME and the graphical Calamares installer.
 
 ## What is OBLinux?
 
@@ -31,20 +26,6 @@ shared OBLinux visual identity.
 The result is a practical starting point for everyday use: familiar graphical
 tools are present from the first boot, while `pacman`, Flatpak, and `paru` keep
 the wider Arch and Linux software ecosystems within reach.
-
-## Why OBLinux?
-
-OBLinux is built around a few deliberate choices:
-
-- **Cohesion from boot to desktop.** The boot menus, Plymouth splash, login
-  screen, installer, desktop, and terminal share one recognizable identity.
-- **Useful defaults without unnecessary layers.** The image provides a focused
-  desktop and application set while retaining stock GNOME behavior and native
-  GNOME settings.
-- **Upstream technologies first.** Arch Linux, GNOME, Calamares, systemd, and
-  their supported configuration mechanisms remain the foundation.
-- **Freedom after installation.** System defaults remain user-configurable,
-  and the Arch package ecosystem stays available through familiar tools.
 
 ## Highlights
 
@@ -59,25 +40,41 @@ OBLinux is built around a few deliberate choices:
 - Signed OBLinux package repository with optional Chaotic-AUR access
 - Zsh, Starship, Fastfetch, `paru`, and a focused modern command-line toolset
 
-## The OBLinux experience
+Released assets from **OBLinux Brand Master** provide the shared R5 visual
+identity across OBLinux editions, from boot and login to the installer, desktop,
+and terminal. Arch supplies its own native integration while retaining stock
+GNOME behavior and user-configurable defaults. Shared artwork is maintained
+upstream and consumed from immutable releases.
 
-```text
-Boot → Live environment → Installer → Login → GNOME desktop → Terminal → Installed system
-```
+## Release status
 
-OBLinux treats that path as one continuous experience rather than a collection
-of unrelated screens. Released assets from the OBLinux Brand Master provide the
-shared OBLinux R5 identity across the boot chain, Calamares, GDM, desktop artwork,
-system icons, and terminal presentation. The Arch edition supplies the native
-configuration that carries those assets from the live medium into the installed
-system.
+OBLinux Arch **26.3.0 is released**. The following Stable artifact passed
+final regression testing on both virtual machines and a physical laptop.
+
+- Git tag: `v26.3.0`
+- Certified source commit (tagged release): `67394522ded4b50b05ef150d8b71decddba2d824`
+- ISO: `oblinux-arch-26.3.0-20260916-2053-x86_64.iso`
+- BUILD_ID: `20260916-2053`
+- SHA-256: `047a1480bdd3040482b8a6d099da7471e775878a09174932de05650b43a9e499`
+- ISO and SHA256 file published on SourceForge: `OBLinux-Arch-ISO/26.3.0/`
+- Public SourceForge download: **verified**; downloaded-ISO `sha256sum -c`: **OK**
+
+The certified release code is frozen. Later documentation updates do not change
+the certified source commit or immutable release tag. GNOME Shell's native
+screenshot functionality is the default; Flameshot removal is complete in this
+release.
+
+See the [release verification record](docs/TESTING.md#stable-2630-release-verification-2026-09-17)
+for the recorded results and the [hardware compatibility notes](docs/HARDWARE_TARGETS.md)
+for tested hardware and known limitations. Release status does not imply broad
+hardware compatibility.
 
 ## Technology
 
 | Component | Selection |
 |---|---|
-| Foundation | Arch Linux, rolling release |
-| ISO framework | `archiso` |
+| Foundation | Arch Linux, rolling release, `x86_64` |
+| ISO framework | [`archiso`](https://gitlab.archlinux.org/archlinux/archiso) |
 | Desktop | GNOME |
 | Installer | Calamares |
 | Package management | `pacman`, Flatpak, `paru` |
@@ -85,7 +82,7 @@ system.
 | Shell and prompt | Zsh and Starship |
 | Boot support | BIOS/Syslinux and UEFI/GRUB |
 
-## Getting OBLinux
+## Building and trying OBLinux
 
 This repository provides the source profile for building the OBLinux Arch live
 and installation image. Build the image on an up-to-date Arch Linux system; the
@@ -109,16 +106,18 @@ published before the build begins. See the
 [package-signing guide](docs/PACKAGE_SIGNING.md) before preparing a build
 machine.
 
-The current Arch stable baseline has completed regression testing on
-virtual machines and physical hardware. See the
-[hardware compatibility notes](docs/HARDWARE_TARGETS.md) for tested hardware
-and known limitations.
+Start testing in a VM with a disposable disk. Validation should cover live
+boot, the GNOME session, a full Calamares installation, and the installed system.
+BIOS/Syslinux and UEFI/GRUB live-boot paths should be tested separately. Disk
+encryption is not supported by the current installer configuration. Review the
+[installer documentation](docs/CALAMARES.md) and [testing records](docs/TESTING.md)
+before installing on physical hardware.
 
-After building, validation should cover live boot, the GNOME session, a full
-Calamares installation, and the installed system. BIOS and UEFI paths should be
-tested separately.
+Calamares copies the live filesystem onto the target disk, then configures the
+installed system and removes live-only components. The live environment's
+packages and defaults therefore form the basis of a fresh installation.
 
-## Repository guide
+### Repository guide
 
 | Path | Purpose |
 |---|---|
@@ -146,11 +145,13 @@ tested separately.
 
 ## Contributing
 
-Contributions should be focused, technically justified, and consistent with the
-documented architecture. Before proposing a change, read the relevant document
-above, prefer supported upstream mechanisms, and update documentation alongside
-meaningful configuration changes. Include relevant build, boot, and installation
-test results with contributions.
+Keep contributions focused and consistent with the documented Arch architecture.
+Active development and integration happen in
+[`oblinux-arch-iso-dev`](https://github.com/marcoobaid/oblinux-arch-iso-dev);
+Stable receives validated changes through separately approved promotions.
+Prefer supported upstream mechanisms, preserve user choices, and update relevant
+documentation when behavior changes. Validation reports should distinguish
+static checks, ISO builds, live boot, installation, and hardware testing.
 
 Brand artwork is maintained in the separate OBLinux Brand Master project and is
 consumed here from released versions. Shared visual assets should not be
