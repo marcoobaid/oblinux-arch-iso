@@ -1,54 +1,65 @@
-# Package signing & Chaotic-AUR (2026-08-12)
+# Package signing & Chaotic-AUR
 
-Two infrastructure additions, done together since they share the same
-underlying mechanism: `oblinux_repo` packages are now signed
+Originally introduced together on 2026-08-12, these infrastructure
+features share the same mechanism: `oblinux_repo` packages are signed
 (`SigLevel = Optional TrustedOnly` → `Required TrustedOnly`), and
 Chaotic-AUR (`https://aur.chaotic.cx`) — community-maintained prebuilt AUR
 packages — is wired in as a repo.
 
-## The OBLinux signing key
+## The current OBLinux signing key
 
-- **ed25519**, generated 2026-08-12 on the build machine (user `baba`),
-  no passphrase (`%no-protection` — needed for `update_repo.sh` to sign
-  non-interactively).
-- Fingerprint: `D0514F69650F2B9725E12E26297CB74B36C93A92`
+- **Ed25519**, generated during the September 2026 build-machine rebuild.
+- Active fingerprint: `F83C29998D979B913298C40E7E0180391C821D13`
 - UID: `OBLinux Repo Signing Key <repo@oblinux.local>`
-- Private key: `~/.gnupg/private-keys-v1.d/D81C2083C6FC7326D507D60759938EF9CF5FE50D.key`
-  on the build machine (filename is the key's *keygrip*, a different
-  identifier than the fingerprint above — this is normal GnuPG internal
-  storage, not a mismatch/error).
-- Revocation certificate:
-  `~/.gnupg/openpgp-revocs.d/D0514F69650F2B9725E12E26297CB74B36C93A92.rev`
-  — needed to cleanly invalidate this key later if it's ever lost or
-  compromised. Back this up; without it, a lost/compromised key can't be
-  properly revoked.
-- Backed up (build machine → secure cloud storage): the `.key` file, the
-  `.rev` file, and a portable secret-key export
-  (`gpg --export-secret-keys --armor D0514F69650F2B9725E12E26297CB74B36C93A92`)
-  — the last one is the one that actually restores cleanly on a fresh
-  machine via `gpg --import`, since it doesn't depend on GnuPG's internal
-  keygrip/keybox linkage the way the raw `.key` file does.
+- The private signing key stays in the build machine's GnuPG keyring;
+  only its public key is shipped in this repository.
+- The new portable private-key export and revocation certificate were
+  backed up off-machine as recorded during the rotation. Private-key material and
+  sensitive backup locations must never be included in Git.
 
-### How it was generated
+### Required disaster-recovery artifacts
+
+A **portable secret-key export is REQUIRED**, together with the matching
+revocation certificate, in protected off-machine storage. A raw GnuPG
+`private-keys-v1.d` file alone is not an adequate portable recovery backup:
+restoration must not depend on the original machine's keybox/keygrip state.
+The portable export supports recovery through GnuPG import; the revocation
+certificate supports invalidating the key if necessary. Backup creation
+and a controlled restoration check belong to a separate key-maintenance
+procedure, never to ISO builds or ordinary documentation review.
+
+The public key can be inspected without exporting any secret material:
 
 ```bash
-gpg --batch --gen-key <<EOF
-%no-protection
-Key-Type: eddsa
-Key-Curve: ed25519
-Key-Usage: sign
-Name-Real: OBLinux Repo Signing Key
-Name-Email: repo@oblinux.local
-Expire-Date: 0
-EOF
-gpg --list-keys --keyid-format long repo@oblinux.local
-gpg --export D0514F69650F2B9725E12E26297CB74B36C93A92 > oblinux-repo.gpg
+gpg --show-keys --with-fingerprint airootfs/usr/share/pacman/keyrings/oblinux-repo.gpg
 ```
 
-The exported file is the **public** key only — safe to commit/share.
-Confirmed correct format:
-`file oblinux-repo.gpg` → `OpenPGP Public Key Version 4, ... EdDSA;
-User ID; Signature; OpenPGP Certificate`, 246 bytes.
+Verify the full fingerprint against the active fingerprint above before
+trusting the key. Public-key material is safe to distribute; possession of
+a downloaded key alone does not authenticate it.
+
+### Previous key and September 2026 rotation
+
+The previous Ed25519 key was generated on 2026-08-12:
+
+- Previous fingerprint: `D0514F69650F2B9725E12E26297CB74B36C93A92`
+- Previous long key ID: `297CB74B36C93A92`
+
+Its private key became unavailable following the September 2026
+build-machine rebuild, so the repository signing key was rotated to
+`F83C29998D979B913298C40E7E0180391C821D13`. Earlier backup notes do not
+establish that the old private key remained recoverable. These old-key
+identifiers are historical only, not current operational values. Loss of
+the private key does not itself revoke the public key or invalidate old
+signatures; no revocation is asserted here.
+
+The rotation was completed and pushed in `oblinux_repo` commit `75933ad`
+and Dev (`oblinux-arch-iso-dev`) commit `4609674`: all four packages were re-signed,
+the repository and files databases were rebuilt and signed, and the
+Dev profile's public key and trusted fingerprint were replaced. The build
+machine's pacman keyring was updated to trust the new key. Off-machine
+backup completion is recorded from the rotation report; the documentation
+review did not access backups or independently test their restoration.
 
 ## Signing packages (`oblinux_repo`)
 
@@ -61,14 +72,13 @@ User ID; Signature; OpenPGP Certificate`, 246 bytes.
    assumed).
 2. The repo database itself — `repo-add -s -k <KEYID> --include-sigs`.
 
-Packages already published (`calamares-3.4.2-2`, `paru-2.1.0-2`,
-`ckbcomp-1.248-1`) were built and published **before** this key existed,
-so they have no `.sig` yet — now that `SigLevel = Required`, they need to
-be re-signed and republished (`./update_repo.sh`, then commit/push) before
-the next `mkarchiso` build, or `pacstrap` will fail to resolve them
-(unsigned package, signature required). This has to run on the build
-machine, where the private key actually lives — not something that can be
-done from a plain clone elsewhere.
+The September 2026 rotation has already re-signed all published packages
+and both databases with the current key. No package version change was
+needed. `update_repo.sh` defaults to the active fingerprint above, unless
+`OBLINUX_REPO_KEYID` overrides it; any intentional override must be reviewed.
+The script skips an existing package signature when it is not older than
+the package: it does **not** verify the signature or its signer before
+skipping it. Verify signatures explicitly after publishing or rotating.
 
 ## Getting trust actually baked into the ISO
 
@@ -82,9 +92,9 @@ covering, matching the three moments trust actually gets used:
 
 1. **Build time** (`mkarchiso`'s `pacstrap`) — uses the **build machine's
    own** system pacman keyring, not anything from the profile. One-time
-   setup required on the build machine before the *next* build (see
-   below) — this is the one step this project's config genuinely can't
-   do on its own, since it's the host machine's own trust store.
+   setup required on each build machine (already completed on the
+   current machine; see below) — this is the one step this project's
+   config cannot do on its own, since it's the host machine's own trust store.
 2. **Live session** — a `pacman-init.service` drop-in
    (`airootfs/etc/systemd/system/pacman-init.service.d/50-oblinux-custom-keyrings.conf`)
    adds `pacman-key --populate chaotic oblinux-repo` as an extra
@@ -98,16 +108,17 @@ covering, matching the three moments trust actually gets used:
    trust bug was fixed — see `docs/TESTING.md`) now also populates
    `chaotic` and `oblinux-repo`.
 
-### One-time build-machine setup (do this before the next build)
+### One-time setup for a new or rebuilt build machine
 
 `pacstrap` verifies signatures against the **build machine's own**
 `/etc/pacman.d/gnupg`, regardless of what's in the profile — the profile's
 keyring files only ever affect the *built image*, never the machine doing
-the building. On the build machine (as `baba`, with sudo):
+the building. The current build machine is already configured. On a new
+build machine, authenticate the public key and its full fingerprint first, then use sudo:
 
 ```bash
 sudo pacman-key --add /path/to/oblinux-repo.gpg
-sudo pacman-key --lsign-key D0514F69650F2B9725E12E26297CB74B36C93A92
+sudo pacman-key --lsign-key F83C29998D979B913298C40E7E0180391C821D13
 ```
 
 (`oblinux-repo.gpg` is the same public key file now at
@@ -151,7 +162,7 @@ just backed by a file already on disk instead of a separate package
 install. Not yet added to `packages.x86_64` — that's a curated-app-list
 decision for later, this just makes the repo available and trusted.
 
-## Status
+## Historical validation: August 2026
 
 Both prerequisites are done as of 2026-08-12: `oblinux_repo`'s three
 packages were re-signed and republished via `update_repo.sh`
@@ -170,3 +181,85 @@ known-existing package). No manual keyring intervention needed on
 either platform — the `pacman-init.service` drop-in (live session) and
 `shellprocess-final.conf` step (installed system) both worked as
 designed.
+
+## September 2026 consistency review
+
+The following records the Dev review before promotion to Stable.
+Read-only inspection on the build machine confirmed the signing-script
+default, exported public key, and `oblinux-repo-trusted` all identify
+`F83C29998D979B913298C40E7E0180391C821D13`. GnuPG verified all four package
+signatures and both database signatures against that fingerprint. The
+host pacman trust database reports the new public key as fully trusted.
+
+The propagation paths remain wired correctly at source level:
+
+- **Build:** the installed `mkarchiso` invokes `pacstrap` with `-G`;
+  package verification uses the host pacman keyring. The profile's public
+  key does not provision host trust. Host trust is confirmed above.
+- **Live:** the new public key and matching `-trusted` file ship in the
+  overlay; the `pacman-init.service` drop-in populates `oblinux-repo`.
+- **Installed:** Calamares `unpackfs` copies the shipped key files;
+  `shellprocess-final.conf` initializes and populates `archlinux chaotic
+  oblinux-repo` in the target. The ephemeral keyring mount is removed and
+  the live-only initialization service is masked, leaving persistent trust.
+
+This is configuration and signature validation, **not** a post-rotation
+ISO build, live boot, or install test. The installer currently prefixes
+its keyring commands with `-`, allowing failures to be ignored; therefore
+successful installer completion alone does not prove trust population.
+Inspect the installer log and verify the key's trust and a signed package
+operation in both live and installed environments during the next test.
+No configuration changes were made by this documentation review.
+
+## Existing installations from the previously published ISO
+
+The pre-rotation profile shipped the previous OBLinux public key and its
+trusted fingerprint. Its live initialization and Calamares population
+steps trusted that key, alongside the separate Arch and Chaotic keyrings.
+An unchanged installation from that ISO therefore trusts only the old
+**OBLinux** signing key, not the replacement. This assessment follows the
+pre-rotation source and reported release baseline; the published ISO and
+individual installed machines were not inspected during this review.
+
+Both pacman configurations require `Required TrustedOnly` for
+`oblinux_repo`, applying to packages **and databases**. Once the newly
+signed database is fetched, an old-key-only client cannot authenticate it;
+repository synchronization can fail and block a normal full-system update.
+Newly signed OBLinux packages also fail verification, even if a previously
+cached database is usable. Already-installed programs continue to run;
+Arch and Chaotic signing trust is unchanged. A key import prompt or
+keyserver download alone does not establish trust in the replacement.
+See upstream [pacman.conf signature policy](https://pacman.archlinux.page/pacman.conf.5.html)
+and [pacman-key operations](https://pacman.archlinux.page/pacman-key.8.html).
+
+There is no automatic migration: these OBLinux keyring files are plain ISO
+overlay files, not an updatable keyring package. Updating `archlinux-keyring`,
+rebooting, or populating the unchanged old `oblinux-repo.gpg` cannot acquire
+the replacement. New profile files do not retroactively update published
+ISOs or existing installations.
+
+### Recommended migration (proposal only; not implemented)
+
+Use a small, reviewed manual bootstrap procedure distributed through an
+authenticated project channel, with the full new fingerprint confirmed
+through an independently trusted channel before granting local trust.
+Obtain the public key from an immutable, reviewed project revision;
+inspect it and require an exact full-fingerprint match. The approved
+procedure should update the on-disk OBLinux public-key/trusted files and
+import and locally trust the replacement in pacman's persistent keyring,
+then verify database/package signatures and perform a full system update.
+Keep `Required TrustedOnly` throughout; do not bypass signature checking.
+
+A new-key-signed transitional package cannot bootstrap trust in its own
+signer, and the unavailable old private key cannot sign a bridge package.
+A one-time authenticated manual trust step is therefore required with the
+current distribution mechanism. A special package or script is not required
+for that step. A managed OBLinux keyring package could improve future
+rotations, but would be a separate implementation after this bootstrap;
+an optional helper must enforce the same fingerprint verification.
+Old-key retirement/revocation is also a separate explicit decision.
+
+Before publishing a migration procedure, test it on an old-ISO installation
+and verify that it recovers repository synchronization and signed package
+installation without weakening signature policy. No migration was executed
+or implemented in this review.
